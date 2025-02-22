@@ -1,0 +1,65 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .main-container {
+    display: flex;
+    gap: 2rem; /* space between the two cards */
+  }
+  
+  /* Card style */
+  .card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 300px;
+    text-align: center;
+  }
+  
+  .card h1, .card h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .card p {
+    margin-bottom: 1.5rem;
+    color: #666;
+  }
+  
+  input[type="file"] {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  button {
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #0056b3;
+  }
+  
+  /* Preview styling */
+  #preview {
+    max-height: 200px;
+    display: block;
+    margin: 0 auto;
+  }
+  
