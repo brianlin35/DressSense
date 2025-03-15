@@ -1,13 +1,12 @@
-# backend/app.py
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import boto3
 import os
 
 app = Flask(__name__)
-CORS(app)  # Allow cross-origin requests from frontend (Next.js)
+CORS(app)
 
+# AWS S3 Configuration
 AWS_REGION = "us-east-1"
 S3_BUCKET = "dresssense-bucket-jorge"
 
@@ -20,15 +19,27 @@ s3_client = boto3.client(
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
-    """Handles file uploads to S3."""
+    # Check if a file is present in the request
     if "file" not in request.files:
         return jsonify({"error": "No file part"}), 400
 
     file = request.files["file"]
+
+    # Validate that the file is an image by checking its MIME type and extension
+    if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+        return jsonify({"error": "Only image files are allowed"}), 400
+
+    # Optionally, you might want to generate a unique filename here instead of using file.filename directly.
     file_key = f"user-uploads/{file.filename}"
 
     try:
-        s3_client.upload_fileobj(file, S3_BUCKET, file_key)
+        # Upload the file to S3. ExtraArgs is used to set the ContentType for proper display in browsers.
+        s3_client.upload_fileobj(
+            file, 
+            S3_BUCKET, 
+            file_key, 
+            ExtraArgs={'ContentType': file.content_type}
+        )
         file_url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
         return jsonify({"message": "Upload successful", "url": file_url})
     except Exception as e:
@@ -47,11 +58,6 @@ def list_files():
         return jsonify({"files": files})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
-@app.route("/")
-def home():
-    return "Hello from Flask!"
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
