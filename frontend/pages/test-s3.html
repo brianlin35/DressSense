@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test S3 Listing</title>
+  <style>
+    /* Optional CSS styling */
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    #fetchBtn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    ul#imageList {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    ul#imageList li {
+      border: 1px solid #ccc;
+      padding: 5px;
+      background: #f9f9f9;
+    }
+    ul#imageList li img {
+      max-width: 200px;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Test S3 Listing</h1>
+  <button id="fetchBtn">Fetch S3 Images</button>
+  <ul id="imageList"></ul>
+
+  <script>
+    const fetchBtn = document.getElementById('fetchBtn');
+    const imageList = document.getElementById('imageList');
+
+    fetchBtn.addEventListener('click', async () => {
+      try {
+        // Call your Flask backend's /list endpoint
+        const response = await fetch('http://127.0.0.1:5001/list');
+        const data = await response.json();
+        console.log('Fetched data:', data);
+
+        // Clear any existing list content
+        imageList.innerHTML = '';
+
+        // If the "files" array is not empty, display each image
+        if (data.files && data.files.length > 0) {
+          data.files.forEach((url) => {
+            const li = document.createElement('li');
+            const img = document.createElement('img');
+            img.src = url;
+            li.appendChild(img);
+            imageList.appendChild(li);
+          });
+        } else {
+          imageList.innerText = 'No images found.';
+        }
+      } catch (err) {
+        console.error('Error fetching images:', err);
+        imageList.innerText = 'Error fetching images. Check console.';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -29,16 +29,18 @@ def upload_file():
     if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
         return jsonify({"error": "Only image files are allowed"}), 400
 
-    # Optionally, you might want to generate a unique filename here instead of using file.filename directly.
     file_key = f"user-uploads/{file.filename}"
 
     try:
-        # Upload the file to S3. ExtraArgs is used to set the ContentType for proper display in browsers.
+        # Upload the file to S3 with ContentDisposition set to inline.
         s3_client.upload_fileobj(
             file, 
             S3_BUCKET, 
             file_key, 
-            ExtraArgs={'ContentType': file.content_type}
+            ExtraArgs={
+                'ContentType': file.content_type,
+                'ContentDisposition': 'inline'
+            }
         )
         file_url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
         return jsonify({"message": "Upload successful", "url": file_url})
@@ -56,6 +58,29 @@ def list_files():
                 for obj in response["Contents"]
             ]
         return jsonify({"files": files})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/delete", methods=["POST"])
+def delete_file():
+    """
+    Expects JSON: {"url": "https://<bucket>.s3.<region>.amazonaws.com/user-uploads/filename.jpg"}
+    Extracts the key (e.g. user-uploads/filename.jpg) and deletes it from S3.
+    """
+    data = request.get_json()
+    url = data.get("url", "")
+
+    if not url or "amazonaws.com/" not in url:
+        return jsonify({"error": "Invalid S3 URL"}), 400
+
+    # Extract the S3 key after '.com/'
+    # Example: "https://bucket.s3.region.amazonaws.com/user-uploads/file.jpg"
+    # => key = "user-uploads/file.jpg"
+    key = url.split(".com/")[-1]
+
+    try:
+        s3_client.delete_object(Bucket=S3_BUCKET, Key=key)
+        return jsonify({"message": "Deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
