@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import boto3
 import os
+import io
+from rembg import remove  # Import the rembg function
 
 app = Flask(__name__)
 CORS(app)
@@ -25,18 +27,28 @@ def upload_file():
 
     file = request.files["file"]
 
-    # Validate that the file is an image by checking its MIME type and extension
+    # Validate that the file is an image by checking its extension
     if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
         return jsonify({"error": "Only image files are allowed"}), 400
 
     file_key = f"user-uploads/{file.filename}"
 
     try:
-        # Upload the file to S3 with ContentDisposition set to inline.
+        # Read image bytes from the file
+        input_bytes = file.read()
+        
+        # Remove the background using rembg
+        output_bytes = remove(input_bytes)
+        
+        # Create a BytesIO object from the processed image bytes
+        output_file = io.BytesIO(output_bytes)
+        output_file.seek(0)
+
+        # Upload the processed image to S3
         s3_client.upload_fileobj(
-            file, 
-            S3_BUCKET, 
-            file_key, 
+            output_file,
+            S3_BUCKET,
+            file_key,
             ExtraArgs={
                 'ContentType': file.content_type,
                 'ContentDisposition': 'inline'
@@ -63,21 +75,13 @@ def list_files():
 
 @app.route("/delete", methods=["POST"])
 def delete_file():
-    """
-    Expects JSON: {"url": "https://<bucket>.s3.<region>.amazonaws.com/user-uploads/filename.jpg"}
-    Extracts the key (e.g. user-uploads/filename.jpg) and deletes it from S3.
-    """
     data = request.get_json()
     url = data.get("url", "")
-
     if not url or "amazonaws.com/" not in url:
         return jsonify({"error": "Invalid S3 URL"}), 400
 
-    # Extract the S3 key after '.com/'
-    # Example: "https://bucket.s3.region.amazonaws.com/user-uploads/file.jpg"
-    # => key = "user-uploads/file.jpg"
+    # Extract the S3 key from the URL (everything after '.com/')
     key = url.split(".com/")[-1]
-
     try:
         s3_client.delete_object(Bucket=S3_BUCKET, Key=key)
         return jsonify({"message": "Deleted successfully"}), 200

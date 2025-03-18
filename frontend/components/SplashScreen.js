@@ -13,7 +13,7 @@ const SplashScreen = ({ onFinish }) => {
         onFinish();
       }, 1000);
       return () => clearTimeout(exitTimer);
-    }, 4000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [onFinish]);
@@ -22,7 +22,7 @@ const SplashScreen = ({ onFinish }) => {
     <div className={`${styles.splash} ${isExiting ? styles.exit : ""}`}>
       <div className={styles.textContainer}>
         <h1 className={styles.title}>Dress Sense</h1>
-        <p className={styles.motto}>feel good, look good, be good</p>
+        <p className={styles.motto}>Look Sharp, Feel Smart, Be Unstoppable</p>
       </div>
     </div>
   );

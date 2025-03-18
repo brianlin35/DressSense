@@ -6,7 +6,7 @@ const TabsHeader = () => {
   const router = useRouter();
   const currentPath = router.pathname;
   const tabs = [
-    { label: 'Pieces', path: '/display' },
+    { label: 'Pieces', path: '/' },          // Changed from '/index' to '/'
     { label: 'Fits', path: '/fits' },
     { label: 'Collections', path: '/collections' },
   ];
@@ -15,10 +15,10 @@ const TabsHeader = () => {
     fontSize: '32px',
     cursor: 'pointer',
     margin: '0 15px',
-    color: isActive ? 'black' : '#aaa', // Active tab is black; others are light gray
+    color: isActive ? 'black' : '#aaa',
     borderBottom: isActive ? '3px solid blue' : 'none',
     paddingBottom: '5px',
-    transition: 'border-bottom 0.2s ease',
+    transition: 'border-bottom 0.2s ease, color 0.2s ease',
   });
 
   return (

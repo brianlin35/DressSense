@@ -1,32 +1,48 @@
 // pages/index.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from 'react-bootstrap';
-import SplashScreen from '../components/SplashScreen';
+import { Modal, Button } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-import Slider from 'react-slick';
-import { useModal } from '../components/GlobalModal';
+import TabsHeader from '../components/TabsHeader';
+import {
+  AiFillHeart,
+  AiOutlineFolderOpen,
+  AiOutlineTag,
+  AiOutlineBgColors,
+  AiOutlineShop,
+  AiOutlineDollarCircle,
+  AiOutlinePlusCircle,
+  AiOutlineDelete
+} from 'react-icons/ai';
+import SplashScreen from '../components/SplashScreen';
 
 export default function Home() {
+  // Use sessionStorage so splash shows only on a new session
   const [showSplash, setShowSplash] = useState(false);
-  const [fadeInMain, setFadeInMain] = useState(false);
   const [images, setImages] = useState([]);
   const fileInputRef = useRef(null);
   const router = useRouter();
-  const { openModal } = useModal();
 
+  // Modal state for larger preview
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  // Check sessionStorage for splash screen
   useEffect(() => {
-    const visited = localStorage.getItem('hasVisited');
-    if (!visited) {
-      setShowSplash(true);
-      localStorage.setItem('hasVisited', 'true');
+    if (typeof window !== 'undefined') {
+      const visited = sessionStorage.getItem('hasVisited');
+      if (!visited) {
+        setShowSplash(true);
+        sessionStorage.setItem('hasVisited', 'true');
+      }
     }
   }, []);
 
+  // Fetch S3 images from your Flask backend
   useEffect(() => {
     fetch('http://127.0.0.1:5001/list')
       .then((res) => res.json())
       .then((data) => {
-        console.log("Fetched data:", data);
+        console.log('Fetched data:', data);
         if (data.files) {
           setImages(data.files);
         }
@@ -36,15 +52,9 @@ export default function Home() {
 
   const handleSplashFinish = () => {
     setShowSplash(false);
-    setFadeInMain(true);
   };
 
-  const handleAddToWardrobeClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
+  // File upload handler
   const handleFileSelect = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -62,7 +72,7 @@ export default function Home() {
       const result = await res.json();
       if (res.ok) {
         alert('Upload successful!');
-        setImages(prevImages => [...prevImages, result.url]);
+        setImages((prevImages) => [...prevImages, result.url]);
       } else {
         alert('Upload failed: ' + result.error);
       }
@@ -72,58 +82,118 @@ export default function Home() {
     }
   };
 
+  // Trigger hidden file input for upload
+  const handleUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Open modal with placeholder metadata for the clicked image
+  const openModal = (url) => {
+    const itemData = {
+      url,
+      category: 'Top',
+      type: 'T-Shirt',
+      brand: 'BrandX',
+      size: 'M',
+      style: 'Casual',
+      color: 'Black',
+      material: 'Cotton',
+      fittedMarketValue: '$50',
+    };
+    setSelectedItem(itemData);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedItem(null);
+  };
+
+  // Delete file from S3 and update local state
+  const handleDelete = async (url) => {
+    try {
+      const response = await fetch('http://127.0.0.1:5001/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to delete object');
+      }
+      setImages((prev) => prev.filter((item) => item !== url));
+      alert(`Deleted ${url} from S3`);
+      closeModal();
+    } catch (err) {
+      console.error('Error deleting item:', err);
+      alert('Error deleting item. Check console.');
+    }
+  };
+
+  // Only show splash screen on initial page load (sessionStorage controls this)
   if (showSplash) {
     return <SplashScreen onFinish={handleSplashFinish} />;
   }
 
-  // Settings for react-slick slider for continuous right-to-left movement.
-  const sliderSettings = {
-    dots: false,
-    infinite: true,
-    speed: 3000,
-    autoplay: true,
-    autoplaySpeed: 0,
-    cssEase: 'linear',
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    rtl: true, // slide from right to left
-  };
-
   return (
-    <div className={`container mt-5 ${fadeInMain ? 'fade-in-main' : ''}`}>
-      <h1 className="text-center mb-4">Dress Sense</h1>
+    <div className="fade-in-main">
+      {/* Tabs Header for Pieces / Fits / Collections */}
+      <TabsHeader />
 
-      {images.length > 0 ? (
-        <Slider {...sliderSettings}>
-          {images.map((url, idx) => (
-            <div key={idx} onClick={() => openModal(url)} style={{ cursor: 'pointer' }}>
-              <img
-                src={url}
-                alt={`Slide ${idx}`}
-                style={{ width: '100%', height: '400px', objectFit: 'cover' }}
-              />
-            </div>
-          ))}
-        </Slider>
-      ) : (
-        <div
-          className="d-flex align-items-center justify-content-center"
-          style={{ height: '400px', backgroundColor: '#eee' }}
-        >
-          <p>No images found.</p>
-        </div>
-      )}
-
-      <div className="text-center mt-4">
-        <Button variant="primary" className="me-3" onClick={() => router.push("/get-dressed")}>
-          Get Dressed
-        </Button>
-        <Button variant="secondary" onClick={handleAddToWardrobeClick}>
-          Add to Your Wardrobe
-        </Button>
+      {/* Filter Buttons */}
+      <div style={styles.filtersContainer}>
+        <button style={styles.filterButton}>
+          <AiFillHeart style={{ marginRight: '5px' }}/>
+          Favorites
+        </button>
+        <button style={styles.filterButton}>
+          <AiOutlineFolderOpen style={{ marginRight: '5px' }}/>
+          Category
+        </button>
+        <button style={styles.filterButton}>
+          <AiOutlineTag style={{ marginRight: '5px' }}/>
+          Type
+        </button>
+        <button style={styles.filterButton}>
+          <AiOutlineBgColors style={{ marginRight: '5px' }}/>
+          Color
+        </button>
+        <button style={styles.filterButton}>
+          <AiOutlineShop style={{ marginRight: '5px' }}/>
+          Brand
+        </button>
+        <button style={styles.filterButton}>
+          <AiOutlineDollarCircle style={{ marginRight: '5px' }}/>
+          Price
+        </button>
       </div>
 
+      {/* Upload a Piece Button */}
+      <div style={styles.uploadContainer}>
+        <button style={styles.uploadButton} onClick={handleUploadClick}>
+          <AiOutlinePlusCircle style={{ marginRight: '8px', fontSize: '18px' }}/>
+          Upload a piece
+        </button>
+      </div>
+
+      {/* Image Grid (square images) */}
+      <div style={styles.gridContainer}>
+        {images.length > 0 ? (
+          images.map((url, idx) => (
+            <div key={idx} style={styles.gridItem}>
+              <div style={styles.aspectRatioBox} onClick={() => openModal(url)}>
+                <img src={url} alt={`Clothing item ${idx}`} style={styles.image}/>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No images found.</p>
+        )}
+      </div>
+
+      {/* Hidden File Input */}
       <input
         type="file"
         accept="image/*"
@@ -131,6 +201,121 @@ export default function Home() {
         style={{ display: 'none' }}
         onChange={handleFileSelect}
       />
+
+      {/* Modal for Larger Preview and Metadata */}
+      <Modal show={showModal} onHide={closeModal} centered>
+        {selectedItem && (
+          <>
+            <Modal.Header closeButton>
+              <Modal.Title>Piece #{selectedItem.url.slice(-8)}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div style={{ textAlign: 'center', marginBottom: '15px' }}>
+                <img
+                  src={selectedItem.url}
+                  alt="Bigger preview"
+                  style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain' }}
+                />
+              </div>
+              <div style={{ fontSize: '16px', marginBottom: '10px' }}>
+                <p>Category: {selectedItem.category}</p>
+                <p>Type: {selectedItem.type}</p>
+                <p>Brand: {selectedItem.brand}</p>
+                <p>Size: {selectedItem.size}</p>
+                <p>Style: {selectedItem.style}</p>
+                <p>Color: {selectedItem.color}</p>
+                <p>Material: {selectedItem.material}</p>
+                <p>Fitted Market Value: {selectedItem.fittedMarketValue}</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+                <AiFillHeart style={styles.iconStyle} onClick={() => alert('Favorited! (placeholder)')} />
+                <AiOutlineDelete style={styles.iconStyle} onClick={() => handleDelete(selectedItem.url)} />
+              </div>
+              <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                <button style={styles.plusButton} onClick={() => alert('Generate fit with this piece! (placeholder)')}>
+                  <AiOutlinePlusCircle style={{ marginRight: '8px' }} />
+                  Generate fit with this piece
+                </button>
+              </div>
+            </Modal.Body>
+          </>
+        )}
+      </Modal>
     </div>
   );
 }
+
+const styles = {
+  filtersContainer: {
+    display: 'flex',
+    gap: '10px',
+    marginBottom: '20px',
+    justifyContent: 'center',
+  },
+  filterButton: {
+    background: '#fff',
+    border: '1px solid #ccc',
+    borderRadius: '999px',
+    padding: '8px 16px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    display: 'inline-flex',
+    alignItems: 'center',
+  },
+  uploadContainer: {
+    textAlign: 'center',
+    marginBottom: '20px',
+  },
+  uploadButton: {
+    background: '#fff',
+    border: '1px solid #ccc',
+    borderRadius: '999px',
+    padding: '8px 16px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    display: 'inline-flex',
+    alignItems: 'center',
+  },
+  gridContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '20px',
+  },
+  gridItem: {
+    border: '1px solid #eee',
+    borderRadius: '5px',
+    background: '#f9f9f9',
+    overflow: 'hidden',
+    textAlign: 'center',
+    cursor: 'pointer',
+  },
+  aspectRatioBox: {
+    position: 'relative',
+    width: '100%',
+    paddingTop: '100%', // 1:1 ratio for a square
+  },
+  image: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'contain',
+    backgroundColor: '#fff',
+  },
+  iconStyle: {
+    fontSize: '28px',
+    cursor: 'pointer',
+    color: '#333',
+  },
+  plusButton: {
+    background: '#fff',
+    border: '1px solid #ccc',
+    borderRadius: '999px',
+    padding: '8px 16px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    display: 'inline-flex',
+    alignItems: 'center',
+  },
+};
