@@ -6,7 +6,7 @@ const TabsHeader = () => {
   const router = useRouter();
   const currentPath = router.pathname;
   const tabs = [
-    { label: 'Pieces', path: '/' },          // Changed from '/index' to '/'
+    { label: 'Pieces', path: '/' },
     { label: 'Fits', path: '/fits' },
     { label: 'Collections', path: '/collections' },
   ];
