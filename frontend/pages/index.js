@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import TabsHeader from '../components/TabsHeader';
 import SplashScreen from '../components/SplashScreen';
 
-// Import icons from React Icons
+// Icons
 import {
   AiFillHeart,
   AiOutlineFolderOpen,
@@ -20,24 +20,23 @@ import {
 } from 'react-icons/ai';
 
 export default function Home() {
-  // Accessibility states
+  // ------------------ Accessibility & Filter States ------------------ //
   const [darkMode, setDarkMode] = useState(false);
   const [colorBlindMode, setColorBlindMode] = useState(false);
+  const [filterFavorites, setFilterFavorites] = useState(false);
 
-  // Splash screen state (using sessionStorage so it runs only on a new session)
+  // ------------------ Splash Screen State ------------------ //
   const [showSplash, setShowSplash] = useState(false);
 
-  // Images array (each is an object from the DB)
-  const [images, setImages] = useState([]);
-
+  // ------------------ Images & File Upload ------------------ //
+  const [images, setImages] = useState([]); // DB items
   const fileInputRef = useRef(null);
-  const router = useRouter();
 
-  // Modal state
+  // ------------------ Modal & Editing States ------------------ //
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  // Local state for editing metadata
+  // For editing metadata in the modal
   const [editFields, setEditFields] = useState({
     category: '',
     type: '',
@@ -49,8 +48,9 @@ export default function Home() {
     fitted_market_value: ''
   });
 
-  // Check sessionStorage for splash screen on load
+  // ------------------ On Load: Splash & Fetch Items ------------------ //
   useEffect(() => {
+    // Show splash only once per session
     if (typeof window !== 'undefined') {
       const visited = sessionStorage.getItem('hasVisited');
       if (!visited) {
@@ -60,12 +60,11 @@ export default function Home() {
     }
   }, []);
 
-  // Fetch images from Flask backend
+  // Fetch items from Flask DB
   useEffect(() => {
     fetch('http://127.0.0.1:5001/list')
       .then((res) => res.json())
       .then((data) => {
-        console.log('Fetched data:', data);
         if (data.files) {
           setImages(data.files);
         }
@@ -77,7 +76,13 @@ export default function Home() {
     setShowSplash(false);
   };
 
-  // Multiple file upload
+  // ------------------ File Upload ------------------ //
+  const handleUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   const handleFileSelect = async (event) => {
     const files = event.target.files;
     if (!files.length) return;
@@ -110,15 +115,10 @@ export default function Home() {
     }
   };
 
-  const handleUploadClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  // Open modal + fill edit form
+  // ------------------ Modal Logic (Open, Close, Edit) ------------------ //
   const openModal = (item) => {
     setSelectedItem(item);
+    // Populate edit fields from the selected item
     setEditFields({
       category: item.category || '',
       type: item.type || '',
@@ -137,7 +137,12 @@ export default function Home() {
     setSelectedItem(null);
   };
 
-  // Save updates to the DB
+  // Update local state as user changes the form
+  const handleChange = (e) => {
+    setEditFields({ ...editFields, [e.target.name]: e.target.value });
+  };
+
+  // ------------------ Save Updated Metadata ------------------ //
   const handleSaveUpdates = async () => {
     if (!selectedItem) return;
 
@@ -155,11 +160,11 @@ export default function Home() {
         throw new Error(result.error || 'Failed to update item');
       }
 
-      // Update local state so the UI reflects the new metadata
+      // Update the local state
       setImages((prev) =>
         prev.map((it) => (it.id === selectedItem.id ? result : it))
       );
-
+      setSelectedItem(result);
       alert('Item updated successfully!');
     } catch (err) {
       console.error('Error updating item:', err);
@@ -167,14 +172,37 @@ export default function Home() {
     }
   };
 
-  const handleChange = (e) => {
-    setEditFields({
-      ...editFields,
-      [e.target.name]: e.target.value,
-    });
+  // ------------------ Favorites ------------------ //
+  const handleToggleFavorite = async () => {
+    if (!selectedItem) return;
+    try {
+      const newFavoriteStatus = !selectedItem.favorite;
+      const response = await fetch('http://127.0.0.1:5001/favorite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: selectedItem.id, favorite: newFavoriteStatus }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to update favorite');
+      }
+      // Update local state
+      setSelectedItem(result);
+      setImages((prev) =>
+        prev.map((item) => (item.id === result.id ? result : item))
+      );
+      alert('Favorite status updated!');
+    } catch (err) {
+      console.error('Error toggling favorite:', err);
+      alert('Error updating favorite. Check console.');
+    }
   };
 
-  // Delete from S3
+  const toggleFavoriteFilter = () => {
+    setFilterFavorites(!filterFavorites);
+  };
+
+  // ------------------ Delete ------------------ //
   const handleDelete = async (item) => {
     try {
       const response = await fetch('http://127.0.0.1:5001/delete', {
@@ -195,7 +223,7 @@ export default function Home() {
     }
   };
 
-  // Accessibility toggles
+  // ------------------ Dark/Light Mode & Color Blind Mode ------------------ //
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
   };
@@ -203,7 +231,7 @@ export default function Home() {
     setColorBlindMode(!colorBlindMode);
   };
 
-  // Overall background + text color for dark/light + color blind mode
+  // Overall styling
   const accessibilityStyles = {
     backgroundColor: darkMode ? '#121212' : '#fff',
     color: darkMode ? '#eee' : '#000',
@@ -211,7 +239,6 @@ export default function Home() {
     minHeight: '100vh',
   };
 
-  // Sticky header with dynamic background for dark mode
   const stickyHeaderStyle = {
     position: 'sticky',
     top: 0,
@@ -220,6 +247,11 @@ export default function Home() {
     color: 'inherit',
     borderBottom: darkMode ? '1px solid #444' : '1px solid #ddd',
   };
+
+  // Filter favorites
+  const displayedImages = filterFavorites
+    ? images.filter((item) => item.favorite)
+    : images;
 
   if (showSplash) {
     return <SplashScreen onFinish={handleSplashFinish} />;
@@ -246,35 +278,38 @@ export default function Home() {
 
         {/* Filter Buttons */}
         <div style={{ ...styles.filtersContainer, backgroundColor: 'inherit', color: 'inherit' }}>
-          <button style={{ ...styles.filterButton, ...getButtonStyle(darkMode) }}>
-            <AiFillHeart style={{ marginRight: '5px' }}/>
+          <button
+            style={{ ...styles.filterButton, ...getButtonStyle(darkMode) }}
+            onClick={toggleFavoriteFilter}
+          >
+            <AiFillHeart style={{ marginRight: '5px' }} />
             Favorites
           </button>
           <button style={{ ...styles.filterButton, ...getButtonStyle(darkMode) }}>
-            <AiOutlineFolderOpen style={{ marginRight: '5px' }}/>
+            <AiOutlineFolderOpen style={{ marginRight: '5px' }} />
             Category
           </button>
           <button style={{ ...styles.filterButton, ...getButtonStyle(darkMode) }}>
-            <AiOutlineTag style={{ marginRight: '5px' }}/>
+            <AiOutlineTag style={{ marginRight: '5px' }} />
             Type
           </button>
           <button style={{ ...styles.filterButton, ...getButtonStyle(darkMode) }}>
-            <AiOutlineBgColors style={{ marginRight: '5px' }}/>
+            <AiOutlineBgColors style={{ marginRight: '5px' }} />
             Color
           </button>
           <button style={{ ...styles.filterButton, ...getButtonStyle(darkMode) }}>
-            <AiOutlineShop style={{ marginRight: '5px' }}/>
+            <AiOutlineShop style={{ marginRight: '5px' }} />
             Brand
           </button>
           <button style={{ ...styles.filterButton, ...getButtonStyle(darkMode) }}>
-            <AiOutlineDollarCircle style={{ marginRight: '5px' }}/>
+            <AiOutlineDollarCircle style={{ marginRight: '5px' }} />
             Price
           </button>
           <button
             style={{ ...styles.uploadButton, ...getUploadButtonStyle(darkMode) }}
             onClick={handleUploadClick}
           >
-            <AiOutlinePlusCircle style={{ marginRight: '8px', fontSize: '18px' }}/>
+            <AiOutlinePlusCircle style={{ marginRight: '8px', fontSize: '18px' }} />
             Upload a piece
           </button>
         </div>
@@ -282,19 +317,11 @@ export default function Home() {
 
       {/* Main content area (image grid) */}
       <div style={styles.gridContainer}>
-        {images.length > 0 ? (
-          images.map((item, idx) => (
-            <div
-              key={idx}
-              style={getGridItemStyle(darkMode)}
-              onClick={() => openModal(item)}
-            >
+        {displayedImages.length > 0 ? (
+          displayedImages.map((item, idx) => (
+            <div key={idx} style={getGridItemStyle(darkMode)} onClick={() => openModal(item)}>
               <div style={styles.aspectRatioBox}>
-                <img
-                  src={item.s3_url}
-                  alt={`Clothing item ${idx}`}
-                  style={styles.image}
-                />
+                <img src={item.s3_url} alt={`Clothing item ${idx}`} style={styles.image} />
               </div>
             </div>
           ))
@@ -313,7 +340,7 @@ export default function Home() {
         onChange={handleFileSelect}
       />
 
-      {/* Modal for Larger Preview, Metadata, and Edit Form */}
+      {/* Modal for Larger Preview & Metadata Editing */}
       <Modal
         show={showModal}
         onHide={closeModal}
@@ -326,7 +353,6 @@ export default function Home() {
               <Modal.Title>Piece #{selectedItem.id}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {/* Image Preview */}
               <div style={{ textAlign: 'center', marginBottom: '15px' }}>
                 <img
                   src={selectedItem.s3_url}
@@ -337,7 +363,7 @@ export default function Home() {
 
               {/* Edit Form for Metadata */}
               <Form>
-                <Form.Group controlId="category">
+                <Form.Group controlId="category" className="mb-2">
                   <Form.Label>Category</Form.Label>
                   <Form.Select
                     name="category"
@@ -352,7 +378,7 @@ export default function Home() {
                   </Form.Select>
                 </Form.Group>
 
-                <Form.Group controlId="type" className="mt-2">
+                <Form.Group controlId="type" className="mb-2">
                   <Form.Label>Type</Form.Label>
                   <Form.Select
                     name="type"
@@ -368,7 +394,7 @@ export default function Home() {
                   </Form.Select>
                 </Form.Group>
 
-                <Form.Group controlId="brand" className="mt-2">
+                <Form.Group controlId="brand" className="mb-2">
                   <Form.Label>Brand</Form.Label>
                   <Form.Control
                     type="text"
@@ -378,7 +404,7 @@ export default function Home() {
                   />
                 </Form.Group>
 
-                <Form.Group controlId="size" className="mt-2">
+                <Form.Group controlId="size" className="mb-2">
                   <Form.Label>Size</Form.Label>
                   <Form.Select
                     name="size"
@@ -395,7 +421,7 @@ export default function Home() {
                   </Form.Select>
                 </Form.Group>
 
-                <Form.Group controlId="style" className="mt-2">
+                <Form.Group controlId="style" className="mb-2">
                   <Form.Label>Style</Form.Label>
                   <Form.Select
                     name="style"
@@ -411,7 +437,7 @@ export default function Home() {
                   </Form.Select>
                 </Form.Group>
 
-                <Form.Group controlId="color" className="mt-2">
+                <Form.Group controlId="color" className="mb-2">
                   <Form.Label>Color</Form.Label>
                   <Form.Select
                     name="color"
@@ -428,7 +454,7 @@ export default function Home() {
                   </Form.Select>
                 </Form.Group>
 
-                <Form.Group controlId="material" className="mt-2">
+                <Form.Group controlId="material" className="mb-2">
                   <Form.Label>Material</Form.Label>
                   <Form.Select
                     name="material"
@@ -445,7 +471,7 @@ export default function Home() {
                   </Form.Select>
                 </Form.Group>
 
-                <Form.Group controlId="fitted_market_value" className="mt-2">
+                <Form.Group controlId="fitted_market_value" className="mb-2">
                   <Form.Label>Fitted Market Value</Form.Label>
                   <Form.Control
                     type="text"
@@ -456,17 +482,22 @@ export default function Home() {
                 </Form.Group>
               </Form>
 
+              {/* Save Changes Button */}
               <div style={{ marginTop: '15px', textAlign: 'center' }}>
                 <Button variant="primary" onClick={handleSaveUpdates}>
                   Save Changes
                 </Button>
               </div>
 
-              {/* Favorite + Delete icons, larger and more colorful */}
+              {/* Favorite and Delete Icons */}
               <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginTop: '20px' }}>
                 <AiFillHeart
-                  style={{ fontSize: '40px', cursor: 'pointer', color: '#ff69b4' }}
-                  onClick={() => alert('Favorited! (placeholder)')}
+                  style={{
+                    fontSize: '40px',
+                    cursor: 'pointer',
+                    color: selectedItem.favorite ? '#ff69b4' : '#aaa'
+                  }}
+                  onClick={handleToggleFavorite}
                 />
                 <AiOutlineDelete
                   style={{ fontSize: '40px', cursor: 'pointer', color: '#dc3545' }}
@@ -481,9 +512,7 @@ export default function Home() {
   );
 }
 
-/** 
- * Return dynamic styles for normal filter buttons 
- */
+// ---------- Helper Functions for Dynamic Styles ---------- //
 function getButtonStyle(darkMode) {
   return {
     background: 'inherit',
@@ -492,9 +521,6 @@ function getButtonStyle(darkMode) {
   };
 }
 
-/**
- * Return dynamic styles for the "Upload a piece" button
- */
 function getUploadButtonStyle(darkMode) {
   return {
     background: 'inherit',
@@ -503,9 +529,6 @@ function getUploadButtonStyle(darkMode) {
   };
 }
 
-/**
- * Return dynamic styles for each grid item
- */
 function getGridItemStyle(darkMode) {
   return {
     border: darkMode ? '1px solid #444' : '1px solid #eee',
@@ -518,6 +541,7 @@ function getGridItemStyle(darkMode) {
   };
 }
 
+// ---------- Shared Styles ---------- //
 const styles = {
   accessibilityBar: {
     display: 'flex',
@@ -563,6 +587,11 @@ const styles = {
     gap: '20px',
     padding: '20px',
   },
+  aspectRatioBox: {
+    position: 'relative',
+    width: '100%',
+    paddingTop: '100%',
+  },
   image: {
     position: 'absolute',
     top: 0,
@@ -572,10 +601,4 @@ const styles = {
     objectFit: 'contain',
     backgroundColor: 'transparent',
   },
-  aspectRatioBox: {
-    position: 'relative',
-    width: '100%',
-    paddingTop: '100%',
-  },
 };
-

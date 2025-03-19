@@ -201,6 +201,21 @@ def delete_file():
         db.session.commit()
 
         return jsonify(item.to_dict()), 200
+    
+    @app.route("/favorite", methods=["POST"])
+    def toggle_favorite():
+        data = request.get_json()
+        item_id = data.get("id")
+        favorite = data.get("favorite")
+        if item_id is None or favorite is None:
+            return jsonify({"error": "Missing parameters"}), 400
+        item = ClothingItem.query.get(item_id)
+        if not item:
+            return jsonify({"error": "Item not found"}), 404
+        item.favorite = favorite
+        db.session.commit()
+        return jsonify(item.to_dict()), 200
+
 
 
 if __name__ == "__main__":
