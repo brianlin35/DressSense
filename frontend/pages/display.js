@@ -55,7 +55,8 @@ export default function Display() {
       const result = await res.json();
       if (res.ok) {
         alert('Upload successful!');
-        setImages((prevImages) => [...prevImages, result.url]);
+        // Add the entire item object returned from the backend to the state
+        setImages((prevImages) => [...prevImages, result]);
       } else {
         alert('Upload failed: ' + result.error);
       }
@@ -72,20 +73,9 @@ export default function Display() {
     }
   };
 
-  // Open modal with placeholder metadata
-  const openModal = (url) => {
-    const itemData = {
-      url,
-      category: 'Top',
-      type: 'T-Shirt',
-      brand: 'BrandX',
-      size: 'M',
-      style: 'Casual',
-      color: 'Black',
-      material: 'Cotton',
-      fittedMarketValue: '$50',
-    };
-    setSelectedItem(itemData);
+  // Open modal with the selected item data from the DB
+  const openModal = (item) => {
+    setSelectedItem(item);
     setShowModal(true);
   };
 
@@ -94,13 +84,13 @@ export default function Display() {
     setSelectedItem(null);
   };
 
-  // Delete from S3
-  const handleDelete = async (url) => {
+  // Delete an item from S3 and update state accordingly
+  const handleDelete = async (s3_url) => {
     try {
       const response = await fetch('http://127.0.0.1:5001/delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url: s3_url }),
       });
 
       const result = await response.json();
@@ -108,9 +98,9 @@ export default function Display() {
         throw new Error(result.error || 'Failed to delete object');
       }
 
-      // Remove from local state
-      setImages((prev) => prev.filter((item) => item !== url));
-      alert(`Deleted ${url} from S3`);
+      // Remove item by filtering based on its s3_url
+      setImages((prev) => prev.filter((item) => item.s3_url !== s3_url));
+      alert(`Deleted ${s3_url} from S3`);
       closeModal();
     } catch (err) {
       console.error('Error deleting item:', err);
@@ -162,11 +152,11 @@ export default function Display() {
       {/* Image Grid */}
       <div style={styles.gridContainer}>
         {images.length > 0 ? (
-          images.map((url, idx) => (
+          images.map((item, idx) => (
             <div key={idx} style={styles.gridItem}>
-              <div style={styles.aspectRatioBox} onClick={() => openModal(url)}>
+              <div style={styles.aspectRatioBox} onClick={() => openModal(item)}>
                 <img
-                  src={url}
+                  src={item.s3_url}
                   alt={`Clothing item ${idx}`}
                   style={styles.image}
                 />
@@ -187,17 +177,17 @@ export default function Display() {
         onChange={handleFileSelect}
       />
 
-      {/* Modal for bigger preview + metadata */}
+      {/* Modal for larger preview + metadata */}
       <Modal show={showModal} onHide={closeModal} centered>
         {selectedItem && (
           <>
             <Modal.Header closeButton>
-              <Modal.Title>Piece #{selectedItem.url.slice(-8)}</Modal.Title>
+              <Modal.Title>Piece #{selectedItem.id}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div style={{ textAlign: 'center', marginBottom: '15px' }}>
                 <img
-                  src={selectedItem.url}
+                  src={selectedItem.s3_url}
                   alt="Bigger preview"
                   style={{
                     maxWidth: '100%',
@@ -207,7 +197,7 @@ export default function Display() {
                 />
               </div>
 
-              {/* Placeholder metadata */}
+              {/* Display predicted metadata */}
               <div style={{ fontSize: '16px', marginBottom: '10px' }}>
                 <p>Category: {selectedItem.category}</p>
                 <p>Type: {selectedItem.type}</p>
@@ -216,18 +206,18 @@ export default function Display() {
                 <p>Style: {selectedItem.style}</p>
                 <p>Color: {selectedItem.color}</p>
                 <p>Material: {selectedItem.material}</p>
-                <p>Fitted Market Value: {selectedItem.fittedMarketValue}</p>
+                <p>Fitted Market Value: {selectedItem.fitted_market_value}</p>
               </div>
 
               {/* Heart and Trash Icons */}
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
                 <AiFillHeart
                   style={styles.iconStyle}
                   onClick={() => alert('Favorited! (placeholder)')}
                 />
                 <AiOutlineDelete
                   style={styles.iconStyle}
-                  onClick={() => handleDelete(selectedItem.url)}
+                  onClick={() => handleDelete(selectedItem.s3_url)}
                 />
               </div>
 
