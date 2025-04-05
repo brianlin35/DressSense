@@ -1,77 +1,103 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
+import json
 import boto3
+import logging
 import os
 import io
+import re
+import uuid
+from datetime import datetime, timezone  # <-- Added timezone here
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from rembg import remove  # Remove image background
-import json
 
-# Initialize Flask app and CORS
+# Configure logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 app = Flask(__name__)
 CORS(app)
 
-# Configure SQLAlchemy with SQLite (for prototyping)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///clothing.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-# AWS S3 Configuration
+# AWS Configurations
 AWS_REGION = "us-east-1"
 S3_BUCKET = "dresssense-bucket-jorge"
 
 s3_client = boto3.client(
     "s3",
+    region_name=AWS_REGION,
     aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
     aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
-    region_name=AWS_REGION,
 )
 
-# Define a database model for a clothing item
-class ClothingItem(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    s3_url = db.Column(db.String, nullable=False)
-    category = db.Column(db.String)
-    type = db.Column(db.String)
-    brand = db.Column(db.String)
-    size = db.Column(db.String)
-    style = db.Column(db.String)
-    color = db.Column(db.String)
-    material = db.Column(db.String)
-    fitted_market_value = db.Column(db.String)
+# DynamoDB configuration – ensure your table "ClothingItems" exists with primary key "id"
+dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
+table = dynamodb.Table("ClothingItems")
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "s3_url": self.s3_url,
-            "category": self.category,
-            "type": self.type,
-            "brand": self.brand,
-            "size": self.size,
-            "style": self.style,
-            "color": self.color,
-            "material": self.material,
-            "fitted_market_value": self.fitted_market_value,
-        }
+def run_recognition(temp_file_path, s3_url) -> dict:
+    prompt = f"""
+You are a fashion expert and product description generator. Your task is to analyze clothing product images and generate detailed and accurate descriptions. Include the following attributes in your descriptions:
+- Category (either Outerwear, Top, Bottom, or Footwear)
+- Type of clothing
+- Primary Color
+- Accent Color(s)
+- Pattern
+- Shape
+- Fit (e.g., slim-fit, oversized, relaxed, etc.)
+- Neckline (e.g., Crew, v-neck, scoop, not applicable, etc.)
+- Key design elements (describe relevant elements. e.g., buttons, zippers, pleats, embellishments, stitching patterns, etc.)
+- Brand (if specified)
+- Style (e.g., streetwear, minimalist, athleisure, classic/traditional, etc.)
+- Occasion suitability (e.g., casual, formal, sporty, etc.)
+- Weather appropriateness (e.g., warm, cold, all-season)
+- Fabric Material (e.g., cotton, wool, silk, denim, etc.)
+- Fabric Weight
+- Functional Features (e.g. water resistant, moisture-wicking, insulated, etc.)
+- How it can be styled (2-3 sentences describing how the piece can be worn)
+- Additional Notes (2-3 sentences describing the overall aesthetic of the piece and its essence)
 
-# Create the database tables (do this once)
-with app.app_context():
-    db.create_all()
+Return ONLY the JSON object with the attribute names as keys.
+Image URL: {s3_url}
+    """
+    logger.info(f"Classification prompt:\n{prompt}")
 
-# Placeholder recognition function (replace with your actual model inference)
-def run_recognition(image_path) -> dict:
-    # In a real scenario, you'd run your model inference here.
-    # For now, return dummy metadata.
-    return {
-        "category": "Top",
-        "type": "T-Shirt",
-        "brand": "BrandX",
-        "size": "M",
-        "style": "Casual",
-        "color": "Black",
-        "material": "Cotton",
-        "fitted_market_value": "$50"
-    }
+    sagemaker = boto3.client('sagemaker-runtime', region_name=AWS_REGION)
+    try:
+        response = sagemaker.invoke_endpoint(
+            EndpointName='endpoint-quick-start-fywsd',
+            ContentType='application/json',
+            Accept='application/json',
+            Body=json.dumps({
+                "inputs": prompt,
+                "parameters": {
+                    "max_new_tokens": 512,
+                    "temperature": 0.7
+                }
+            })
+        )
+        response_body = response['Body'].read().decode()
+        logger.info(f"Raw model output: {response_body}")
+        result = json.loads(response_body)
+        if isinstance(result, list):
+            generated_text = result[0].get('generated_text', '')
+        else:
+            generated_text = result.get('generated_text', '')
+        logger.info(f"Model response: {generated_text}")
+        try:
+            features = json.loads(generated_text)
+        except Exception as e:
+            logger.error(f"Error parsing JSON: {str(e)}")
+            json_match = re.search(r'\{[\s\S]*\}', generated_text)
+            if json_match:
+                try:
+                    features = json.loads(json_match.group())
+                except Exception as e2:
+                    logger.error(f"Error parsing extracted JSON: {str(e2)}")
+                    features = {}
+            else:
+                features = {}
+        return features
+    except Exception as e:
+        logger.error(f"Error invoking endpoint: {str(e)}")
+        return {}
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
@@ -83,10 +109,13 @@ def upload_file():
     if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
         return jsonify({"error": "Only image files are allowed"}), 400
 
-    file_key = f"user-uploads/{file.filename}"
+    # Generate a unique id and filename
+    unique_id = str(uuid.uuid4())
+    unique_filename = f"{unique_id}_{file.filename}"
+    file_key = f"user-uploads/{unique_filename}"
 
     try:
-        # Read image bytes and remove background
+        # Read file, remove background, and prepare for S3 upload
         input_bytes = file.read()
         output_bytes = remove(input_bytes)
         output_file = io.BytesIO(output_bytes)
@@ -102,47 +131,97 @@ def upload_file():
                 'ContentDisposition': 'inline'
             }
         )
-        file_url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
+        s3_url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
 
-        # Optionally, save the file temporarily to disk to run recognition
-        # Here we assume rembg processed bytes are in output_bytes.
-        temp_path = f"/tmp/{file.filename}"
+        # Create a placeholder record in DynamoDB with "pending" status
+        placeholder_item = {
+            "id": unique_id,
+            "s3_url": s3_url,
+            "category": "pending",
+            "type": "pending",
+            "brand": "pending",
+            "size": "pending",
+            "style": "pending",
+            "color": "pending",
+            "material": "pending",
+            "fitted_market_value": "pending",
+            "status": "pending",
+            "processed_at": None,
+            "error_message": None
+        }
+        table.put_item(Item=placeholder_item)
+        logger.info(f"Created placeholder record: {json.dumps(placeholder_item)}")
+
+        # Optionally, save the file temporarily for recognition
+        temp_path = f"/tmp/{unique_filename}"
         with open(temp_path, "wb") as temp_file:
             temp_file.write(output_bytes)
 
-        # Run your recognition model to extract features
-        metadata = run_recognition(temp_path)
-        os.remove(temp_path)  # Clean up temp file
+        # Run classification synchronously using the Qwen model endpoint
+        metadata = run_recognition(temp_path, s3_url)
+        os.remove(temp_path)  # Clean up temporary file
 
-        # Save the result to the database
-        clothing_item = ClothingItem(
-            s3_url=file_url,
-            category=metadata.get("category"),
-            type=metadata.get("type"),
-            brand=metadata.get("brand"),
-            size=metadata.get("size"),
-            style=metadata.get("style"),
-            color=metadata.get("color"),
-            material=metadata.get("material"),
-            fitted_market_value=metadata.get("fitted_market_value")
+        # Update the DynamoDB record with classification results.
+        # Alias reserved keywords: "type" -> "#ty", "style" -> "#sty", "status" -> "#st"
+        update_expression = (
+            "SET category = :category, #ty = :type, brand = :brand, "
+            "size = :size, #sty = :style, color = :color, "
+            "material = :material, fitted_market_value = :fitted_market_value, "
+            "#st = :status, processed_at = :processed_at"
         )
-        db.session.add(clothing_item)
-        db.session.commit()
+        expression_attribute_values = {
+            ":category": metadata.get("Category", "unknown"),
+            ":type": metadata.get("Type of clothing", "unknown"),
+            ":brand": metadata.get("Brand", "unknown"),
+            ":size": "N/A",  # If size is not provided, default to "N/A"
+            ":style": metadata.get("Style", "unknown"),
+            ":color": metadata.get("Primary Color", "unknown"),
+            ":material": metadata.get("Fabric Material", "unknown"),
+            ":fitted_market_value": "N/A",  # If estimated value is not provided, default to "N/A"
+            ":status": "processed",
+            ":processed_at": datetime.now(timezone.utc).isoformat()  # Using timezone.utc here
+        }
+        expression_attribute_names = {"#ty": "type", "#sty": "style", "#st": "status"}
+        table.update_item(
+            Key={"id": unique_id},
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=expression_attribute_values,
+            ExpressionAttributeNames=expression_attribute_names
+        )
+        logger.info(f"Updated record {unique_id} with classification results.")
 
-        # Return the S3 URL and metadata as response
-        response_data = clothing_item.to_dict()
-        response_data["message"] = "Upload successful"
-        return jsonify(response_data)
+        # Retrieve the updated record to return in the response
+        updated_item = table.get_item(Key={"id": unique_id}).get("Item")
+
+        return jsonify({
+            "message": "Upload and classification successful",
+            "item": updated_item
+        })
+
     except Exception as e:
+        logger.error(f"Error in /upload: {str(e)}")
+        # If an error occurs, update the record with error status if possible
+        try:
+            table.update_item(
+                Key={"id": unique_id},
+                UpdateExpression="SET #st = :status, error_message = :error",
+                ExpressionAttributeValues={
+                    ":status": "failed",
+                    ":error": str(e)
+                },
+                ExpressionAttributeNames={"#st": "status"}
+            )
+        except Exception as inner_e:
+            logger.error(f"Error updating error status in DynamoDB: {str(inner_e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route("/list", methods=["GET"])
 def list_files():
     try:
-        # For simplicity, we fetch from the database rather than directly listing S3 objects.
-        items = ClothingItem.query.all()
-        items_list = [item.to_dict() for item in items]
-        return jsonify({"files": items_list})
+        # Scan the entire table (for production, consider pagination)
+        response = table.scan()
+        items = response.get("Items", [])
+        return jsonify({"files": items})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -153,70 +232,67 @@ def delete_file():
     if not url or "amazonaws.com/" not in url:
         return jsonify({"error": "Invalid S3 URL"}), 400
 
-    key = url.split(".com/")[-1]
     try:
+        # Derive the S3 key from the URL
+        key = url.split(".com/")[-1]
+        # Delete the object from S3
         s3_client.delete_object(Bucket=S3_BUCKET, Key=key)
-        # Also remove from database
-        item = ClothingItem.query.filter_by(s3_url=url).first()
-        if item:
-            db.session.delete(item)
-            db.session.commit()
+        # Delete DynamoDB record(s) matching the s3_url (using a scan here)
+        response = table.scan(
+            FilterExpression=boto3.dynamodb.conditions.Attr("s3_url").eq(url)
+        )
+        items = response.get("Items", [])
+        if items:
+            for item in items:
+                table.delete_item(Key={"id": item["id"]})
         return jsonify({"message": "Deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
-    @app.route("/update", methods=["POST"])
-    def update_item():
-        data = request.get_json()
-        item_id = data.get("id")
-        if not item_id:
-            return jsonify({"error": "No item ID provided"}), 400
 
-        # Extract new metadata
-        category = data.get("category", "")
-        type_ = data.get("type", "")
-        brand = data.get("brand", "")
-        size = data.get("size", "")
-        style = data.get("style", "")
-        color = data.get("color", "")
-        material = data.get("material", "")
-        fitted_market_value = data.get("fitted_market_value", "")
+@app.route("/update", methods=["POST"])
+def update_item():
+    data = request.get_json()
+    item_id = data.get("id")
+    if not item_id:
+        return jsonify({"error": "No item ID provided"}), 400
 
-        # Find the record in the DB
-        item = ClothingItem.query.get(item_id)
-        if not item:
-            return jsonify({"error": "Item not found"}), 404
+    # Build update expression from allowed fields
+    update_expression = "SET "
+    expression_attribute_values = {}
+    allowed_fields = ["category", "type", "brand", "size", "style", "color", "material", "fitted_market_value"]
+    for field in allowed_fields:
+        if field in data:
+            update_expression += f"{field} = :{field}, "
+            expression_attribute_values[f":{field}"] = data[field]
+    update_expression = update_expression.rstrip(", ")
+    try:
+        table.update_item(
+            Key={"id": item_id},
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=expression_attribute_values
+        )
+        updated_item = table.get_item(Key={"id": item_id}).get("Item")
+        return jsonify(updated_item), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-        # Update fields
-        item.category = category
-        item.type = type_
-        item.brand = brand
-        item.size = size
-        item.style = style
-        item.color = color
-        item.material = material
-        item.fitted_market_value = fitted_market_value
-
-        # Commit changes
-        db.session.commit()
-
-        return jsonify(item.to_dict()), 200
-    
-    @app.route("/favorite", methods=["POST"])
-    def toggle_favorite():
-        data = request.get_json()
-        item_id = data.get("id")
-        favorite = data.get("favorite")
-        if item_id is None or favorite is None:
-            return jsonify({"error": "Missing parameters"}), 400
-        item = ClothingItem.query.get(item_id)
-        if not item:
-            return jsonify({"error": "Item not found"}), 404
-        item.favorite = favorite
-        db.session.commit()
-        return jsonify(item.to_dict()), 200
-
-
+@app.route("/favorite", methods=["POST"])
+def toggle_favorite():
+    data = request.get_json()
+    item_id = data.get("id")
+    favorite = data.get("favorite")
+    if item_id is None or favorite is None:
+        return jsonify({"error": "Missing parameters"}), 400
+    try:
+        table.update_item(
+            Key={"id": item_id},
+            UpdateExpression="SET favorite = :fav",
+            ExpressionAttributeValues={":fav": favorite}
+        )
+        updated_item = table.get_item(Key={"id": item_id}).get("Item")
+        return jsonify(updated_item), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
