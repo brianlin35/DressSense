@@ -1,106 +1,200 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Modal } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { Modal, Toast } from 'react-bootstrap';
 import TabsHeader from '../components/TabsHeader';
-import {
+import MenuButtons from '../components/MenuButtons';
+import { 
+  AiOutlinePlusCircle, 
+  AiOutlineEdit, 
+  AiOutlineDelete, 
   AiFillHeart,
-  AiOutlineFolderOpen,
-  AiOutlineTag,
-  AiOutlineBgColors,
-  AiOutlineShop,
-  AiOutlineDollarCircle,
-  AiOutlinePlusCircle,
-  AiOutlineDelete
+  AiOutlineMoon,
+  AiOutlineSun
 } from 'react-icons/ai';
 
-export default function Display() {
+function Display() {
   const [images, setImages] = useState([]);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const fileInputRef = useRef(null);
+  const [showItemKeys, setShowItemKeys] = useState(false);
+  
+  // Dark mode state
+  const [darkMode, setDarkMode] = useState(false);
 
-  // Modal states
+  // Keep track of favorites plus other filter toggles
+  const [favoritesFilter, setFavoritesFilter] = useState(false);
+  const [activeFilters, setActiveFilters] = useState({
+    category: false,
+    type: false,
+    color: false,
+    brand: false,
+    price: false,
+  });
+
   const [showModal, setShowModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
-  // Function to fetch data from the backend
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [tempName, setTempName] = useState('');
+  const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
+
+  // States for uploading
+  const [uploadName, setUploadName] = useState('');
+  const [uploadFile, setUploadFile] = useState(null);
+  const [uploadModelResult, setUploadModelResult] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+
+  const router = useRouter();
+
+  // Fetch images list
   const fetchData = () => {
     fetch('http://127.0.0.1:5001/list')
       .then((res) => res.json())
       .then((data) => {
-        console.log('Fetched data:', data);
-        if (data.files) {
-          setImages(data.files);
-        }
+        if (data.files) setImages(data.files);
       })
       .catch((err) => console.error('Error fetching images:', err));
   };
 
-  // Fetch images on mount and poll every 10 seconds
   useEffect(() => {
     fetchData();
     const interval = setInterval(fetchData, 10000);
     return () => clearInterval(interval);
   }, []);
 
-  // Handle file upload using XMLHttpRequest to track progress
-  const handleFileSelect = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      console.error('Please select an image file.');
+  // Toggle dark mode on <body>
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
+  const showToast = (message, variant = 'success') => {
+    setToast({ show: true, message, variant });
+    setTimeout(() => {
+      setToast((prev) => ({ ...prev, show: false }));
+    }, 3000);
+  };
+
+  /* ------------------ MenuButtons Callbacks ------------------ */
+  const handleFavoritesFilterToggle = () => {
+    setFavoritesFilter((prev) => !prev);
+  };
+
+  const handleToggleFilter = (filterName) => {
+    setActiveFilters((prev) => ({
+      ...prev,
+      [filterName]: !prev[filterName],
+    }));
+  };
+
+  /* ------------------ Compute displayedImages ------------------ */
+  let displayedImages = [...images];
+  if (favoritesFilter) {
+    displayedImages = displayedImages.filter((item) => item.favorite);
+  }
+  if (activeFilters.category) {
+    displayedImages.sort((a, b) => (a.category || '').localeCompare(b.category || ''));
+  }
+  if (activeFilters.type) {
+    displayedImages.sort((a, b) => (a.type || '').localeCompare(b.type || ''));
+  }
+  if (activeFilters.color) {
+    displayedImages.sort((a, b) => (a.color || '').localeCompare(b.color || ''));
+  }
+  if (activeFilters.brand) {
+    displayedImages.sort((a, b) => (a.brand || '').localeCompare(b.brand || ''));
+  }
+  if (activeFilters.price) {
+    displayedImages.sort((a, b) => {
+      const priceA = parseFloat(a.fitted_market_value) || 0;
+      const priceB = parseFloat(b.fitted_market_value) || 0;
+      return priceA - priceB;
+    });
+  }
+
+  /* ------------------ Upload Flow ------------------ */
+  const handleOpenUploadModal = () => {
+    setShowUploadModal(true);
+  };
+
+  const handleCloseUploadModal = () => {
+    setShowUploadModal(false);
+    setUploadName('');
+    setUploadFile(null);
+    setUploadModelResult('');
+    setIsUploading(false);
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setUploadFile(e.target.files[0]);
+    }
+  };
+
+  const handleUploadSubmit = () => {
+    if (isUploading) return;
+    if (!uploadFile) {
+      showToast('Please select an image to upload', 'warning');
       return;
     }
+    if (!uploadFile.type.startsWith('image/')) {
+      showToast('Only image files are allowed', 'danger');
+      return;
+    }
+    setIsUploading(true);
+    const safeName = uploadName.trim() === '' ? 'untitled' : uploadName.trim();
     const formData = new FormData();
-    formData.append('file', file);
-
+    formData.append('file', uploadFile);
+    formData.append('name', safeName);
+    formData.append('model_result', uploadModelResult.trim() || '');
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://127.0.0.1:5001/upload');
-
-    // Update progress state
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const progress = Math.round((event.loaded / event.total) * 100);
-        setUploadProgress(progress);
-      }
-    };
-
     xhr.onload = () => {
-      setUploadProgress(0);
+      setIsUploading(false);
       if (xhr.status === 200) {
-        // Refresh list after successful upload
-        fetchData();
+        try {
+          const responseJson = JSON.parse(xhr.responseText);
+          if (responseJson.item && responseJson.item.id) {
+            showToast('Upload successful', 'success');
+            fetchData();
+            handleCloseUploadModal();
+          } else {
+            showToast('Upload error: Missing item data', 'danger');
+          }
+        } catch (error) {
+          console.error('Error parsing upload response:', error);
+          showToast('Upload unsuccessful', 'danger');
+        }
       } else {
-        console.error('Upload failed: ', xhr.responseText);
+        console.error('Upload failed:', xhr.responseText);
+        showToast('Upload unsuccessful', 'danger');
       }
     };
-
     xhr.onerror = () => {
-      setUploadProgress(0);
+      setIsUploading(false);
       console.error('Upload error');
+      showToast('Upload unsuccessful', 'danger');
     };
-
     xhr.send(formData);
   };
 
-  // Trigger hidden file input
-  const handleUploadClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  // Open modal with the selected item data from the DB
+  /* ------------------ Details Modal Flow ------------------ */
   const openModal = (item) => {
-    console.log('Opening modal for item:', item);
-    setSelectedItem(item);
+    setSelectedItem({ ...item, favorite: item.favorite || false });
+    setTempName(item.name || `Piece #${item.id}`);
     setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
     setSelectedItem(null);
+    setIsEditingName(false);
+    setShowItemKeys(false);
   };
 
-  // Delete an item from S3 and update state accordingly
   const handleDelete = async (s3_url) => {
     try {
       const response = await fetch('http://127.0.0.1:5001/delete', {
@@ -109,76 +203,106 @@ export default function Display() {
         body: JSON.stringify({ url: s3_url }),
       });
       const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to delete object');
-      }
-      fetchData(); // Refresh list after deletion
+      if (!response.ok) throw new Error(result.error || 'Failed to delete object');
+      fetchData();
       closeModal();
     } catch (err) {
       console.error('Error deleting item:', err);
     }
   };
 
-  return (
-    <div style={styles.container}>
-      {/* Tabs Header */}
-      <TabsHeader />
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedItem((prev) => ({ ...prev, [name]: value }));
+  };
 
-      {/* Filter Buttons with Icons */}
-      <div style={styles.filtersContainer}>
-        <button style={styles.filterButton}>
-          <AiFillHeart style={{ marginRight: '5px' }} />
-          Favorites
-        </button>
-        <button style={styles.filterButton}>
-          <AiOutlineFolderOpen style={{ marginRight: '5px' }} />
-          Category
-        </button>
-        <button style={styles.filterButton}>
-          <AiOutlineTag style={{ marginRight: '5px' }} />
-          Type
-        </button>
-        <button style={styles.filterButton}>
-          <AiOutlineBgColors style={{ marginRight: '5px' }} />
-          Color
-        </button>
-        <button style={styles.filterButton}>
-          <AiOutlineShop style={{ marginRight: '5px' }} />
-          Brand
-        </button>
-        <button style={styles.filterButton}>
-          <AiOutlineDollarCircle style={{ marginRight: '5px' }} />
-          Price
-        </button>
+  const handleUpdate = async () => {
+    setIsUpdating(true);
+    try {
+      const response = await fetch('http://127.0.0.1:5001/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedItem),
+      });
+      if (response.ok) {
+        fetchData();
+        closeModal();
+      } else {
+        console.error('Failed to update item');
+      }
+    } catch (err) {
+      console.error('Error updating item:', err);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const toggleEditingName = () => setIsEditingName((prev) => !prev);
+
+  const handleGenerateFit = () => {
+    if (selectedItem && selectedItem.s3_url) {
+      router.push({
+        pathname: '/fits',
+        query: { imageUrl: selectedItem.s3_url }
+      });
+    }
+  };
+
+  // Keys to show in the details modal
+  const keysToShow = [
+    "brand",
+    "category",
+    "color",
+    "fitted_market_value",
+    "material",
+    "size",
+    "style",
+    "type"
+  ];
+
+  // Toggle dark mode
+  const toggleDarkMode = () => setDarkMode((prev) => !prev);
+
+  return (
+    // The container itself remains unmodified;
+    // dark mode is applied on <body> via useEffect
+    <div className="container">
+      {/* Dark mode toggle always visible */}
+      <div className="darkModeToggle" onClick={toggleDarkMode}>
+        {darkMode ? (
+          <AiOutlineSun size={24} style={{ color: '#FFD700' }} />
+        ) : (
+          <AiOutlineMoon size={24} style={{ color: '#666' }} />
+        )}
       </div>
 
-      {/* Upload a piece button */}
-      <div style={styles.uploadContainer}>
-        <button style={styles.uploadButton} onClick={handleUploadClick}>
-          <AiOutlinePlusCircle style={{ marginRight: '8px', fontSize: '18px' }} />
+      <TabsHeader />
+
+      <MenuButtons
+        favoritesFilter={favoritesFilter}
+        handleFavoritesFilterToggle={handleFavoritesFilterToggle}
+        activeFilters={activeFilters}
+        onToggleFilter={handleToggleFilter}
+      />
+
+      {/* UPLOAD BUTTON */}
+      <div className="uploadContainer">
+        <button className="uploadButton" onClick={handleOpenUploadModal}>
+          <AiOutlinePlusCircle className="iconSmall" />
           Upload a piece
         </button>
       </div>
 
-      {/* Progress Bar */}
-      {uploadProgress > 0 && (
-        <div style={styles.progressContainer}>
-          <div style={{ ...styles.progressBar, width: `${uploadProgress}%` }}>
-            {uploadProgress}%
-          </div>
-        </div>
-      )}
-
-      {/* Image Grid */}
-      <div style={styles.gridContainer}>
-        {images.length > 0 ? (
-          images.map((item) => (
-            <div key={item.id} style={styles.gridItem}>
-              <div style={styles.aspectRatioBox} onClick={() => openModal(item)}>
+      {/* DISPLAYED IMAGES */}
+      <div className="gridContainer">
+        {displayedImages.length > 0 ? (
+          displayedImages.map((item) => (
+            <div key={item.id} className="gridItem" onClick={() => openModal(item)}>
+              <div className="aspectRatioBox">
                 <img
                   src={item.s3_url}
                   alt={`Clothing item ${item.id}`}
-                  style={styles.image}
+                  className="image"
                 />
               </div>
             </div>
@@ -188,153 +312,174 @@ export default function Display() {
         )}
       </div>
 
-      {/* Hidden file input */}
-      <input
-        type="file"
-        accept="image/*"
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        onChange={handleFileSelect}
-      />
+      {/* Upload Modal */}
+      <Modal show={showUploadModal} onHide={handleCloseUploadModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Upload New Piece</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="form-group">
+            <label htmlFor="uploadName">Piece Name</label>
+            <input
+              type="text"
+              id="uploadName"
+              className="form-control"
+              value={uploadName}
+              onChange={(e) => setUploadName(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="uploadFile">Choose an Image</label>
+            <input
+              type="file"
+              id="uploadFile"
+              className="form-control"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="uploadModelResult">Model Result (optional)</label>
+            <input
+              type="text"
+              id="uploadModelResult"
+              className="form-control"
+              value={uploadModelResult}
+              onChange={(e) => setUploadModelResult(e.target.value)}
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-secondary" onClick={handleCloseUploadModal}>
+            Cancel
+          </button>
+          <button className="btn btn-primary" onClick={handleUploadSubmit} disabled={isUploading}>
+            {isUploading ? 'Uploading...' : 'Upload'}
+          </button>
+        </Modal.Footer>
+      </Modal>
 
-      {/* Modal for larger preview + metadata */}
+      {/* Details Modal */}
       <Modal show={showModal} onHide={closeModal} centered>
         {selectedItem && (
           <>
             <Modal.Header closeButton>
-              <Modal.Title>Piece #{selectedItem.id}</Modal.Title>
+              <Modal.Title className="modalTitleContainer">
+                {isEditingName ? (
+                  <input
+                    type="text"
+                    value={tempName}
+                    onChange={(e) => {
+                      setTempName(e.target.value);
+                      setSelectedItem((prev) => ({ ...prev, name: e.target.value }));
+                    }}
+                    className="editNameInput"
+                    autoFocus
+                  />
+                ) : (
+                  <>
+                    {selectedItem.name || `Piece #${selectedItem.id}`}
+                    <AiOutlineEdit className="editIcon" onClick={toggleEditingName} />
+                  </>
+                )}
+              </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div style={{ textAlign: 'center', marginBottom: '15px' }}>
+              <div className="modalImageContainer">
                 <img
                   src={selectedItem.s3_url}
                   alt="Bigger preview"
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '300px',
-                    objectFit: 'contain',
-                  }}
+                  className="modalImage"
+                  onClick={() => setShowItemKeys((prev) => !prev)}
+                  style={{ cursor: 'pointer' }}
                 />
               </div>
-              <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-                <p>Category: {selectedItem.category}</p>
-                <p>Type: {selectedItem.type}</p>
-                <p>Brand: {selectedItem.brand}</p>
-                <p>Size: {selectedItem.size}</p>
-                <p>Style: {selectedItem.style}</p>
-                <p>Color: {selectedItem.color}</p>
-                <p>Material: {selectedItem.material}</p>
-                <p>Fitted Market Value: {selectedItem.fitted_market_value}</p>
+              {showItemKeys && (
+                <div className="itemKeysContainer">
+                  {keysToShow.map((key) => (
+                    <div key={key} className="keyRow">
+                      <strong>{key}:</strong> {selectedItem[key] || "N/A"}
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="iconRow">
+                {selectedItem.favorite ? (
+                  <span 
+                    className="iconButton favoriteIcon red" 
+                    onClick={() => {
+                      fetch('http://127.0.0.1:5001/favorite', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: selectedItem.id, favorite: false }),
+                      })
+                        .then((res) => res.json())
+                        .then((updatedItem) => {
+                          setSelectedItem(updatedItem);
+                          fetchData();
+                        })
+                        .catch((err) => console.error('Error toggling favorite:', err));
+                    }}
+                  >
+                    <AiFillHeart />
+                  </span>
+                ) : (
+                  <span 
+                    className="iconButton favoriteIcon grey" 
+                    onClick={() => {
+                      fetch('http://127.0.0.1:5001/favorite', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: selectedItem.id, favorite: true }),
+                      })
+                        .then((res) => res.json())
+                        .then((updatedItem) => {
+                          setSelectedItem(updatedItem);
+                          fetchData();
+                        })
+                        .catch((err) => console.error('Error toggling favorite:', err));
+                    }}
+                  >
+                    <AiFillHeart />
+                  </span>
+                )}
+                <span
+                  className="iconButton deleteIcon blue" onClick={() => handleDelete(selectedItem.s3_url)}>
+                  <AiOutlineDelete />
+                </span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
-                <AiFillHeart style={styles.iconStyle} onClick={() => console.log('Favorited (placeholder)')} />
-                <AiOutlineDelete style={styles.iconStyle} onClick={() => handleDelete(selectedItem.s3_url)} />
-              </div>
-              <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                <button style={styles.plusButton} onClick={() => console.log('Generate fit with this piece (placeholder)')}>
-                  <AiOutlinePlusCircle style={{ marginRight: '8px' }} />
+              <div className="centerButtons">
+                <button className="plusButton" onClick={handleGenerateFit}>
+                  <AiOutlinePlusCircle className="iconSmall" />
                   Generate fit with this piece
+                </button>
+                <button className="saveButton" onClick={handleUpdate} disabled={isUpdating}>
+                  {isUpdating ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </Modal.Body>
           </>
         )}
       </Modal>
+
+      <Toast
+        show={toast.show}
+        onClose={() => setToast({ ...toast, show: false })}
+        bg={toast.variant}
+        delay={3000}
+        autohide
+        style={{
+          position: 'fixed',
+          bottom: 20,
+          right: 20,
+          minWidth: 200,
+          zIndex: 9999,
+        }}
+      >
+        <Toast.Body className="text-white">{toast.message}</Toast.Body>
+      </Toast>
     </div>
   );
 }
 
-const styles = {
-  container: {
-    fontFamily: 'Arial, sans-serif',
-    padding: '20px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  },
-  filtersContainer: {
-    display: 'flex',
-    gap: '10px',
-    marginBottom: '20px',
-    justifyContent: 'center',
-  },
-  filterButton: {
-    background: '#fff',
-    border: '1px solid #ccc',
-    borderRadius: '999px',
-    padding: '8px 16px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    display: 'inline-flex',
-    alignItems: 'center',
-  },
-  uploadContainer: {
-    textAlign: 'center',
-    marginBottom: '20px',
-  },
-  uploadButton: {
-    background: '#fff',
-    border: '1px solid #ccc',
-    borderRadius: '999px',
-    padding: '8px 16px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    display: 'inline-flex',
-    alignItems: 'center',
-  },
-  progressContainer: {
-    width: '100%',
-    backgroundColor: '#eee',
-    borderRadius: '4px',
-    marginBottom: '20px',
-    overflow: 'hidden',
-  },
-  progressBar: {
-    height: '20px',
-    backgroundColor: '#4caf50',
-    color: '#fff',
-    textAlign: 'center',
-    lineHeight: '20px',
-  },
-  gridContainer: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '20px',
-  },
-  gridItem: {
-    border: '1px solid #eee',
-    borderRadius: '5px',
-    background: '#f9f9f9',
-    overflow: 'hidden',
-    textAlign: 'center',
-    cursor: 'pointer',
-  },
-  aspectRatioBox: {
-    position: 'relative',
-    width: '100%',
-    paddingTop: '100%', // 1:1 ratio for a square
-  },
-  image: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    objectFit: 'contain',
-    backgroundColor: '#fff',
-  },
-  iconStyle: {
-    fontSize: '28px',
-    cursor: 'pointer',
-    color: '#333',
-  },
-  plusButton: {
-    background: '#fff',
-    border: '1px solid #ccc',
-    borderRadius: '999px',
-    padding: '8px 16px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    display: 'inline-flex',
-    alignItems: 'center',
-  },
-};
+export default Display;
