@@ -410,3 +410,51 @@ body.dark-mode .saveButton {
   color: #555;
 }
 
+/* Key Features container uses grid layout for a neat appearance */
+.keyFeatures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  background: #f1f1f1;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* Individual key feature card */
+.keyFeature {
+  background: #fff;
+  padding: 12px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label styling for each key */
+.keyLabel {
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+/* Value styling for each key */
+.keyValue {
+  font-size: 16px;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 0;
+  word-wrap: break-word;
+}
+
+/* Field input styling for editable mode */
+.fieldInput {
+  font-size: 16px;
+  padding: 6px 8px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+

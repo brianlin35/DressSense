@@ -19,7 +19,7 @@ function Display() {
   // Dark mode state
   const [darkMode, setDarkMode] = useState(false);
 
-  // Keep track of favorites plus other filter toggles
+  // Filters and favorites
   const [favoritesFilter, setFavoritesFilter] = useState(false);
   const [activeFilters, setActiveFilters] = useState({
     category: false,
@@ -31,12 +31,16 @@ function Display() {
 
   const [showModal, setShowModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
-
   const [selectedItem, setSelectedItem] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
   const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
+  
+  // Track which key is currently being edited
+  const [editingKey, setEditingKey] = useState(null);
+  // Track if a dropdown field is in "custom" mode
+  const [customMode, setCustomMode] = useState({});
 
   // States for uploading
   const [uploadName, setUploadName] = useState('');
@@ -46,7 +50,35 @@ function Display() {
 
   const router = useRouter();
 
-  // Fetch images list
+  // Predefined dropdown options for keys (except "Brand" and "Value")
+  const dropdownOptions = {
+    Category: ["Top", "Bottom", "Outerwear", "Footwear"],
+    Color: ["White", "Black", "Red", "Blue", "Green", "Yellow"],
+    Material: ["Cotton", "Polyester", "Wool", "Silk", "Denim"],
+    Size: ["S", "M", "L", "XL"],
+    Style: ["Minimalist", "Streetwear", "Casual", "Formal"],
+    Type: ["T-shirt", "Shirt", "Pants", "Dress", "Skirt"],
+  };
+
+  // For this example, "Brand" and "Value" are free text.
+  const keysToShow = [
+    "Brand",
+    "Category",
+    "Color",
+    "Value",
+    "Material",
+    "Size",
+    "Style",
+    "Type"
+  ];
+
+  // Function to handle input changes for editable fields
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedItem((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Fetch images list from the backend
   const fetchData = () => {
     fetch('http://127.0.0.1:5001/list')
       .then((res) => res.json())
@@ -56,9 +88,10 @@ function Display() {
       .catch((err) => console.error('Error fetching images:', err));
   };
 
+  // Poll backend every 3 seconds for near-real-time updates
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 10000);
+    const interval = setInterval(fetchData, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -71,6 +104,11 @@ function Display() {
     }
   }, [darkMode]);
 
+  // **** Define toggleDarkMode function ****
+  const toggleDarkMode = () => {
+    setDarkMode(prev => !prev);
+  };
+
   const showToast = (message, variant = 'success') => {
     setToast({ show: true, message, variant });
     setTimeout(() => {
@@ -78,19 +116,19 @@ function Display() {
     }, 3000);
   };
 
-  /* ------------------ MenuButtons Callbacks ------------------ */
+  /* ---------------- MenuButtons Callbacks ---------------- */
   const handleFavoritesFilterToggle = () => {
-    setFavoritesFilter((prev) => !prev);
+    setFavoritesFilter(prev => !prev);
   };
 
   const handleToggleFilter = (filterName) => {
-    setActiveFilters((prev) => ({
+    setActiveFilters(prev => ({
       ...prev,
       [filterName]: !prev[filterName],
     }));
   };
 
-  /* ------------------ Compute displayedImages ------------------ */
+  /* ---------------- Compute displayedImages ---------------- */
   let displayedImages = [...images];
   if (favoritesFilter) {
     displayedImages = displayedImages.filter((item) => item.favorite);
@@ -115,7 +153,7 @@ function Display() {
     });
   }
 
-  /* ------------------ Upload Flow ------------------ */
+  /* ---------------- Upload Flow ---------------- */
   const handleOpenUploadModal = () => {
     setShowUploadModal(true);
   };
@@ -181,42 +219,30 @@ function Display() {
     xhr.send(formData);
   };
 
-  /* ------------------ Details Modal Flow ------------------ */
+  /* ---------------- Details Modal Flow ---------------- */
   const openModal = (item) => {
     setSelectedItem({ ...item, favorite: item.favorite || false });
     setTempName(item.name || `Piece #${item.id}`);
     setShowModal(true);
+    setEditingKey(null);
+    setCustomMode({});
   };
 
-  const closeModal = () => {
+  // When closing the modal, re-fetch data and discard unsaved changes.
+  const handleCloseModal = () => {
+    fetchData();
     setShowModal(false);
     setSelectedItem(null);
     setIsEditingName(false);
-    setShowItemKeys(false);
+    setEditingKey(null);
+    setCustomMode({});
   };
 
-  const handleDelete = async (s3_url) => {
-    try {
-      const response = await fetch('http://127.0.0.1:5001/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: s3_url }),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Failed to delete object');
-      fetchData();
-      closeModal();
-    } catch (err) {
-      console.error('Error deleting item:', err);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSelectedItem((prev) => ({ ...prev, [name]: value }));
-  };
-
+  // Update the item in the DB and exit all edit modes (triggered on Enter)
   const handleUpdate = async () => {
+    setIsEditingName(false);
+    setEditingKey(null);
+    setCustomMode({});
     setIsUpdating(true);
     try {
       const response = await fetch('http://127.0.0.1:5001/update', {
@@ -226,7 +252,8 @@ function Display() {
       });
       if (response.ok) {
         fetchData();
-        closeModal();
+        setShowModal(false);
+        setSelectedItem(null);
       } else {
         console.error('Failed to update item');
       }
@@ -234,6 +261,14 @@ function Display() {
       console.error('Error updating item:', err);
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  // onKeyDown handler for inputs to trigger update on Enter
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleUpdate();
     }
   };
 
@@ -248,26 +283,9 @@ function Display() {
     }
   };
 
-  // Keys to show in the details modal
-  const keysToShow = [
-    "brand",
-    "category",
-    "color",
-    "fitted_market_value",
-    "material",
-    "size",
-    "style",
-    "type"
-  ];
-
-  // Toggle dark mode
-  const toggleDarkMode = () => setDarkMode((prev) => !prev);
-
   return (
-    // The container itself remains unmodified;
-    // dark mode is applied on <body> via useEffect
     <div className="container">
-      {/* Dark mode toggle always visible */}
+      {/* Dark mode toggle */}
       <div className="darkModeToggle" onClick={toggleDarkMode}>
         {darkMode ? (
           <AiOutlineSun size={24} style={{ color: '#FFD700' }} />
@@ -276,7 +294,8 @@ function Display() {
         )}
       </div>
 
-      <TabsHeader />
+      {/* Tabs Header */}
+      <TabsHeader darkMode={darkMode} />
 
       <MenuButtons
         favoritesFilter={favoritesFilter}
@@ -353,14 +372,11 @@ function Display() {
           <button className="btn btn-secondary" onClick={handleCloseUploadModal}>
             Cancel
           </button>
-          <button className="btn btn-primary" onClick={handleUploadSubmit} disabled={isUploading}>
-            {isUploading ? 'Uploading...' : 'Upload'}
-          </button>
         </Modal.Footer>
       </Modal>
 
       {/* Details Modal */}
-      <Modal show={showModal} onHide={closeModal} centered>
+      <Modal show={showModal} onHide={handleCloseModal} centered>
         {selectedItem && (
           <>
             <Modal.Header closeButton>
@@ -373,6 +389,7 @@ function Display() {
                       setTempName(e.target.value);
                       setSelectedItem((prev) => ({ ...prev, name: e.target.value }));
                     }}
+                    onKeyDown={handleKeyDown}
                     className="editNameInput"
                     autoFocus
                   />
@@ -395,10 +412,79 @@ function Display() {
                 />
               </div>
               {showItemKeys && (
-                <div className="itemKeysContainer">
+                <div className="keyFeatures">
                   {keysToShow.map((key) => (
-                    <div key={key} className="keyRow">
-                      <strong>{key}:</strong> {selectedItem[key] || "N/A"}
+                    <div key={key} className="keyFeature">
+                      <span className="keyLabel">{key}:</span>
+                      {/* For "Brand" and "Value", always use text input mode if editing */}
+                      {key === "Brand" || key === "Value" ? (
+                        editingKey === key ? (
+                          <input
+                            type="text"
+                            id={key}
+                            name={key}
+                            value={selectedItem[key] || ""}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
+                            className="fieldInput"
+                          />
+                        ) : (
+                          <span
+                            className="keyValue"
+                            onClick={() => setEditingKey(key)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            {selectedItem[key] || "N/A"}
+                          </span>
+                        )
+                      ) : (
+                        // For dropdown-enabled fields
+                        editingKey === key ? (
+                          customMode[key] ? (
+                            <input
+                              type="text"
+                              id={key}
+                              name={key}
+                              value={selectedItem[key] || ""}
+                              onChange={handleInputChange}
+                              onKeyDown={handleKeyDown}
+                              className="fieldInput"
+                            />
+                          ) : (
+                            <select
+                              name={key}
+                              value={selectedItem[key] || ""}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === "Custom") {
+                                  setCustomMode((prev) => ({ ...prev, [key]: true }));
+                                  setSelectedItem((prev) => ({ ...prev, [key]: "" }));
+                                } else {
+                                  setSelectedItem((prev) => ({ ...prev, [key]: value }));
+                                }
+                              }}
+                              onKeyDown={handleKeyDown}
+                              className="fieldInput"
+                            >
+                              {dropdownOptions[key] &&
+                                dropdownOptions[key].map((option) => (
+                                  <option key={option} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                              <option value="Custom">Custom</option>
+                            </select>
+                          )
+                        ) : (
+                          <span
+                            className="keyValue"
+                            onClick={() => setEditingKey(key)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            {selectedItem[key] || "N/A"}
+                          </span>
+                        )
+                      )}
                     </div>
                   ))}
                 </div>
@@ -443,18 +529,18 @@ function Display() {
                     <AiFillHeart />
                   </span>
                 )}
-                <span
-                  className="iconButton deleteIcon blue" onClick={() => handleDelete(selectedItem.s3_url)}>
+                <span 
+                  className="iconButton deleteIcon blue" 
+                  onClick={() => handleDelete(selectedItem.s3_url)}
+                >
                   <AiOutlineDelete />
                 </span>
               </div>
+              {/* Centered Button */}
               <div className="centerButtons">
                 <button className="plusButton" onClick={handleGenerateFit}>
                   <AiOutlinePlusCircle className="iconSmall" />
                   Generate fit with this piece
-                </button>
-                <button className="saveButton" onClick={handleUpdate} disabled={isUpdating}>
-                  {isUpdating ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
             </Modal.Body>
