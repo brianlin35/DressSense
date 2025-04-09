@@ -32,7 +32,7 @@ s3_client = boto3.client(
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
 table = dynamodb.Table("ClothingItems")
 
-def run_recognition(temp_file_path, s3_url) -> dict:
+def run_recognition(temp_file_path, s3_url, product_name) -> dict:
     prompt = f"""
 You are a fashion expert and product description generator. Your task is to analyze clothing product images and generate detailed and accurate descriptions. Include the following attributes in your descriptions:
 - Category (either Outerwear, Top, Bottom, or Footwear)
@@ -56,6 +56,7 @@ You are a fashion expert and product description generator. Your task is to anal
 
 Return ONLY the JSON object with the attribute names as keys.
 Image URL: {s3_url}
+Product Name: {product_name}
     """
     logger.info(f"Classification prompt:\n{prompt}")
 
@@ -115,6 +116,17 @@ def upload_file():
     file_key = f"user-uploads/{unique_filename}"
 
     try:
+        # Retrieve the optional name provided by the user from the form data.
+        user_input_name = request.form.get("name")
+        if not user_input_name:
+            # When no name is provided, scan the DynamoDB table to determine the count
+            scan_response = table.scan()
+            current_count = len(scan_response.get("Items", []))
+            # Create a default name using the current count + 1
+            product_name = f"Clothing Piece {current_count + 1}"
+        else:
+            product_name = user_input_name
+
         # Read file, remove background, and prepare for S3 upload
         input_bytes = file.read()
         output_bytes = remove(input_bytes)
@@ -133,9 +145,10 @@ def upload_file():
         )
         s3_url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
 
-        # Create a placeholder record in DynamoDB with "pending" status
+        # Create a placeholder record in DynamoDB with "pending" status including the product name.
         placeholder_item = {
             "id": unique_id,
+            "name": product_name,
             "s3_url": s3_url,
             "category": "pending",
             "type": "pending",
@@ -157,19 +170,19 @@ def upload_file():
         with open(temp_path, "wb") as temp_file:
             temp_file.write(output_bytes)
 
-        # Run classification synchronously using the Qwen model endpoint
-        metadata = run_recognition(temp_path, s3_url)
+        # Run classification synchronously using the model endpoint, passing the product name.
+        metadata = run_recognition(temp_path, s3_url, product_name)
         os.remove(temp_path)  # Clean up temporary file
 
-        # Update the DynamoDB record with classification results.
-        # Alias reserved keywords: "type" -> "#ty", "style" -> "#sty", "status" -> "#st"
+        # Update the DynamoDB record with classification results and the product name.
         update_expression = (
-            "SET category = :category, #ty = :type, brand = :brand, "
+            "SET #nm = :name, category = :category, #ty = :type, brand = :brand, "
             "size = :size, #sty = :style, color = :color, "
             "material = :material, fitted_market_value = :fitted_market_value, "
             "#st = :status, processed_at = :processed_at"
         )
         expression_attribute_values = {
+            ":name": product_name,
             ":category": metadata.get("Category", "unknown"),
             ":type": metadata.get("Type of clothing", "unknown"),
             ":brand": metadata.get("Brand", "unknown"),
@@ -179,9 +192,14 @@ def upload_file():
             ":material": metadata.get("Fabric Material", "unknown"),
             ":fitted_market_value": "N/A",  # If estimated value is not provided, default to "N/A"
             ":status": "processed",
-            ":processed_at": datetime.now(timezone.utc).isoformat()  # Using timezone.utc here
+            ":processed_at": datetime.now(timezone.utc).isoformat()
         }
-        expression_attribute_names = {"#ty": "type", "#sty": "style", "#st": "status"}
+        expression_attribute_names = {
+            "#nm": "name",
+            "#ty": "type",
+            "#sty": "style",
+            "#st": "status"
+        }
         table.update_item(
             Key={"id": unique_id},
             UpdateExpression=update_expression,
@@ -256,20 +274,36 @@ def update_item():
     if not item_id:
         return jsonify({"error": "No item ID provided"}), 400
 
-    # Build update expression from allowed fields
     update_expression = "SET "
     expression_attribute_values = {}
-    allowed_fields = ["category", "type", "brand", "size", "style", "color", "material", "fitted_market_value"]
+    expression_attribute_names = {}
+    # Include "name" along with any other allowed fields.
+    allowed_fields = ["name", "category", "type", "brand", "size", "style", "color", "material", "fitted_market_value"]
+
     for field in allowed_fields:
         if field in data:
-            update_expression += f"{field} = :{field}, "
+            # Use aliases for reserved keywords.
+            if field == "type":
+                update_expression += f"#ty = :{field}, "
+                expression_attribute_names["#ty"] = "type"
+            elif field == "style":
+                update_expression += f"#sty = :{field}, "
+                expression_attribute_names["#sty"] = "style"
+            elif field == "name":
+                update_expression += f"#nm = :{field}, "
+                expression_attribute_names["#nm"] = "name"
+            else:
+                update_expression += f"{field} = :{field}, "
             expression_attribute_values[f":{field}"] = data[field]
+
     update_expression = update_expression.rstrip(", ")
+
     try:
         table.update_item(
             Key={"id": item_id},
             UpdateExpression=update_expression,
-            ExpressionAttributeValues=expression_attribute_values
+            ExpressionAttributeValues=expression_attribute_values,
+            ExpressionAttributeNames=expression_attribute_names
         )
         updated_item = table.get_item(Key={"id": item_id}).get("Item")
         return jsonify(updated_item), 200

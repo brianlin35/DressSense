@@ -410,7 +410,7 @@ body.dark-mode .saveButton {
   color: #555;
 }
 
-/* Key Features container uses grid layout for a neat appearance */
+/* Key Features container using grid layout */
 .keyFeatures {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -428,7 +428,7 @@ body.dark-mode .saveButton {
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Stack label and value vertically */
 }
 
 /* Label styling for each key */
@@ -446,6 +446,7 @@ body.dark-mode .saveButton {
   box-sizing: border-box;
   padding: 4px 0;
   word-wrap: break-word;
+  cursor: pointer;
 }
 
 /* Field input styling for editable mode */
@@ -457,4 +458,5 @@ body.dark-mode .saveButton {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 

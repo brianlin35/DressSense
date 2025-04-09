@@ -37,42 +37,43 @@ function Display() {
   const [tempName, setTempName] = useState('');
   const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
   
-  // Track which key is currently being edited
+  // Track which key is being edited
   const [editingKey, setEditingKey] = useState(null);
-  // Track if a dropdown field is in "custom" mode
+  // Track if a dropdown field is in "custom" mode (free text)
   const [customMode, setCustomMode] = useState({});
 
   // States for uploading
   const [uploadName, setUploadName] = useState('');
   const [uploadFile, setUploadFile] = useState(null);
-  const [uploadModelResult, setUploadModelResult] = useState('');
+  // (Removed uploadModelResult field as requested)
   const [isUploading, setIsUploading] = useState(false);
 
   const router = useRouter();
 
-  // Predefined dropdown options for keys (except "Brand" and "Value")
+  // Predefined dropdown options for keys (except "brand" and "fitted_market_value" which are free text)
   const dropdownOptions = {
-    Category: ["Top", "Bottom", "Outerwear", "Footwear"],
-    Color: ["White", "Black", "Red", "Blue", "Green", "Yellow"],
-    Material: ["Cotton", "Polyester", "Wool", "Silk", "Denim"],
-    Size: ["S", "M", "L", "XL"],
-    Style: ["Minimalist", "Streetwear", "Casual", "Formal"],
-    Type: ["T-shirt", "Shirt", "Pants", "Dress", "Skirt"],
+    category: ["Top", "Bottom", "Outerwear", "Footwear"],
+    color: ["White", "Black", "Red", "Blue", "Green", "Yellow"],
+    material: ["Cotton", "Polyester", "Wool", "Silk", "Denim"],
+    size: ["S", "M", "L", "XL"],
+    style: ["Minimalist", "Streetwear", "Casual", "Formal"],
+    type: ["T-shirt", "Shirt", "Pants", "Dress", "Skirt"],
   };
 
-  // For this example, "Brand" and "Value" are free text.
+  // Use keys with lower-case names to match DB fields.
+  // "brand" and "fitted_market_value" are free text; the rest use dropdowns.
   const keysToShow = [
-    "Brand",
-    "Category",
-    "Color",
-    "Value",
-    "Material",
-    "Size",
-    "Style",
-    "Type"
+    "brand",
+    "category",
+    "color",
+    "fitted_market_value",
+    "material",
+    "size",
+    "style",
+    "type"
   ];
 
-  // Function to handle input changes for editable fields
+  // Handle input changes for editable fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSelectedItem((prev) => ({ ...prev, [name]: value }));
@@ -104,9 +105,27 @@ function Display() {
     }
   }, [darkMode]);
 
-  // **** Define toggleDarkMode function ****
+  // Define toggleDarkMode function
   const toggleDarkMode = () => {
     setDarkMode(prev => !prev);
+  };
+
+  // Handle deletion of an item/image
+  const handleDelete = async (s3_url) => {
+    try {
+      const response = await fetch('http://127.0.0.1:5001/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: s3_url }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to delete object');
+      fetchData();
+      setShowModal(false);
+      setSelectedItem(null);
+    } catch (err) {
+      console.error('Error deleting item:', err);
+    }
   };
 
   const showToast = (message, variant = 'success') => {
@@ -131,7 +150,7 @@ function Display() {
   /* ---------------- Compute displayedImages ---------------- */
   let displayedImages = [...images];
   if (favoritesFilter) {
-    displayedImages = displayedImages.filter((item) => item.favorite);
+    displayedImages = displayedImages.filter(item => item.favorite);
   }
   if (activeFilters.category) {
     displayedImages.sort((a, b) => (a.category || '').localeCompare(b.category || ''));
@@ -162,7 +181,6 @@ function Display() {
     setShowUploadModal(false);
     setUploadName('');
     setUploadFile(null);
-    setUploadModelResult('');
     setIsUploading(false);
   };
 
@@ -187,7 +205,7 @@ function Display() {
     const formData = new FormData();
     formData.append('file', uploadFile);
     formData.append('name', safeName);
-    formData.append('model_result', uploadModelResult.trim() || '');
+    // Removed model_result since it's no longer needed.
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://127.0.0.1:5001/upload');
     xhr.onload = () => {
@@ -238,8 +256,9 @@ function Display() {
     setCustomMode({});
   };
 
-  // Update the item in the DB and exit all edit modes (triggered on Enter)
+  // Update function modified so it does not automatically close the modal.
   const handleUpdate = async () => {
+    // Exit all edit modes
     setIsEditingName(false);
     setEditingKey(null);
     setCustomMode({});
@@ -251,9 +270,11 @@ function Display() {
         body: JSON.stringify(selectedItem),
       });
       if (response.ok) {
-        fetchData();
-        setShowModal(false);
-        setSelectedItem(null);
+        const updatedItem = await response.json(); // Get the updated record from backend
+        setSelectedItem(updatedItem);
+        fetchData(); // Refresh the overall image list
+        // Note: We are no longer closing the modal here.
+        // setShowModal(false);
       } else {
         console.error('Failed to update item');
       }
@@ -272,7 +293,7 @@ function Display() {
     }
   };
 
-  const toggleEditingName = () => setIsEditingName((prev) => !prev);
+  const toggleEditingName = () => setIsEditingName(prev => !prev);
 
   const handleGenerateFit = () => {
     if (selectedItem && selectedItem.s3_url) {
@@ -297,7 +318,7 @@ function Display() {
       {/* Tabs Header */}
       <TabsHeader darkMode={darkMode} />
 
-      <MenuButtons
+      <MenuButtons 
         favoritesFilter={favoritesFilter}
         handleFavoritesFilterToggle={handleFavoritesFilterToggle}
         activeFilters={activeFilters}
@@ -305,7 +326,7 @@ function Display() {
       />
 
       {/* UPLOAD BUTTON */}
-      <div className="uploadContainer">
+      <div className="uploadContainer" style={{ textAlign: 'center' }}>
         <button className="uploadButton" onClick={handleOpenUploadModal}>
           <AiOutlinePlusCircle className="iconSmall" />
           Upload a piece
@@ -332,7 +353,12 @@ function Display() {
       </div>
 
       {/* Upload Modal */}
-      <Modal show={showUploadModal} onHide={handleCloseUploadModal} centered>
+      <Modal 
+        show={showUploadModal} 
+        onHide={handleCloseUploadModal} 
+        centered 
+        backdrop={true} // Clicking outside will close
+      >
         <Modal.Header closeButton>
           <Modal.Title>Upload New Piece</Modal.Title>
         </Modal.Header>
@@ -356,21 +382,20 @@ function Display() {
               accept="image/*"
               onChange={handleFileChange}
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="uploadModelResult">Model Result (optional)</label>
-            <input
-              type="text"
-              id="uploadModelResult"
-              className="form-control"
-              value={uploadModelResult}
-              onChange={(e) => setUploadModelResult(e.target.value)}
-            />
+            {uploadFile && (
+              <p style={{ marginTop: '8px' }}>
+                Selected file: <strong>{uploadFile.name}</strong>
+              </p>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button className="btn btn-secondary" onClick={handleCloseUploadModal}>
-            Cancel
+          <button 
+            className="btn btn-primary" 
+            onClick={handleUploadSubmit} 
+            disabled={isUploading}
+          >
+            {isUploading ? 'Uploading...' : 'Upload'}
           </button>
         </Modal.Footer>
       </Modal>
@@ -387,7 +412,7 @@ function Display() {
                     value={tempName}
                     onChange={(e) => {
                       setTempName(e.target.value);
-                      setSelectedItem((prev) => ({ ...prev, name: e.target.value }));
+                      setSelectedItem(prev => ({ ...prev, name: e.target.value }));
                     }}
                     onKeyDown={handleKeyDown}
                     className="editNameInput"
@@ -407,7 +432,7 @@ function Display() {
                   src={selectedItem.s3_url}
                   alt="Bigger preview"
                   className="modalImage"
-                  onClick={() => setShowItemKeys((prev) => !prev)}
+                  onClick={() => setShowItemKeys(prev => !prev)}
                   style={{ cursor: 'pointer' }}
                 />
               </div>
@@ -416,8 +441,7 @@ function Display() {
                   {keysToShow.map((key) => (
                     <div key={key} className="keyFeature">
                       <span className="keyLabel">{key}:</span>
-                      {/* For "Brand" and "Value", always use text input mode if editing */}
-                      {key === "Brand" || key === "Value" ? (
+                      {key === "brand" || key === "fitted_market_value" ? (
                         editingKey === key ? (
                           <input
                             type="text"
@@ -438,7 +462,6 @@ function Display() {
                           </span>
                         )
                       ) : (
-                        // For dropdown-enabled fields
                         editingKey === key ? (
                           customMode[key] ? (
                             <input
@@ -457,17 +480,17 @@ function Display() {
                               onChange={(e) => {
                                 const value = e.target.value;
                                 if (value === "Custom") {
-                                  setCustomMode((prev) => ({ ...prev, [key]: true }));
-                                  setSelectedItem((prev) => ({ ...prev, [key]: "" }));
+                                  setCustomMode(prev => ({ ...prev, [key]: true }));
+                                  setSelectedItem(prev => ({ ...prev, [key]: "" }));
                                 } else {
-                                  setSelectedItem((prev) => ({ ...prev, [key]: value }));
+                                  setSelectedItem(prev => ({ ...prev, [key]: value }));
                                 }
                               }}
                               onKeyDown={handleKeyDown}
                               className="fieldInput"
                             >
                               {dropdownOptions[key] &&
-                                dropdownOptions[key].map((option) => (
+                                dropdownOptions[key].map(option => (
                                   <option key={option} value={option}>
                                     {option}
                                   </option>
@@ -499,12 +522,12 @@ function Display() {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id: selectedItem.id, favorite: false }),
                       })
-                        .then((res) => res.json())
-                        .then((updatedItem) => {
+                        .then(res => res.json())
+                        .then(updatedItem => {
                           setSelectedItem(updatedItem);
                           fetchData();
                         })
-                        .catch((err) => console.error('Error toggling favorite:', err));
+                        .catch(err => console.error('Error toggling favorite:', err));
                     }}
                   >
                     <AiFillHeart />
@@ -518,12 +541,12 @@ function Display() {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id: selectedItem.id, favorite: true }),
                       })
-                        .then((res) => res.json())
-                        .then((updatedItem) => {
+                        .then(res => res.json())
+                        .then(updatedItem => {
                           setSelectedItem(updatedItem);
                           fetchData();
                         })
-                        .catch((err) => console.error('Error toggling favorite:', err));
+                        .catch(err => console.error('Error toggling favorite:', err));
                     }}
                   >
                     <AiFillHeart />
