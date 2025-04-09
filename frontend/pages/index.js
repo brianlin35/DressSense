@@ -274,7 +274,6 @@ function Display() {
         setSelectedItem(updatedItem);
         fetchData(); // Refresh the overall image list
         // Note: We are no longer closing the modal here.
-        // setShowModal(false);
       } else {
         console.error('Failed to update item');
       }
@@ -303,6 +302,72 @@ function Display() {
       });
     }
   };
+
+  // ---------------- Compute Grouped Content for Display ----------------
+  // Determine which filter is active to decide group key.
+  const groupingKey = activeFilters.category 
+    ? 'category' 
+    : activeFilters.type 
+      ? 'type'
+      : activeFilters.color 
+        ? 'color'
+        : activeFilters.brand 
+          ? 'brand'
+          : activeFilters.price 
+            ? 'fitted_market_value'
+            : null;
+
+  let content;
+  if (groupingKey) {
+    const groupedImages = displayedImages.reduce((acc, item) => {
+      const group = item[groupingKey] || "Others";
+      if (!acc[group]) {
+        acc[group] = [];
+      }
+      acc[group].push(item);
+      return acc;
+    }, {});
+    content = Object.keys(groupedImages)
+      .sort() // sorts group keys alphabetically
+      .map((group) => (
+        <div key={group}>
+          <h2 style={{ margin: '1rem 0' }}>{group}</h2>
+          <div className="gridContainer">
+            {groupedImages[group].map((item) => (
+              <div key={item.id} className="gridItem" onClick={() => openModal(item)}>
+                <div className="aspectRatioBox">
+                  <img
+                    src={item.s3_url}
+                    alt={`Clothing item ${item.id}`}
+                    className="image"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ));
+  } else {
+    content = (
+      <div className="gridContainer">
+        {displayedImages.length > 0 ? (
+          displayedImages.map((item) => (
+            <div key={item.id} className="gridItem" onClick={() => openModal(item)}>
+              <div className="aspectRatioBox">
+                <img
+                  src={item.s3_url}
+                  alt={`Clothing item ${item.id}`}
+                  className="image"
+                />
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No images found.</p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="container">
@@ -333,31 +398,15 @@ function Display() {
         </button>
       </div>
 
-      {/* DISPLAYED IMAGES */}
-      <div className="gridContainer">
-        {displayedImages.length > 0 ? (
-          displayedImages.map((item) => (
-            <div key={item.id} className="gridItem" onClick={() => openModal(item)}>
-              <div className="aspectRatioBox">
-                <img
-                  src={item.s3_url}
-                  alt={`Clothing item ${item.id}`}
-                  className="image"
-                />
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No images found.</p>
-        )}
-      </div>
+      {/* DISPLAYED IMAGES with Group Headers */}
+      {content}
 
       {/* Upload Modal */}
       <Modal 
         show={showUploadModal} 
         onHide={handleCloseUploadModal} 
         centered 
-        backdrop={true} // Clicking outside will close
+        backdrop={true}
       >
         <Modal.Header closeButton>
           <Modal.Title>Upload New Piece</Modal.Title>
