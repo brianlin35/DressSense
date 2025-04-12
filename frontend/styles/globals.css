@@ -72,7 +72,7 @@ body.dark-mode .tabsHeader .active {
 .darkModeToggle {
   position: fixed;
   top: 20px;
-  right: 20px;
+  left: 20px;
   z-index: 9999;
   cursor: pointer;
 }
@@ -272,8 +272,8 @@ body.dark-mode .btn {
 
 /* Active state for the entire button in light mode */
 .filterButton.active {
-  background-color: #dcdcdc; /* Slightly darker gray or any color you like */
-  color: #333; /* or #fff if you want more contrast */
+  background-color: #dcdcdc;
+  color: #333;
 }
 
 /* Dark mode styling overrides */
@@ -283,9 +283,8 @@ body.dark-mode .filterButton {
   border: 1px solid #555;
 }
 
-/* Active state in dark mode */
 body.dark-mode .filterButton.active {
-  background-color: #444; /* or whichever color you prefer in dark mode */
+  background-color: #444;
   color: #fff;
 }
 
@@ -297,7 +296,7 @@ body.dark-mode .filterButton.active {
 }
 
 .iconStyle {
-  font-size: 30px; /* increased size */
+  font-size: 30px;
   margin-right: 5px;
 }
 
@@ -313,31 +312,28 @@ body.dark-mode .filterButton.active {
   justify-content: center;
 }
 
-/* Optional active state */
 .filterButton.active {
-  background-color: #dcdcdc; /* or choose a contrasting color */
+  background-color: #dcdcdc;
 }
 
 .aspectRatioBox {
   position: relative;
   width: 100%;
   padding-top: 100%;
-  background-color: #fff; /* or .image { background-color: #fff } */
+  background-color: #fff;
 }
 
 .dark-mode .aspectRatioBox {
   background-color: #000 !important;
 }
 
-/* Alternatively, if your image has a background set: */
 .dark-mode .image {
   background-color: #000 !important;
 }
 
-/* Dark mode modal overrides */
 body.dark-mode .modal-content {
-  background-color: #333; /* dark grey background */
-  color: #fff;            /* white text */
+  background-color: #333;
+  color: #fff;
 }
 
 body.dark-mode .modal-header,
@@ -351,16 +347,14 @@ body.dark-mode .modal-title {
   color: #fff;
 }
 
-/* Make sure the name input is also legible in dark mode */
 body.dark-mode .editNameInput {
   background-color: #444;
   color: #fff;
   border: 1px solid #555;
 }
 
-/* Generate Fit button matches category color (blue) in dark mode */
 .plusButton {
-  background: #fff; /* default light mode */
+  background: #fff;
   border: 1px solid #ccc;
   border-radius: 999px;
   padding: 8px 16px;
@@ -373,14 +367,13 @@ body.dark-mode .editNameInput {
 }
 
 body.dark-mode .plusButton {
-  background-color: #1c74e0; /* your "blue" or desired category color */
+  background-color: #1c74e0;
   border: none;
   color: #fff;
 }
 
-/* Save Changes button green */
 .saveButton {
-  background: #4caf50; /* green */
+  background: #4caf50;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -389,9 +382,8 @@ body.dark-mode .plusButton {
   font-size: 16px;
 }
 
-/* In dark mode, keep it green but maybe darken the shade if you like */
 body.dark-mode .saveButton {
-  background: #4caf50; /* keep same or use a darker green if desired */
+  background: #4caf50;
   color: #fff;
 }
 
@@ -410,7 +402,6 @@ body.dark-mode .saveButton {
   color: #555;
 }
 
-/* Key Features container using grid layout */
 .keyFeatures {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -421,24 +412,21 @@ body.dark-mode .saveButton {
   margin-top: 10px;
 }
 
-/* Individual key feature card */
 .keyFeature {
   background: #fff;
   padding: 12px;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column; /* Stack label and value vertically */
+  flex-direction: column;
 }
 
-/* Label styling for each key */
 .keyLabel {
   font-weight: bold;
   color: #555;
   margin-bottom: 4px;
 }
 
-/* Value styling for each key */
 .keyValue {
   font-size: 16px;
   color: #333;
@@ -449,7 +437,6 @@ body.dark-mode .saveButton {
   cursor: pointer;
 }
 
-/* Field input styling for editable mode */
 .fieldInput {
   font-size: 16px;
   padding: 6px 8px;
@@ -459,4 +446,38 @@ body.dark-mode .saveButton {
   border-radius: 4px;
 }
 
+/* --------------------------------------------------
+   RESET & BASE
+----------------------------------------------------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
 
+/* Default light mode body */
+body {
+  background-color: #fff;
+  color: #333;
+}
+
+/* ... the rest of your CSS from the snippet ... */
+.keyValue {
+  font-size: 16px;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 0;
+  word-wrap: break-word;
+  cursor: pointer;
+}
+
+.fieldInput {
+  font-size: 16px;
+  padding: 6px 8px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

@@ -2,10 +2,10 @@
 import React from 'react';
 import TabsHeader from '../components/TabsHeader';
 
-export default function Collections() {
+export default function Collections({ darkMode, toggleDarkMode }) {
   return (
     <div style={styles.container}>
-      <TabsHeader />
+      <TabsHeader darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       {/* Content for Collections will go here in the future */}
     </div>
   );

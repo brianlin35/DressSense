@@ -5,10 +5,12 @@ import os
 import io
 import re
 import uuid
-from datetime import datetime, timezone  # <-- Added timezone here
+from datetime import datetime, timezone  # For timestamping
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from rembg import remove  # Remove image background
+from rembg import remove  # For removing image backgrounds
+from transformers import LlamaTokenizerFast  # In case you need this later
+from transformers import AutoTokenizer  # Fixed: Import AutoTokenizer
 
 # Configure logging
 logger = logging.getLogger()
@@ -28,9 +30,15 @@ s3_client = boto3.client(
     aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
 )
 
-# DynamoDB configuration – ensure your table "ClothingItems" exists with primary key "id"
+# DynamoDB configuration – Ensure your table "ClothingItems" exists with primary key "id"
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
 table = dynamodb.Table("ClothingItems")
+
+# Instantiate the SageMaker Runtime client and the AutoTokenizer once.
+sagemaker_client = boto3.client("sagemaker-runtime", region_name=AWS_REGION)
+tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Llama-8B", trust_remote_code=True)
+
+# ------------------------ Helper Functions ------------------------
 
 def run_recognition(temp_file_path, s3_url, product_name) -> dict:
     prompt = f"""
@@ -50,7 +58,7 @@ You are a fashion expert and product description generator. Your task is to anal
 - Weather appropriateness (e.g., warm, cold, all-season)
 - Fabric Material (e.g., cotton, wool, silk, denim, etc.)
 - Fabric Weight
-- Functional Features (e.g. water resistant, moisture-wicking, insulated, etc.)
+- Functional Features (e.g., water resistant, moisture-wicking, insulated, etc.)
 - How it can be styled (2-3 sentences describing how the piece can be worn)
 - Additional Notes (2-3 sentences describing the overall aesthetic of the piece and its essence)
 
@@ -60,9 +68,8 @@ Product Name: {product_name}
     """
     logger.info(f"Classification prompt:\n{prompt}")
 
-    sagemaker = boto3.client('sagemaker-runtime', region_name=AWS_REGION)
     try:
-        response = sagemaker.invoke_endpoint(
+        response = sagemaker_client.invoke_endpoint(
             EndpointName='endpoint-quick-start-fywsd',
             ContentType='application/json',
             Accept='application/json',
@@ -77,10 +84,7 @@ Product Name: {product_name}
         response_body = response['Body'].read().decode()
         logger.info(f"Raw model output: {response_body}")
         result = json.loads(response_body)
-        if isinstance(result, list):
-            generated_text = result[0].get('generated_text', '')
-        else:
-            generated_text = result.get('generated_text', '')
+        generated_text = result[0].get('generated_text', '') if isinstance(result, list) else result.get('generated_text', '')
         logger.info(f"Model response: {generated_text}")
         try:
             features = json.loads(generated_text)
@@ -100,40 +104,103 @@ Product Name: {product_name}
         logger.error(f"Error invoking endpoint: {str(e)}")
         return {}
 
+def create_detailed_item_description(item: dict, item_id: str) -> str:
+    description_parts = [f"[Item {item_id}]", f"{item['Primary Color']} {item['Type of Clothing']}"]
+    if item.get('Pattern') not in ["Solid", "Not applicable"]:
+        description_parts[1] = f"{item['Pattern']} {description_parts[1]}"
+    if item.get('Style') not in ["Not specified", "Not applicable"]:
+        description_parts.append(f"{item['Style']} style")
+    if item.get('Neckline') not in ["Not specified", "Not applicable"]:
+        description_parts.append(f"{item['Neckline']} neckline")
+    if item.get('Accent Color(s)') not in ["Not specified", "Not applicable"]:
+        description_parts.append(f"with {item['Accent Color(s)']} accents")
+    if item.get('Brand') not in ["Not specified", "Not applicable"]:
+        description_parts.append(f"from {item['Brand']}")
+    return ", ".join(description_parts)
+
+def create_outfit_recommendation_prompt(clothing_items: list) -> str:
+    inventory_by_category = {}
+    for idx, item in enumerate(clothing_items):
+        category = item["Category"]
+        if category not in inventory_by_category:
+            inventory_by_category[category] = []
+        inventory_by_category[category].append(create_detailed_item_description(item, str(idx)))
+
+    inventory_text = ""
+    for category, items in inventory_by_category.items():
+        inventory_text += f"\n{category}:\n"
+        for item in items:
+            inventory_text += f"- {item}\n"
+
+    prompt = f"""As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].
+
+AVAILABLE INVENTORY:
+{inventory_text}
+
+INSTRUCTIONS:
+1. Only recommend items that are explicitly listed in the inventory above.
+2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather).
+3. The recommendation should follow the JSON format:
+{{
+    "Outfit": [item_id numbers],
+    "Explanation": "1-2 sentences explaining why this outfit works",
+    "Styling Tips": "1-2 sentences on additional styling suggestions"
+}}
+
+FORMAT:
+- "Outfit": Array of IDs (without the "Item" prefix)
+- "Explanation" and "Styling Tips": Concise sentences.
+
+Respond with valid JSON.
+"""
+    return prompt
+
+def parse_rec_response(response_str: str) -> dict:
+    outfit_match = re.search(r"\"Outfit\":\s*(\[[^\]]+\])", response_str)
+    explanation_match = re.search(r"\"Explanation\":\s*\"([^\"]+)\"", response_str)
+    styling_match = re.search(r"\"Styling Tips\":\s*\"([^\"]+)\"", response_str)
+    
+    if not (outfit_match and explanation_match and styling_match):
+        raise ValueError("Invalid response format from recommendation model.")
+    
+    outfit_ids = json.loads(outfit_match.group(1))
+    explanation = explanation_match.group(1)
+    styling_tips = styling_match.group(1)
+    
+    return {
+        "outfit": outfit_ids,
+        "explanation": explanation,
+        "styling": styling_tips
+    }
+
+# ------------------------ Endpoints ------------------------
+
 @app.route("/upload", methods=["POST"])
 def upload_file():
     if "file" not in request.files:
         return jsonify({"error": "No file part"}), 400
-
     file = request.files["file"]
-
     if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
         return jsonify({"error": "Only image files are allowed"}), 400
 
-    # Generate a unique id and filename
     unique_id = str(uuid.uuid4())
     unique_filename = f"{unique_id}_{file.filename}"
     file_key = f"user-uploads/{unique_filename}"
 
     try:
-        # Retrieve the optional name provided by the user from the form data.
         user_input_name = request.form.get("name")
         if not user_input_name:
-            # When no name is provided, scan the DynamoDB table to determine the count
             scan_response = table.scan()
             current_count = len(scan_response.get("Items", []))
-            # Create a default name using the current count + 1
             product_name = f"Clothing Piece {current_count + 1}"
         else:
             product_name = user_input_name
 
-        # Read file, remove background, and prepare for S3 upload
         input_bytes = file.read()
         output_bytes = remove(input_bytes)
         output_file = io.BytesIO(output_bytes)
         output_file.seek(0)
 
-        # Upload the processed image to S3
         s3_client.upload_fileobj(
             output_file,
             S3_BUCKET,
@@ -144,8 +211,8 @@ def upload_file():
             }
         )
         s3_url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
+        logger.info(f"Uploaded file to S3: {s3_url}")
 
-        # Create a placeholder record in DynamoDB with "pending" status including the product name.
         placeholder_item = {
             "id": unique_id,
             "name": product_name,
@@ -165,16 +232,13 @@ def upload_file():
         table.put_item(Item=placeholder_item)
         logger.info(f"Created placeholder record: {json.dumps(placeholder_item)}")
 
-        # Optionally, save the file temporarily for recognition
         temp_path = f"/tmp/{unique_filename}"
         with open(temp_path, "wb") as temp_file:
             temp_file.write(output_bytes)
 
-        # Run classification synchronously using the model endpoint, passing the product name.
         metadata = run_recognition(temp_path, s3_url, product_name)
-        os.remove(temp_path)  # Clean up temporary file
+        os.remove(temp_path)
 
-        # Update the DynamoDB record with classification results and the product name.
         update_expression = (
             "SET #nm = :name, category = :category, #ty = :type, brand = :brand, "
             "size = :size, #sty = :style, color = :color, "
@@ -186,11 +250,11 @@ def upload_file():
             ":category": metadata.get("Category", "unknown"),
             ":type": metadata.get("Type of clothing", "unknown"),
             ":brand": metadata.get("Brand", "unknown"),
-            ":size": "N/A",  # If size is not provided, default to "N/A"
+            ":size": "N/A",
             ":style": metadata.get("Style", "unknown"),
             ":color": metadata.get("Primary Color", "unknown"),
             ":material": metadata.get("Fabric Material", "unknown"),
-            ":fitted_market_value": "N/A",  # If estimated value is not provided, default to "N/A"
+            ":fitted_market_value": "N/A",
             ":status": "processed",
             ":processed_at": datetime.now(timezone.utc).isoformat()
         }
@@ -208,9 +272,7 @@ def upload_file():
         )
         logger.info(f"Updated record {unique_id} with classification results.")
 
-        # Retrieve the updated record to return in the response
         updated_item = table.get_item(Key={"id": unique_id}).get("Item")
-
         return jsonify({
             "message": "Upload and classification successful",
             "item": updated_item
@@ -218,7 +280,6 @@ def upload_file():
 
     except Exception as e:
         logger.error(f"Error in /upload: {str(e)}")
-        # If an error occurs, update the record with error status if possible
         try:
             table.update_item(
                 Key={"id": unique_id},
@@ -236,7 +297,6 @@ def upload_file():
 @app.route("/list", methods=["GET"])
 def list_files():
     try:
-        # Scan the entire table (for production, consider pagination)
         response = table.scan()
         items = response.get("Items", [])
         return jsonify({"files": items})
@@ -251,11 +311,8 @@ def delete_file():
         return jsonify({"error": "Invalid S3 URL"}), 400
 
     try:
-        # Derive the S3 key from the URL
         key = url.split(".com/")[-1]
-        # Delete the object from S3
         s3_client.delete_object(Bucket=S3_BUCKET, Key=key)
-        # Delete DynamoDB record(s) matching the s3_url (using a scan here)
         response = table.scan(
             FilterExpression=boto3.dynamodb.conditions.Attr("s3_url").eq(url)
         )
@@ -277,12 +334,10 @@ def update_item():
     update_expression = "SET "
     expression_attribute_values = {}
     expression_attribute_names = {}
-    # Include "name" along with any other allowed fields.
     allowed_fields = ["name", "category", "type", "brand", "size", "style", "color", "material", "fitted_market_value"]
 
     for field in allowed_fields:
         if field in data:
-            # Use aliases for reserved keywords.
             if field == "type":
                 update_expression += f"#ty = :{field}, "
                 expression_attribute_names["#ty"] = "type"
@@ -326,6 +381,90 @@ def toggle_favorite():
         updated_item = table.get_item(Key={"id": item_id}).get("Item")
         return jsonify(updated_item), 200
     except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/recommend", methods=["POST"])
+def recommend():
+    try:
+        data = request.get_json()  # Expecting {'user_prompt': '...'}
+        user_prompt = data.get("user_prompt", "")
+        logger.info(f"User prompt received: {user_prompt}")
+        
+        # Use a separate DynamoDB table for recommendations if desired.
+        dynamodb_rec = boto3.resource('dynamodb', region_name=AWS_REGION)
+        rec_table = dynamodb_rec.Table("recommendation-test")
+        response = rec_table.scan()
+        items = response.get('Items', [])
+        logger.info(f"Total items scanned from recommendation-test: {len(items)}")
+        
+        # Filter items to only those with an "analysis" field so that ordering is preserved.
+        valid_items = [item for item in items if "analysis" in item]
+        logger.info(f"Total valid items (with analysis field): {len(valid_items)}")
+        
+        clothing_items = [json.loads(item["analysis"]) for item in valid_items]
+        
+        sys_prompt = create_outfit_recommendation_prompt(clothing_items)
+        logger.info(f"System prompt created:\n{sys_prompt}")
+        
+        const_messages = [
+            {"role": "system", "content": sys_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+        
+        def build_chat_prompt(messages):
+            # Use Python's .upper() method
+            return "\n".join([f"{msg['role'].upper()}: {msg['content']}" for msg in messages])
+        
+        text = build_chat_prompt(const_messages)
+        logger.info(f"Built chat prompt:\n{text}")
+        
+        payload = {
+            "inputs": text,
+            "parameters": {
+                "max_new_tokens": 1024,
+                "do_sample": True,
+                "temperature": 0.7
+            }
+        }
+        
+        model_response = sagemaker_client.invoke_endpoint(
+            EndpointName="endpoint-quick-start-kag8m",
+            ContentType="application/json",
+            Body=json.dumps(payload)
+        )
+        result = json.loads(model_response['Body'].read())
+        generated_text = result.get("generated_text", "")
+        logger.info(f"Generated text from model: {generated_text}")
+
+        try:
+            rec_output = parse_rec_response(generated_text)
+        except Exception as parse_error:
+            logger.error(f"Error parsing recommendation output: {str(parse_error)}")
+            logger.error("Full generated text for debugging:")
+            logger.error(generated_text)
+            return jsonify({"error": "Invalid response format from recommendation model."}), 500
+
+        logger.info(f"Parsed recommendation output: {rec_output}")
+        
+        # Map numeric indices returned by the model to actual S3 URLs using the valid_items order.
+        resolved_outfit_urls = []
+        if "outfit" in rec_output and isinstance(rec_output["outfit"], list):
+            for idx in rec_output["outfit"]:
+                logger.info(f"Processing index: {idx}")
+                if isinstance(idx, int) and idx < len(valid_items):
+                    s3_url = valid_items[idx]["s3_url"]
+                    logger.info(f"Resolved index {idx} to S3 URL: {s3_url}")
+                    resolved_outfit_urls.append(s3_url)
+                else:
+                    logger.error(f"Index {idx} out of range; total valid items: {len(valid_items)}")
+            rec_output["outfit"] = resolved_outfit_urls
+        else:
+            logger.error("Recommendation output does not contain a valid 'outfit' array.")
+            return jsonify({"error": "Invalid recommendation output from model."}), 500
+
+        return jsonify(rec_output)
+    except Exception as e:
+        logger.error(f"Error in /recommend endpoint: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
