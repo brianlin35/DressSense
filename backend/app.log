@@ -1,0 +1,1446 @@
+2025-04-12 19:11:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:11:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:11:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:11:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:11:56 INFO: 127.0.0.1 - - [12/Apr/2025 19:11:56] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:11:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:11:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:11:59 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/b341e43b-a4c8-417f-938c-68237045d552_shoes_men_tcc_d_44a809233a.png
+2025-04-12 19:11:59 INFO: Created placeholder record: {"id": "b341e43b-a4c8-417f-938c-68237045d552", "name": "Clothing Piece 2", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/b341e43b-a4c8-417f-938c-68237045d552_shoes_men_tcc_d_44a809233a.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:12:00 ERROR: Error during Claude invocation: An error occurred (AccessDeniedException) when calling the InvokeModel operation: You don't have access to the model with the specified model ID.
+2025-04-12 19:12:00 INFO: Updated record b341e43b-a4c8-417f-938c-68237045d552 with classification results + analysis.
+2025-04-12 19:12:00 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:00] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:12:00 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:00] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:05 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:20 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:20] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:23] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:26] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:32 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:32] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:35 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:35] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:38] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:41 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:41] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:44 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:44] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:47 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:47] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:56 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:56] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:12:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:12:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:13:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:13:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:13:05 INFO: 127.0.0.1 - - [12/Apr/2025 19:13:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:13:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:13:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:13:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:13:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:13:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:13:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:13:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:13:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:13:20 INFO: 127.0.0.1 - - [12/Apr/2025 19:13:20] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:13:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:13:23] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:13:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:13:26] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:14:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:14:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:15:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:15:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:15:35 INFO:  * Detected change in '/Users/jorgesandoval/Desktop/Coding/Berkeley/DATASCI210/Web Dashboard/backend/app.py', reloading
+2025-04-12 19:15:35 INFO:  * Restarting with stat
+2025-04-12 19:15:37 INFO: Found credentials in environment variables.
+2025-04-12 19:15:37 WARNING:  * Debugger is active!
+2025-04-12 19:15:37 INFO:  * Debugger PIN: 180-434-836
+2025-04-12 19:15:51 INFO: 127.0.0.1 - - [12/Apr/2025 19:15:51] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:15:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:15:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:15:56 INFO: 127.0.0.1 - - [12/Apr/2025 19:15:56] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:15:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:15:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:15:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:15:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:02 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/f350cfdb-1167-4115-b696-cf1d161c7c72_SFV-1_FRONT_Carbon_Black_b716177f-34f0-4964-b9f0-5d3b87b51cb5.jpg
+2025-04-12 19:16:02 INFO: Created placeholder record: {"id": "f350cfdb-1167-4115-b696-cf1d161c7c72", "name": "Clothing Piece 3", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/f350cfdb-1167-4115-b696-cf1d161c7c72_SFV-1_FRONT_Carbon_Black_b716177f-34f0-4964-b9f0-5d3b87b51cb5.jpg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:16:05 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:08 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "Shirt",
+    "Primary Color": "Black and white",
+    "Accent Color(s)": "Gray",
+    "Pattern": "Plaid",
+    "Shape": "Regular fit",
+    "Fit": "Regular",
+    "Neckline": "Collared",
+    "Key Design Elements": "Button-down front, short sleeves",
+    "Brand": "Stormtech",
+    "Style": "Casual",
+    "Occasion": "Everyday wear, casual outings",
+    "Weather Appropriateness": "Suitable for mild weather",
+    "Fabric Material": "Cotton or cotton blend",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Breathable fabric"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:16:08 INFO: Extracted JSON substring:
+{
+    "Category": "Top",
+    "Type of clothing": "Shirt",
+    "Primary Color": "Black and white",
+    "Accent Color(s)": "Gray",
+    "Pattern": "Plaid",
+    "Shape": "Regular fit",
+    "Fit": "Regular",
+    "Neckline": "Collared",
+    "Key Design Elements": "Button-down front, short sleeves",
+    "Brand": "Stormtech",
+    "Style": "Casual",
+    "Occasion": "Everyday wear, casual outings",
+    "Weather Appropriateness": "Suitable for mild weather",
+    "Fabric Material": "Cotton or cotton blend",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Breathable fabric"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:16:08 ERROR: Error parsing extracted JSON: Extra data: line 18 column 4 (char 587)
+Extracted:
+{
+    "Category": "Top",
+    "Type of clothing": "Shirt",
+    "Primary Color": "Black and white",
+    "Accent Color(s)": "Gray",
+    "Pattern": "Plaid",
+    "Shape": "Regular fit",
+    "Fit": "Regular",
+    "Neckline": "Collared",
+    "Key Design Elements": "Button-down front, short sleeves",
+    "Brand": "Stormtech",
+    "Style": "Casual",
+    "Occasion": "Everyday wear, casual outings",
+    "Weather Appropriateness": "Suitable for mild weather",
+    "Fabric Material": "Cotton or cotton blend",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Breathable fabric"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:16:09 INFO: Updated record f350cfdb-1167-4115-b696-cf1d161c7c72 with classification results + analysis.
+2025-04-12 19:16:09 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:09] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:16:09 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:09] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:20 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:20] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:23] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:26] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:32 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:32] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:35 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:35] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:38] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:41 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:41] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:44 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:44] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:47 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:47] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:56 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:56] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:16:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:16:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:05 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:20 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:20] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:23] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:26] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:46 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:46] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:47 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:47] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:56 INFO:  * Detected change in '/Users/jorgesandoval/Desktop/Coding/Berkeley/DATASCI210/Web Dashboard/backend/app.py', reloading
+2025-04-12 19:17:56 INFO:  * Restarting with stat
+2025-04-12 19:17:59 INFO: Found credentials in environment variables.
+2025-04-12 19:17:59 WARNING:  * Debugger is active!
+2025-04-12 19:17:59 INFO:  * Debugger PIN: 180-434-836
+2025-04-12 19:17:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:17:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:17:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:04 INFO:  * Detected change in '/Users/jorgesandoval/Desktop/Coding/Berkeley/DATASCI210/Web Dashboard/backend/app.py', reloading
+2025-04-12 19:18:04 INFO:  * Restarting with stat
+2025-04-12 19:18:06 INFO: Found credentials in environment variables.
+2025-04-12 19:18:06 WARNING:  * Debugger is active!
+2025-04-12 19:18:06 INFO:  * Debugger PIN: 180-434-836
+2025-04-12 19:18:07 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:07] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:07 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:07] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:20 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:20] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:20 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/b97eb84c-8cf1-4130-a3e7-c6c97063748d_270133_206_41.jpeg
+2025-04-12 19:18:20 INFO: Created placeholder record: {"id": "b97eb84c-8cf1-4130-a3e7-c6c97063748d", "name": "Clothing Piece 4", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/b97eb84c-8cf1-4130-a3e7-c6c97063748d_270133_206_41.jpeg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:18:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:23] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:25 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:25] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:26] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:29 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top", 
+    "Type of clothing": "Shirt",
+    "Primary Color": "Light Green",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Button-up",
+    "Fit": "Regular",
+    "Neckline": "Collared",
+    "Key Design Elements": "Chest pockets, Button-front closure",
+    "Brand": "L.L.Bean",
+    "Style": "Casual",
+    "Occasion": "Everyday wear",
+    "Weather Appropriateness": "Suitable for mild weather",
+    "Fabric Material": "Cotton or cotton blend",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Breathable fabric, Pockets for storage"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:18:29 INFO: Updated record b97eb84c-8cf1-4130-a3e7-c6c97063748d with classification results + analysis.
+2025-04-12 19:18:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:29] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:18:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:32 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:32] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:35 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:35] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:38] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:41 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:41] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:44 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:44] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:47 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:47] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:56 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:56] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:18:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:18:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:05 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:13 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:13] "OPTIONS /delete HTTP/1.1" 200 -
+2025-04-12 19:19:13 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:13] "OPTIONS /delete HTTP/1.1" 200 -
+2025-04-12 19:19:13 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:13] "OPTIONS /delete HTTP/1.1" 200 -
+2025-04-12 19:19:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:14] "POST /delete HTTP/1.1" 200 -
+2025-04-12 19:19:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:14] "POST /delete HTTP/1.1" 200 -
+2025-04-12 19:19:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:14] "POST /delete HTTP/1.1" 200 -
+2025-04-12 19:19:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:20 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:20] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:23] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:26] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:32 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:32] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:32 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/f4e9e2a2-3c76-4c2d-bd3b-5e337a82da63_shoes-for-crews-soft-toe-shoes-22782-s14-64_600.png
+2025-04-12 19:19:32 INFO: Created placeholder record: {"id": "f4e9e2a2-3c76-4c2d-bd3b-5e337a82da63", "name": "Clothing Piece 2", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/f4e9e2a2-3c76-4c2d-bd3b-5e337a82da63_shoes-for-crews-soft-toe-shoes-22782-s14-64_600.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:19:35 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:35] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:37 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Footwear",
+    "Type of clothing": "Shoes",
+    "Primary Color": "Black",
+    "Accent Color(s)": "",
+    "Pattern": "",
+    "Shape": "Running/Athletic",
+    "Fit": "Snug",
+    "Neckline": "",
+    "Key Design Elements": "Mesh upper, reinforced toe box, traction outsole",
+    "Brand": "",
+    "Style": "Athletic",
+    "Occasion": "Fitness/Exercise",
+    "Weather Appropriateness": "Versatile",
+    "Fabric Material": "Synthetic mesh, rubber",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Breathable, cushioned, durable"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:19:37 INFO: Updated record f4e9e2a2-3c76-4c2d-bd3b-5e337a82da63 with classification results + analysis.
+2025-04-12 19:19:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:38] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:19:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:38] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:40 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/1a353280-0f2e-4bde-b284-93556422f0d8_st2020_whi.png
+2025-04-12 19:19:41 INFO: Created placeholder record: {"id": "1a353280-0f2e-4bde-b284-93556422f0d8", "name": "Clothing Piece 3", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/1a353280-0f2e-4bde-b284-93556422f0d8_st2020_whi.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:19:41 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:41] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:43 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "T-shirt",
+    "Primary Color": "White",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Crew neck",
+    "Fit": "Regular",
+    "Neckline": "Crew neck",
+    "Key Design Elements": "Plain, basic",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Everyday wear",
+    "Weather Appropriateness": "Suitable for warm weather",
+    "Fabric Material": "Cotton (presumed)",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": ""
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:19:43 INFO: Updated record 1a353280-0f2e-4bde-b284-93556422f0d8 with classification results + analysis.
+2025-04-12 19:19:43 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:43] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:19:44 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:44] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:46 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/7836802e-b8a1-4462-b50b-5c8130b4f8c0_0001397_npr-rainbow-tee_850.png
+2025-04-12 19:19:47 INFO: Created placeholder record: {"id": "7836802e-b8a1-4462-b50b-5c8130b4f8c0", "name": "Clothing Piece 4", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/7836802e-b8a1-4462-b50b-5c8130b4f8c0_0001397_npr-rainbow-tee_850.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:19:47 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:47] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:50 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "T-shirt",
+    "Primary Color": "Heather Gray",
+    "Accent Color(s)": "Red, Yellow, Blue, Green, Orange",
+    "Pattern": "Graphic Print",
+    "Shape": "Regular/Straight",
+    "Fit": "Standard/Regular",
+    "Neckline": "Crew Neck",
+    "Key Design Elements": "Graphic design with NPR logo, waves, mountains, sun",
+    "Brand": "NPR",
+    "Style": "Casual",
+    "Occasion": "Everyday Wear",
+    "Weather Appropriateness": "All Seasons",
+    "Fabric Material": "Cotton",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": ""
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:19:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:50 INFO: Updated record 7836802e-b8a1-4462-b50b-5c8130b4f8c0 with classification results + analysis.
+2025-04-12 19:19:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:50] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:19:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:55 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/d828bd5b-5114-48de-b1d7-12165e6f4aee_Black.png
+2025-04-12 19:19:55 INFO: Created placeholder record: {"id": "d828bd5b-5114-48de-b1d7-12165e6f4aee", "name": "Clothing Piece 5", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/d828bd5b-5114-48de-b1d7-12165e6f4aee_Black.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:19:56 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:56] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:19:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:19:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:00 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "T-shirt",
+    "Primary Color": "Black",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Regular fit",
+    "Fit": "Casual",
+    "Neckline": "Crew neck",
+    "Key Design Elements": "Plain, simple",
+    "Brand": "SON",
+    "Style": "Basic",
+    "Occasion": "Casual",
+    "Weather Appropriateness": "All weather",
+    "Fabric Material": "",
+    "Fabric Weight": "",
+    "Functional Features": ""
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:20:00 INFO: Updated record d828bd5b-5114-48de-b1d7-12165e6f4aee with classification results + analysis.
+2025-04-12 19:20:00 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:00] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:20:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:03 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/ad1047a0-c6f7-4d60-bf96-31e34b36273a_CREWNECKSBlack_737x980.png
+2025-04-12 19:20:03 INFO: Created placeholder record: {"id": "ad1047a0-c6f7-4d60-bf96-31e34b36273a", "name": "Clothing Piece 6", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/ad1047a0-c6f7-4d60-bf96-31e34b36273a_CREWNECKSBlack_737x980.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:20:05 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:07 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "T-shirt",
+    "Primary Color": "Black",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Regular",
+    "Fit": "Regular",
+    "Neckline": "Crew neck",
+    "Key Design Elements": "Plain",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Everyday wear",
+    "Weather Appropriateness": "Versatile",
+    "Fabric Material": "",
+    "Fabric Weight": "",
+    "Functional Features": ""
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:20:07 INFO: Updated record ad1047a0-c6f7-4d60-bf96-31e34b36273a with classification results + analysis.
+2025-04-12 19:20:07 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:07] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:20:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:12 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/6dadb701-1789-43c7-860c-0e57ee92a568_DitchPant_Rye_Front_1200x.png
+2025-04-12 19:20:12 INFO: Created placeholder record: {"id": "6dadb701-1789-43c7-860c-0e57ee92a568", "name": "Clothing Piece 7", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/6dadb701-1789-43c7-860c-0e57ee92a568_DitchPant_Rye_Front_1200x.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:20:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:16 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Bottom",
+    "Type of clothing": "Pants",
+    "Primary Color": "Tan",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Straight Leg",
+    "Fit": "Regular",
+    "Neckline": "",
+    "Key Design Elements": "Five-pocket styling, button closure",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Casual everyday wear",
+    "Weather Appropriateness": "Warm weather",
+    "Fabric Material": "Cotton",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Pockets"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:20:16 INFO: Updated record 6dadb701-1789-43c7-860c-0e57ee92a568 with classification results + analysis.
+2025-04-12 19:20:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:17] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:20:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:20 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:20] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:22 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:22] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:23 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/07f8304d-4861-4b0f-9ace-141b99836c3c_ME-005980_Anvil_Pant_ME-01640_Majolica_Alto_Blue_Front.png
+2025-04-12 19:20:23 INFO: Created placeholder record: {"id": "07f8304d-4861-4b0f-9ace-141b99836c3c", "name": "Clothing Piece 8", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/07f8304d-4861-4b0f-9ace-141b99836c3c_ME-005980_Anvil_Pant_ME-01640_Majolica_Alto_Blue_Front.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:20:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:23] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:24 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:24] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:25 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:25] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:26] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:27 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Bottom",
+    "Type of clothing": "Pants",
+    "Primary Color": "Navy blue",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Straight leg",
+    "Fit": "Regular",
+    "Neckline": "",
+    "Key Design Elements": "Button closure, belt loops",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Everyday wear",
+    "Weather Appropriateness": "Suitable for various weather conditions",
+    "Fabric Material": "Cotton or cotton blend",
+    "Fabric Weight": "Lightweight to medium weight",
+    "Functional Features": "Comfortable, versatile"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:20:28 INFO: Updated record 07f8304d-4861-4b0f-9ace-141b99836c3c with classification results + analysis.
+2025-04-12 19:20:28 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:28] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:20:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:31 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/be2bbb5d-e4d7-4246-8227-f3edb847dd50_mens-cut-and-sew-t-shirt-1402919_l.png
+2025-04-12 19:20:31 INFO: Created placeholder record: {"id": "be2bbb5d-e4d7-4246-8227-f3edb847dd50", "name": "Clothing Piece 9", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/be2bbb5d-e4d7-4246-8227-f3edb847dd50_mens-cut-and-sew-t-shirt-1402919_l.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:20:32 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:32] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:32 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:32] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:35 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:35] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:35 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:35] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:37 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "T-shirt",
+    "Primary Color": "Blue",
+    "Accent Color(s)": "Orange, White",
+    "Pattern": "Photographic print",
+    "Shape": "Regular fit",
+    "Fit": "Unisex",
+    "Neckline": "Crew neck",
+    "Key Design Elements": "Photographic print of an elderly couple embracing and smiling",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Casual wear",
+    "Weather Appropriateness": "Suitable for warm weather",
+    "Fabric Material": "Cotton",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": ""
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:20:37 INFO: Updated record be2bbb5d-e4d7-4246-8227-f3edb847dd50 with classification results + analysis.
+2025-04-12 19:20:37 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:37] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:20:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:38] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:38] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:40 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:40] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:40 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/87c0bc05-8c33-40e8-b8a4-c5be0e0de83d_ORIGO-ecomm-enero-3.png
+2025-04-12 19:20:40 INFO: Created placeholder record: {"id": "87c0bc05-8c33-40e8-b8a4-c5be0e0de83d", "name": "Clothing Piece 10", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/87c0bc05-8c33-40e8-b8a4-c5be0e0de83d_ORIGO-ecomm-enero-3.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:20:41 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:41] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:41 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:41] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:43 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:43] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:44 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:44] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:45 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Footwear",
+    "Type of clothing": "Sneakers",
+    "Primary Color": "White",
+    "Accent Color(s)": "",
+    "Pattern": "",
+    "Shape": "Low-top",
+    "Fit": "Regular",
+    "Neckline": "",
+    "Key Design Elements": "Lace-up closure, minimal design",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Everyday wear",
+    "Weather Appropriateness": "All weather",
+    "Fabric Material": "Leather",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Comfortable for walking"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:20:45 INFO: Updated record 87c0bc05-8c33-40e8-b8a4-c5be0e0de83d with classification results + analysis.
+2025-04-12 19:20:45 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:45] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:20:47 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:47] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:50 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/0c266221-cda3-4acf-a5fa-28a2f09f1e1c_outback-trading-company-shirts-men-s-mesa-bamboo-shirt-31650032517254.png
+2025-04-12 19:20:50 INFO: Created placeholder record: {"id": "0c266221-cda3-4acf-a5fa-28a2f09f1e1c", "name": "Clothing Piece 11", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/0c266221-cda3-4acf-a5fa-28a2f09f1e1c_outback-trading-company-shirts-men-s-mesa-bamboo-shirt-31650032517254.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:20:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:20:57 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "Shirt",
+    "Primary Color": "Pink",
+    "Accent Color(s)": "White",
+    "Pattern": "Solid",
+    "Shape": "Collared",
+    "Fit": "Regular",
+    "Neckline": "Collared",
+    "Key Design Elements": "Button-down front, chest pockets",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Everyday wear",
+    "Weather Appropriateness": "Warm weather",
+    "Fabric Material": "Cotton",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Pockets"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:20:57 INFO: Updated record 0c266221-cda3-4acf-a5fa-28a2f09f1e1c with classification results + analysis.
+2025-04-12 19:20:57 INFO: 127.0.0.1 - - [12/Apr/2025 19:20:57] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:21:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:04 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/ac14cdbe-6dad-49ce-8406-5a710d573128_Pair-leather-shoes.png
+2025-04-12 19:21:05 INFO: Created placeholder record: {"id": "ac14cdbe-6dad-49ce-8406-5a710d573128", "name": "Clothing Piece 12", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/ac14cdbe-6dad-49ce-8406-5a710d573128_Pair-leather-shoes.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:21:05 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:09 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:09] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:10 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Footwear",
+    "Type of clothing": "Shoes",
+    "Primary Color": "Brown",
+    "Accent Color(s)": "Grey",
+    "Pattern": "Solid",
+    "Shape": "Low-cut",
+    "Fit": "Casual",
+    "Neckline": "",
+    "Key Design Elements": "Velcro straps, zipper closure, perforated details",
+    "Brand": "No brand name visible",
+    "Style": "Casual, comfortable",
+    "Occasion": "Everyday wear, casual outings",
+    "Weather Appropriateness": "Suitable for mild to warm weather",
+    "Fabric Material": "Leather, mesh",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Slip-resistant sole, breathable mesh lining"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:21:10 INFO: Updated record ac14cdbe-6dad-49ce-8406-5a710d573128 with classification results + analysis.
+2025-04-12 19:21:10 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:10] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:21:12 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:12] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:14 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/79735031-d5cd-41f5-b17f-8f031f568634_parker-red-tennis-shoe-by-jolly-kids-652958_650x650_crop_center.png
+2025-04-12 19:21:14 INFO: Created placeholder record: {"id": "79735031-d5cd-41f5-b17f-8f031f568634", "name": "Clothing Piece 13", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/79735031-d5cd-41f5-b17f-8f031f568634_parker-red-tennis-shoe-by-jolly-kids-652958_650x650_crop_center.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:21:15 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:15] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:18 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Footwear",
+    "Type of clothing": "Sneakers",
+    "Primary Color": "Red",
+    "Accent Color(s)": "White, Tan",
+    "Pattern": "Solid",
+    "Shape": "Low-top",
+    "Fit": "Casual",
+    "Neckline": "",
+    "Key Design Elements": "Canvas upper, rubber toe cap, lace-up closure",
+    "Brand": "",
+    "Style": "Classic",
+    "Occasion": "Casual",
+    "Weather Appropriateness": "Warmer weather",
+    "Fabric Material": "Canvas, Rubber",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Breathable, Flexible"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:21:18 INFO: Updated record 79735031-d5cd-41f5-b17f-8f031f568634 with classification results + analysis.
+2025-04-12 19:21:18 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:18] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:21:19 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:19] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:21 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/69e6dfdb-3257-45f8-befa-6fe0b25b87b6_personalized-t-shirts-for-kids-1283436_l.png
+2025-04-12 19:21:21 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:21] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:22 INFO: Created placeholder record: {"id": "69e6dfdb-3257-45f8-befa-6fe0b25b87b6", "name": "Clothing Piece 14", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/69e6dfdb-3257-45f8-befa-6fe0b25b87b6_personalized-t-shirts-for-kids-1283436_l.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:21:24 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:24] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:26 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "T-shirt",
+    "Primary Color": "Light blue",
+    "Accent Color(s)": "Navy blue, mustard yellow",
+    "Pattern": "Printed panda design",
+    "Shape": "Crewneck",
+    "Fit": "Regular",
+    "Neckline": "Crewneck",
+    "Key Design Elements": "Printed panda figures, stars, rockets",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Everyday wear, loungewear",
+    "Weather Appropriateness": "Spring, summer",
+    "Fabric Material": "Cotton",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": ""
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:21:26 INFO: Updated record 69e6dfdb-3257-45f8-befa-6fe0b25b87b6 with classification results + analysis.
+2025-04-12 19:21:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:26] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:21:27 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:27] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:30 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/7871393f-6989-464c-a478-cdcfbb1e7dd5_runningshoes-2048px-09522.png
+2025-04-12 19:21:30 INFO: Created placeholder record: {"id": "7871393f-6989-464c-a478-cdcfbb1e7dd5", "name": "Clothing Piece 15", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/7871393f-6989-464c-a478-cdcfbb1e7dd5_runningshoes-2048px-09522.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:21:30 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:30] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:33 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:33] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:34 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Footwear",
+    "Type of clothing": "Sneakers",
+    "Primary Color": "Mint green",
+    "Accent Color(s)": "Purple, Tan",
+    "Pattern": "Solid",
+    "Shape": "Low-top",
+    "Fit": "Athletic",
+    "Neckline": "",
+    "Key Design Elements": "Mesh upper, lace-up closure, contrasting details",
+    "Brand": "",
+    "Style": "Sporty",
+    "Occasion": "Casual, Athletic",
+    "Weather Appropriateness": "Warm weather",
+    "Fabric Material": "Mesh, Synthetic",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Breathable mesh upper, flexible sole"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:21:34 INFO: Updated record 7871393f-6989-464c-a478-cdcfbb1e7dd5 with classification results + analysis.
+2025-04-12 19:21:34 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:34] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:21:36 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:36] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:39 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:39] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:40 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/fba8cd95-0581-49cf-bb20-947a297d7509_Shop-Khaki_2000x.png
+2025-04-12 19:21:40 INFO: Created placeholder record: {"id": "fba8cd95-0581-49cf-bb20-947a297d7509", "name": "Clothing Piece 16", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/fba8cd95-0581-49cf-bb20-947a297d7509_Shop-Khaki_2000x.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:21:42 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:42] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:45 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Bottom",
+    "Type of clothing": "Pants",
+    "Primary Color": "Khaki",
+    "Accent Color(s)": "",
+    "Pattern": "",
+    "Shape": "Straight Leg",
+    "Fit": "Regular",
+    "Neckline": "",
+    "Key Design Elements": "Pleated Front, Belt Loops",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Casual/Everyday Wear",
+    "Weather Appropriateness": "Warm Weather",
+    "Fabric Material": "Cotton/Chino",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": ""
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:21:45 INFO: Updated record fba8cd95-0581-49cf-bb20-947a297d7509 with classification results + analysis.
+2025-04-12 19:21:45 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:45] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:21:45 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:45] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:48 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:48] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:49 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/8ee4a995-766c-494c-a5cc-91b3ae10e105_sky-blue-front-XT96-performance-long-sleeve-t-shirt.png
+2025-04-12 19:21:49 INFO: Created placeholder record: {"id": "8ee4a995-766c-494c-a5cc-91b3ae10e105", "name": "Clothing Piece 17", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/8ee4a995-766c-494c-a5cc-91b3ae10e105_sky-blue-front-XT96-performance-long-sleeve-t-shirt.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:21:51 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:51] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:53 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "Long sleeve shirt",
+    "Primary Color": "Light blue",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Regular fit",
+    "Fit": "Regular",
+    "Neckline": "Crew neck",
+    "Key Design Elements": "Plain, basic design",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Everyday wear",
+    "Weather Appropriateness": "Suitable for mild weather",
+    "Fabric Material": "Cotton or cotton blend (inferred)",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": ""
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:21:53 INFO: Updated record 8ee4a995-766c-494c-a5cc-91b3ae10e105 with classification results + analysis.
+2025-04-12 19:21:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:53] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:21:55 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:55] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:57 INFO: 127.0.0.1 - - [12/Apr/2025 19:21:57] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:21:58 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/f910cbf0-fc9b-4b85-a74b-9e635ed86a93_womens_incline_as_pants_graphene_qfu_85_grh.png
+2025-04-12 19:21:58 INFO: Created placeholder record: {"id": "f910cbf0-fc9b-4b85-a74b-9e635ed86a93", "name": "Clothing Piece 18", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/f910cbf0-fc9b-4b85-a74b-9e635ed86a93_womens_incline_as_pants_graphene_qfu_85_grh.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:22:00 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:00] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:02 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Bottom",
+    "Type of clothing": "Pants",
+    "Primary Color": "Gray",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Straight",
+    "Fit": "Regular",
+    "Neckline": "",
+    "Key Design Elements": "Zippered pockets",
+    "Brand": "",
+    "Style": "Outdoor/Hiking",
+    "Occasion": "Activewear/Outdoor",
+    "Weather Appropriateness": "Mild/Cool",
+    "Fabric Material": "Synthetic/Technical",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Moisture-wicking, Stretch, Durable"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:22:02 INFO: Updated record f910cbf0-fc9b-4b85-a74b-9e635ed86a93 with classification results + analysis.
+2025-04-12 19:22:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:02] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:22:03 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:03] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:06 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:06] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:07 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/6cf42e86-2707-474c-bf54-839d18bafc1d_shoes_men_tcc_d_44a809233a.png
+2025-04-12 19:22:07 INFO: Created placeholder record: {"id": "6cf42e86-2707-474c-bf54-839d18bafc1d", "name": "Clothing Piece 19", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/6cf42e86-2707-474c-bf54-839d18bafc1d_shoes_men_tcc_d_44a809233a.png", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:22:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:16 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:16] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:18 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Footwear",
+    "Type of clothing": "Sneakers",
+    "Primary Color": "Navy Blue",
+    "Accent Color(s)": "White, Beige",
+    "Pattern": "Solid with accent stripes",
+    "Shape": "Low-top",
+    "Fit": "Regular",
+    "Neckline": "",
+    "Key Design Elements": "Iconic triple stripe detail, metal branding",
+    "Brand": "Adidas",
+    "Style": "Classic, Retro",
+    "Occasion": "Casual, Athleisure",
+    "Weather Appropriateness": "All-weather",
+    "Fabric Material": "Leather, Suede",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Flat rubber outsole, lace-up closure"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:22:18 INFO: Updated record 6cf42e86-2707-474c-bf54-839d18bafc1d with classification results + analysis.
+2025-04-12 19:22:18 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:18] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:22:20 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:20] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:23] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:25 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/f68a9960-cc9a-4d58-999b-f31f0e23cf0f_white-casual-shoes-for-men.jpg
+2025-04-12 19:22:25 INFO: Created placeholder record: {"id": "f68a9960-cc9a-4d58-999b-f31f0e23cf0f", "name": "Clothing Piece 20", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/f68a9960-cc9a-4d58-999b-f31f0e23cf0f_white-casual-shoes-for-men.jpg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:22:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:26] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:29 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Footwear",
+    "Type of clothing": "Sneakers",
+    "Primary Color": "White",
+    "Accent Color(s)": "Black, Red",
+    "Pattern": "Solid",
+    "Shape": "Low-top",
+    "Fit": "Regular",
+    "Neckline": "",
+    "Key Design Elements": "Branded patches, contrast stripes",
+    "Brand": "Fashion",
+    "Style": "Casual",
+    "Occasion": "Everyday wear",
+    "Weather Appropriateness": "Suitable for most weather conditions",
+    "Fabric Material": "Canvas/Leather",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Flat rubber sole"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:22:29 INFO: Updated record f68a9960-cc9a-4d58-999b-f31f0e23cf0f with classification results + analysis.
+2025-04-12 19:22:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:29] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:22:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:32 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:32] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:33 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/4dcd8c0a-dd6e-47e7-af65-3a89b5536fed_FQ8138_103_P1.jpeg
+2025-04-12 19:22:33 INFO: Created placeholder record: {"id": "4dcd8c0a-dd6e-47e7-af65-3a89b5536fed", "name": "Clothing Piece 21", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/4dcd8c0a-dd6e-47e7-af65-3a89b5536fed_FQ8138_103_P1.jpeg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:22:35 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:35] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:36 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Footwear",
+    "Type of clothing": "Sneakers",
+    "Primary Color": "White",
+    "Accent Color(s)": "Green",
+    "Pattern": "",
+    "Shape": "Athletic",
+    "Fit": "Comfortable",
+    "Neckline": "",
+    "Key Design Elements": "Air cushion sole, mesh detailing",
+    "Brand": "Air Jordan",
+    "Style": "Basketball",
+    "Occasion": "Casual, Sports",
+    "Weather Appropriateness": "Mild, Dry conditions",
+    "Fabric Material": "Leather, Mesh",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Air cushioning, Traction"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:22:36 INFO: Updated record 4dcd8c0a-dd6e-47e7-af65-3a89b5536fed with classification results + analysis.
+2025-04-12 19:22:36 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:36] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:22:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:38] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:39 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/71a4f82b-7c2a-4cef-800a-3f8867f6951f_Air_Jordan_1_Banned.jpg
+2025-04-12 19:22:39 INFO: Created placeholder record: {"id": "71a4f82b-7c2a-4cef-800a-3f8867f6951f", "name": "Clothing Piece 22", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/71a4f82b-7c2a-4cef-800a-3f8867f6951f_Air_Jordan_1_Banned.jpg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:22:41 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:41] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:44 ERROR: Error during Claude invocation: An error occurred (ThrottlingException) when calling the InvokeModel operation (reached max retries: 3): Too many requests, please wait before trying again.
+2025-04-12 19:22:44 INFO: Updated record 71a4f82b-7c2a-4cef-800a-3f8867f6951f with classification results + analysis.
+2025-04-12 19:22:44 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:44] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:22:44 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:44] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:47 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:47] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:48 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/7ba05f2c-0f26-4980-b29f-ac6332d745e1_521757_38374_41.jpeg
+2025-04-12 19:22:48 INFO: Created placeholder record: {"id": "7ba05f2c-0f26-4980-b29f-ac6332d745e1", "name": "Clothing Piece 23", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/7ba05f2c-0f26-4980-b29f-ac6332d745e1_521757_38374_41.jpeg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:22:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:52 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Bottom",
+    "Type of clothing": "Cargo pants",
+    "Primary Color": "Gray",
+    "Accent Color(s)": "",
+    "Pattern": "",
+    "Shape": "Straight leg",
+    "Fit": "Regular",
+    "Neckline": "",
+    "Key Design Elements": "Multiple cargo pockets, button closure",
+    "Brand": "",
+    "Style": "Casual",
+    "Occasion": "Casual wear, outdoor activities",
+    "Weather Appropriateness": "Suitable for mild to cool weather",
+    "Fabric Material": "Cotton or cotton blend",
+    "Fabric Weight": "Lightweight to midweight",
+    "Functional Features": "Cargo pockets for storage and utility"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:22:52 INFO: Updated record 7ba05f2c-0f26-4980-b29f-ac6332d745e1 with classification results + analysis.
+2025-04-12 19:22:52 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:52] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:22:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:56 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:56] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:22:56 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/96d6e095-52fb-4452-bbac-f6da8fbfdbd1_04527__93257.jpg
+2025-04-12 19:22:57 INFO: Created placeholder record: {"id": "96d6e095-52fb-4452-bbac-f6da8fbfdbd1", "name": "Clothing Piece 24", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/96d6e095-52fb-4452-bbac-f6da8fbfdbd1_04527__93257.jpg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:22:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:22:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:01 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Bottom",
+    "Type of clothing": "Pants",
+    "Primary Color": "Light beige",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Straight leg",
+    "Fit": "Regular",
+    "Neckline": "",
+    "Key Design Elements": "Pleated front, belt loops",
+    "Brand": "",
+    "Style": "Classic",
+    "Occasion": "Casual, Business casual",
+    "Weather Appropriateness": "Spring, Summer, Fall",
+    "Fabric Material": "Cotton or Cotton blend",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": ""
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:23:01 INFO: Updated record 96d6e095-52fb-4452-bbac-f6da8fbfdbd1 with classification results + analysis.
+2025-04-12 19:23:01 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:01] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:23:02 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:05 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/eb71eff6-58ef-4866-b646-3f497653f388_active-technical-pants.jpg
+2025-04-12 19:23:05 INFO: Created placeholder record: {"id": "eb71eff6-58ef-4866-b646-3f497653f388", "name": "Clothing Piece 25", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/eb71eff6-58ef-4866-b646-3f497653f388_active-technical-pants.jpg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:23:05 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:08 ERROR: Error during Claude invocation: An error occurred (ThrottlingException) when calling the InvokeModel operation (reached max retries: 3): Too many requests, please wait before trying again.
+2025-04-12 19:23:09 INFO: Updated record eb71eff6-58ef-4866-b646-3f497653f388 with classification results + analysis.
+2025-04-12 19:23:09 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:09] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:23:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:16 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/5b26f760-3e0b-4484-84c9-fe51eb5ed5fb_t1_werkpants_mens_olive_flat_lay_4825e693-f588-4813-bff0-1d4c46ce82ce.jpg
+2025-04-12 19:23:16 INFO: Created placeholder record: {"id": "5b26f760-3e0b-4484-84c9-fe51eb5ed5fb", "name": "Clothing Piece 26", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/5b26f760-3e0b-4484-84c9-fe51eb5ed5fb_t1_werkpants_mens_olive_flat_lay_4825e693-f588-4813-bff0-1d4c46ce82ce.jpg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:23:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:20 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:20] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:23 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Bottom",
+    "Type of clothing": "Pants",
+    "Primary Color": "Olive Green",
+    "Accent Color(s)": "Black",
+    "Pattern": "Solid",
+    "Shape": "Straight Leg",
+    "Fit": "Relaxed",
+    "Neckline": "-",
+    "Key Design Elements": "Cargo pockets, Zip fly, Belt loops",
+    "Brand": "Unclear",
+    "Style": "Casual, Utilitarian",
+    "Occasion": "Outdoor activities, Hiking, Casual wear",
+    "Weather Appropriateness": "Suitable for mild to warm weather",
+    "Fabric Material": "Likely cotton or synthetic blend",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Multiple pockets for storage, Breathable fabric"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:23:23 INFO: Updated record 5b26f760-3e0b-4484-84c9-fe51eb5ed5fb with classification results + analysis.
+2025-04-12 19:23:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:23] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:23:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:23] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:26 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:26] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:26 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/53bea3d3-db94-4fbf-bce9-67000658a681_gig500_1_wht.jpg
+2025-04-12 19:23:27 INFO: Created placeholder record: {"id": "53bea3d3-db94-4fbf-bce9-67000658a681", "name": "Clothing Piece 27", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/53bea3d3-db94-4fbf-bce9-67000658a681_gig500_1_wht.jpg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:23:29 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:29] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:31 INFO: Model response:
+{"analysis": {"Category": "Top", "Type of clothing": "T-shirt", "Primary Color": "White", "Accent Color(s)": "", "Pattern": "Solid", "Shape": "Regular fit", "Fit": "Standard", "Neckline": "Crew neck", "Key Design Elements": "Plain", "Brand": "Gildan", "Style": "Basic", "Occasion": "Casual", "Weather Appropriateness": "All seasons", "Fabric Material": "Cotton", "Fabric Weight": "Lightweight", "Functional Features": "Breathable, comfortable"}, "extra_notes": "This is a classic, versatile white crew neck t-shirt suitable for everyday casual wear."}
+2025-04-12 19:23:31 INFO: Updated record 53bea3d3-db94-4fbf-bce9-67000658a681 with classification results + analysis.
+2025-04-12 19:23:31 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:31] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:23:32 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:32] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:35 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/7b3ee1a5-7aa0-43ee-8a53-7285abba9f5a_SFV-1_FRONT_Carbon_Black_b716177f-34f0-4964-b9f0-5d3b87b51cb5.jpg
+2025-04-12 19:23:35 INFO: Created placeholder record: {"id": "7b3ee1a5-7aa0-43ee-8a53-7285abba9f5a", "name": "Clothing Piece 28", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/7b3ee1a5-7aa0-43ee-8a53-7285abba9f5a_SFV-1_FRONT_Carbon_Black_b716177f-34f0-4964-b9f0-5d3b87b51cb5.jpg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:23:35 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:35] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:38] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:41 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:41] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:42 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "Shirt",
+    "Primary Color": "Black",
+    "Accent Color(s)": "White, Gray",
+    "Pattern": "Plaid",
+    "Shape": "Classic",
+    "Fit": "Regular",
+    "Neckline": "Collared",
+    "Key Design Elements": "Button-down, Short sleeves",
+    "Brand": "Stormtech",
+    "Style": "Casual",
+    "Occasion": "Everyday wear",
+    "Weather Appropriateness": "Warm weather",
+    "Fabric Material": "Cotton",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Breathable"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:23:42 INFO: Updated record 7b3ee1a5-7aa0-43ee-8a53-7285abba9f5a with classification results + analysis.
+2025-04-12 19:23:42 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:42] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:23:44 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:44] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:46 INFO: Uploaded file to S3: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/0e49a292-9518-4a98-878c-183318395b60_61owdlDd7wL._AC_UY1000_.jpg
+2025-04-12 19:23:46 INFO: Created placeholder record: {"id": "0e49a292-9518-4a98-878c-183318395b60", "name": "Clothing Piece 29", "s3_url": "https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/0e49a292-9518-4a98-878c-183318395b60_61owdlDd7wL._AC_UY1000_.jpg", "category": "pending", "type": "pending", "brand": "pending", "size": "pending", "style": "pending", "color": "pending", "material": "pending", "fitted_market_value": "pending", "status": "pending", "processed_at": null, "error_message": null}
+2025-04-12 19:23:47 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:47] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:50 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:51 INFO: Model response:
+{
+  "analysis": {
+    "Category": "Top",
+    "Type of clothing": "Dress Shirt",
+    "Primary Color": "Black",
+    "Accent Color(s)": "",
+    "Pattern": "Solid",
+    "Shape": "Classic",
+    "Fit": "Regular",
+    "Neckline": "Collared",
+    "Key Design Elements": "Button-down front, Long sleeves",
+    "Brand": "Flex",
+    "Style": "Formal",
+    "Occasion": "Professional, Business",
+    "Weather Appropriateness": "Year-round",
+    "Fabric Material": "Cotton",
+    "Fabric Weight": "Lightweight",
+    "Functional Features": "Breathable, Easy to iron"
+  },
+  "extra_notes": ""
+}
+2025-04-12 19:23:51 INFO: Updated record 0e49a292-9518-4a98-878c-183318395b60 with classification results + analysis.
+2025-04-12 19:23:51 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:51] "POST /upload HTTP/1.1" 200 -
+2025-04-12 19:23:51 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:51] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:53 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:56 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:56] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:23:59 INFO: 127.0.0.1 - - [12/Apr/2025 19:23:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:03 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:03] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:03 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:03] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:04 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:04] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:05 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:07 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:07] "OPTIONS /delete HTTP/1.1" 200 -
+2025-04-12 19:24:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:08] "POST /delete HTTP/1.1" 200 -
+2025-04-12 19:24:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:08 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:10 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:10] "POST /delete HTTP/1.1" 200 -
+2025-04-12 19:24:10 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:10] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:14] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:24:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:23] "OPTIONS /recommend HTTP/1.1" 200 -
+2025-04-12 19:24:23 INFO: User prompt received: give me an easter brunch outfit
+2025-04-12 19:24:23 INFO: Total items scanned from ClothingItems: 27
+2025-04-12 19:24:23 INFO: Total valid items (with analysis field): 27
+2025-04-12 19:24:23 INFO: System prompt created:
+As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].
+
+AVAILABLE INVENTORY:
+
+Bottom:
+- [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from 
+- [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from 
+- [Item 7], Tan Pants, Casual style,  neckline, with  accents, from 
+- [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from 
+- [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear
+- [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from 
+- [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from 
+
+Footwear:
+- [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from 
+- [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from 
+- [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas
+- [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible
+- [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from 
+- [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan
+- [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from 
+- [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion
+
+Top:
+- [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan
+- [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean
+- [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from 
+- [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from 
+- [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech
+- [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex
+- [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR
+- [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON
+- [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from 
+
+
+INSTRUCTIONS:
+1. Only recommend items that are explicitly listed in the inventory above.
+2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather).
+3. The recommendation should follow the JSON format exactly as shown below:
+{
+    "Outfit": [item_id numbers],
+    "Explanation": "1-2 sentences explaining why this outfit works",
+    "Styling Tips": "1-2 sentences on additional styling suggestions"
+}
+
+FORMAT:
+- "Outfit": Array of IDs (without the "Item" prefix)
+- "Explanation" and "Styling Tips": Concise sentences.
+
+Return only the JSON object with the attribute names as keys. 
+Do not include any extra text, markdown formatting, or explanation outside of the JSON.
+
+2025-04-12 19:24:23 INFO: Built chat prompt:
+SYSTEM: As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].
+
+AVAILABLE INVENTORY:
+
+Bottom:
+- [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from 
+- [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from 
+- [Item 7], Tan Pants, Casual style,  neckline, with  accents, from 
+- [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from 
+- [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear
+- [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from 
+- [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from 
+
+Footwear:
+- [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from 
+- [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from 
+- [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas
+- [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible
+- [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from 
+- [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan
+- [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from 
+- [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion
+
+Top:
+- [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan
+- [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean
+- [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from 
+- [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from 
+- [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech
+- [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex
+- [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR
+- [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON
+- [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from 
+
+
+INSTRUCTIONS:
+1. Only recommend items that are explicitly listed in the inventory above.
+2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather).
+3. The recommendation should follow the JSON format exactly as shown below:
+{
+    "Outfit": [item_id numbers],
+    "Explanation": "1-2 sentences explaining why this outfit works",
+    "Styling Tips": "1-2 sentences on additional styling suggestions"
+}
+
+FORMAT:
+- "Outfit": Array of IDs (without the "Item" prefix)
+- "Explanation" and "Styling Tips": Concise sentences.
+
+Return only the JSON object with the attribute names as keys. 
+Do not include any extra text, markdown formatting, or explanation outside of the JSON.
+
+USER: give me an easter brunch outfit
+2025-04-12 19:24:23 ERROR: Error in /recommend endpoint: name 'sagemaker_client' is not defined
+2025-04-12 19:24:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:23] "[35m[1mPOST /recommend HTTP/1.1[0m" 500 -
+2025-04-12 19:25:31 INFO: 127.0.0.1 - - [12/Apr/2025 19:25:31] "OPTIONS /recommend HTTP/1.1" 200 -
+2025-04-12 19:25:31 INFO: User prompt received:  2025-04-12 19:24:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:11] "GET /list HTTP/1.1" 200 - 2025-04-12 19:24:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:14] "GET /list HTTP/1.1" 200 - 2025-04-12 19:24:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:17] "GET /list HTTP/1.1" 200 - 2025-04-12 19:24:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:23] "OPTIONS /recommend HTTP/1.1" 200 - 2025-04-12 19:24:23 INFO: User prompt received: give me an easter brunch outfit 2025-04-12 19:24:23 INFO: Total items scanned from ClothingItems: 27 2025-04-12 19:24:23 INFO: Total valid items (with analysis field): 27 2025-04-12 19:24:23 INFO: System prompt created: As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].  AVAILABLE INVENTORY:  Bottom: - [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from  - [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from  - [Item 7], Tan Pants, Casual style,  neckline, with  accents, from  - [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from  - [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear - [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from  - [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from   Footwear: - [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from  - [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from  - [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas - [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible - [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from  - [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan - [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from  - [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion  Top: - [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan - [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean - [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from  - [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from  - [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech - [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex - [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR - [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON - [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from    INSTRUCTIONS: 1. Only recommend items that are explicitly listed in the inventory above. 2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather). 3. The recommendation should follow the JSON format exactly as shown below: {     "Outfit": [item_id numbers],     "Explanation": "1-2 sentences explaining why this outfit works",     "Styling Tips": "1-2 sentences on additional styling suggestions" }  FORMAT: - "Outfit": Array of IDs (without the "Item" prefix) - "Explanation" and "Styling Tips": Concise sentences.  Return only the JSON object with the attribute names as keys.  Do not include any extra text, markdown formatting, or explanation outside of the JSON.  2025-04-12 19:24:23 INFO: Built chat prompt: SYSTEM: As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].  AVAILABLE INVENTORY:  Bottom: - [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from  - [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from  - [Item 7], Tan Pants, Casual style,  neckline, with  accents, from  - [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from  - [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear - [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from  - [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from   Footwear: - [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from  - [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from  - [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas - [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible - [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from  - [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan - [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from  - [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion  Top: - [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan - [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean - [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from  - [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from  - [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech - [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex - [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR - [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON - [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from    INSTRUCTIONS: 1. Only recommend items that are explicitly listed in the inventory above. 2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather). 3. The recommendation should follow the JSON format exactly as shown below: {     "Outfit": [item_id numbers],     "Explanation": "1-2 sentences explaining why this outfit works",     "Styling Tips": "1-2 sentences on additional styling suggestions" }  FORMAT: - "Outfit": Array of IDs (without the "Item" prefix) - "Explanation" and "Styling Tips": Concise sentences.  Return only the JSON object with the attribute names as keys.  Do not include any extra text, markdown formatting, or explanation outside of the JSON.  USER: give me an easter brunch outfit 2025-04-12 19:24:23 ERROR: Error in /recommend endpoint: name 'sagemaker_client' is not defined 2025-04-12 19:24:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:23] "[35m[1mPOST /recommend HTTP/1.1[0m" 500 -
+2025-04-12 19:25:31 INFO: Total items scanned from ClothingItems: 27
+2025-04-12 19:25:31 INFO: Total valid items (with analysis field): 27
+2025-04-12 19:25:31 INFO: System prompt created:
+As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].
+
+AVAILABLE INVENTORY:
+
+Bottom:
+- [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from 
+- [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from 
+- [Item 7], Tan Pants, Casual style,  neckline, with  accents, from 
+- [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from 
+- [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear
+- [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from 
+- [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from 
+
+Footwear:
+- [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from 
+- [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from 
+- [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas
+- [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible
+- [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from 
+- [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan
+- [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from 
+- [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion
+
+Top:
+- [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan
+- [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean
+- [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from 
+- [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from 
+- [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech
+- [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex
+- [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR
+- [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON
+- [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from 
+
+
+INSTRUCTIONS:
+1. Only recommend items that are explicitly listed in the inventory above.
+2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather).
+3. The recommendation should follow the JSON format exactly as shown below:
+{
+    "Outfit": [item_id numbers],
+    "Explanation": "1-2 sentences explaining why this outfit works",
+    "Styling Tips": "1-2 sentences on additional styling suggestions"
+}
+
+FORMAT:
+- "Outfit": Array of IDs (without the "Item" prefix)
+- "Explanation" and "Styling Tips": Concise sentences.
+
+Return only the JSON object with the attribute names as keys. 
+Do not include any extra text, markdown formatting, or explanation outside of the JSON.
+
+2025-04-12 19:25:31 INFO: Built chat prompt:
+SYSTEM: As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].
+
+AVAILABLE INVENTORY:
+
+Bottom:
+- [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from 
+- [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from 
+- [Item 7], Tan Pants, Casual style,  neckline, with  accents, from 
+- [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from 
+- [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear
+- [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from 
+- [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from 
+
+Footwear:
+- [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from 
+- [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from 
+- [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas
+- [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible
+- [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from 
+- [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan
+- [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from 
+- [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion
+
+Top:
+- [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan
+- [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean
+- [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from 
+- [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from 
+- [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech
+- [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex
+- [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR
+- [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON
+- [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from 
+
+
+INSTRUCTIONS:
+1. Only recommend items that are explicitly listed in the inventory above.
+2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather).
+3. The recommendation should follow the JSON format exactly as shown below:
+{
+    "Outfit": [item_id numbers],
+    "Explanation": "1-2 sentences explaining why this outfit works",
+    "Styling Tips": "1-2 sentences on additional styling suggestions"
+}
+
+FORMAT:
+- "Outfit": Array of IDs (without the "Item" prefix)
+- "Explanation" and "Styling Tips": Concise sentences.
+
+Return only the JSON object with the attribute names as keys. 
+Do not include any extra text, markdown formatting, or explanation outside of the JSON.
+
+USER:  2025-04-12 19:24:11 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:11] "GET /list HTTP/1.1" 200 - 2025-04-12 19:24:14 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:14] "GET /list HTTP/1.1" 200 - 2025-04-12 19:24:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:17] "GET /list HTTP/1.1" 200 - 2025-04-12 19:24:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:23] "OPTIONS /recommend HTTP/1.1" 200 - 2025-04-12 19:24:23 INFO: User prompt received: give me an easter brunch outfit 2025-04-12 19:24:23 INFO: Total items scanned from ClothingItems: 27 2025-04-12 19:24:23 INFO: Total valid items (with analysis field): 27 2025-04-12 19:24:23 INFO: System prompt created: As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].  AVAILABLE INVENTORY:  Bottom: - [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from  - [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from  - [Item 7], Tan Pants, Casual style,  neckline, with  accents, from  - [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from  - [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear - [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from  - [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from   Footwear: - [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from  - [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from  - [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas - [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible - [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from  - [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan - [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from  - [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion  Top: - [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan - [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean - [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from  - [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from  - [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech - [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex - [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR - [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON - [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from    INSTRUCTIONS: 1. Only recommend items that are explicitly listed in the inventory above. 2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather). 3. The recommendation should follow the JSON format exactly as shown below: {     "Outfit": [item_id numbers],     "Explanation": "1-2 sentences explaining why this outfit works",     "Styling Tips": "1-2 sentences on additional styling suggestions" }  FORMAT: - "Outfit": Array of IDs (without the "Item" prefix) - "Explanation" and "Styling Tips": Concise sentences.  Return only the JSON object with the attribute names as keys.  Do not include any extra text, markdown formatting, or explanation outside of the JSON.  2025-04-12 19:24:23 INFO: Built chat prompt: SYSTEM: As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].  AVAILABLE INVENTORY:  Bottom: - [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from  - [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from  - [Item 7], Tan Pants, Casual style,  neckline, with  accents, from  - [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from  - [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear - [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from  - [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from   Footwear: - [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from  - [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from  - [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas - [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible - [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from  - [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan - [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from  - [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion  Top: - [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan - [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean - [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from  - [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from  - [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech - [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex - [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR - [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from  - [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON - [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from    INSTRUCTIONS: 1. Only recommend items that are explicitly listed in the inventory above. 2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather). 3. The recommendation should follow the JSON format exactly as shown below: {     "Outfit": [item_id numbers],     "Explanation": "1-2 sentences explaining why this outfit works",     "Styling Tips": "1-2 sentences on additional styling suggestions" }  FORMAT: - "Outfit": Array of IDs (without the "Item" prefix) - "Explanation" and "Styling Tips": Concise sentences.  Return only the JSON object with the attribute names as keys.  Do not include any extra text, markdown formatting, or explanation outside of the JSON.  USER: give me an easter brunch outfit 2025-04-12 19:24:23 ERROR: Error in /recommend endpoint: name 'sagemaker_client' is not defined 2025-04-12 19:24:23 INFO: 127.0.0.1 - - [12/Apr/2025 19:24:23] "[35m[1mPOST /recommend HTTP/1.1[0m" 500 -
+2025-04-12 19:25:31 ERROR: Error in /recommend endpoint: name 'sagemaker_client' is not defined
+2025-04-12 19:25:31 INFO: 127.0.0.1 - - [12/Apr/2025 19:25:31] "[35m[1mPOST /recommend HTTP/1.1[0m" 500 -
+2025-04-12 19:28:25 INFO:  * Detected change in '/Users/jorgesandoval/Desktop/Coding/Berkeley/DATASCI210/Web Dashboard/backend/app.py', reloading
+2025-04-12 19:28:25 INFO:  * Restarting with stat
+2025-04-12 19:28:27 INFO: Found credentials in environment variables.
+2025-04-12 19:28:27 WARNING:  * Debugger is active!
+2025-04-12 19:28:27 INFO:  * Debugger PIN: 180-434-836
+2025-04-12 19:30:24 INFO:  * Detected change in '/Users/jorgesandoval/Desktop/Coding/Berkeley/DATASCI210/Web Dashboard/backend/app.py', reloading
+2025-04-12 19:30:24 INFO:  * Restarting with stat
+2025-04-12 19:30:27 INFO: Found credentials in environment variables.
+2025-04-12 19:30:27 WARNING:  * Debugger is active!
+2025-04-12 19:30:27 INFO:  * Debugger PIN: 180-434-836
+2025-04-12 19:30:45 INFO: 127.0.0.1 - - [12/Apr/2025 19:30:45] "OPTIONS /recommend HTTP/1.1" 200 -
+2025-04-12 19:30:45 INFO: User prompt received: give me an easter brunch outfit
+2025-04-12 19:30:45 INFO: Total items scanned from ClothingItems: 27
+2025-04-12 19:30:45 INFO: Total valid items (with analysis field): 27
+2025-04-12 19:30:45 INFO: System prompt created:
+As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].
+
+AVAILABLE INVENTORY:
+
+Bottom:
+- [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from 
+- [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from 
+- [Item 7], Tan Pants, Casual style,  neckline, with  accents, from 
+- [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from 
+- [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear
+- [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from 
+- [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from 
+
+Footwear:
+- [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from 
+- [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from 
+- [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas
+- [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible
+- [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from 
+- [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan
+- [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from 
+- [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion
+
+Top:
+- [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan
+- [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean
+- [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from 
+- [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from 
+- [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech
+- [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex
+- [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR
+- [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON
+- [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from 
+
+
+INSTRUCTIONS:
+1. Only recommend items that are explicitly listed in the inventory above.
+2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather).
+3. The recommendation should follow the JSON format exactly as shown below:
+{
+    "Outfit": [item_id numbers],
+    "Explanation": "1-2 sentences explaining why this outfit works",
+    "Styling Tips": "1-2 sentences on additional styling suggestions"
+}
+
+FORMAT:
+- "Outfit": Array of IDs (without the "Item" prefix)
+- "Explanation" and "Styling Tips": Concise sentences.
+
+Return only the JSON object with the attribute names as keys. 
+Do not include any extra text, markdown formatting, or explanation outside of the JSON.
+
+2025-04-12 19:30:48 INFO: Generated text from model: {
+    "Outfit": [26, 8, 3],
+    "Explanation": "This outfit combines classic and casual pieces for an Easter brunch look. The light beige pants provide a smart base, while the light green collared shirt adds a touch of spring color. The red sneakers add a casual, comfortable element.",
+    "Styling Tips": "Accessorize with a lightweight cardigan or blazer if needed. Add a patterned pocket square or tie for extra flair."
+}
+2025-04-12 19:30:48 INFO: Parsed recommendation output: {'outfit': [26, 8, 3], 'explanation': 'This outfit combines classic and casual pieces for an Easter brunch look. The light beige pants provide a smart base, while the light green collared shirt adds a touch of spring color. The red sneakers add a casual, comfortable element.', 'styling': 'Accessorize with a lightweight cardigan or blazer if needed. Add a patterned pocket square or tie for extra flair.'}
+2025-04-12 19:30:48 INFO: Processing index: 26
+2025-04-12 19:30:48 INFO: Resolved index 26 to S3 URL: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/96d6e095-52fb-4452-bbac-f6da8fbfdbd1_04527__93257.jpg
+2025-04-12 19:30:48 INFO: Processing index: 8
+2025-04-12 19:30:48 INFO: Resolved index 8 to S3 URL: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/b97eb84c-8cf1-4130-a3e7-c6c97063748d_270133_206_41.jpeg
+2025-04-12 19:30:48 INFO: Processing index: 3
+2025-04-12 19:30:48 INFO: Resolved index 3 to S3 URL: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/79735031-d5cd-41f5-b17f-8f031f568634_parker-red-tennis-shoe-by-jolly-kids-652958_650x650_crop_center.png
+2025-04-12 19:30:48 INFO: 127.0.0.1 - - [12/Apr/2025 19:30:48] "POST /recommend HTTP/1.1" 200 -
+2025-04-12 19:45:38 INFO: 127.0.0.1 - - [12/Apr/2025 19:45:38] "OPTIONS /recommend HTTP/1.1" 200 -
+2025-04-12 19:45:38 INFO: User prompt received: Give me another outfit option for: 
+2025-04-12 19:45:39 INFO: Total items scanned from ClothingItems: 27
+2025-04-12 19:45:39 INFO: Total valid items (with analysis field): 27
+2025-04-12 19:45:39 INFO: System prompt created:
+As a fashion stylist, please create outfit combinations using the following detailed inventory of clothing items. Each item is marked with a unique identifier [Item ###].
+
+AVAILABLE INVENTORY:
+
+Bottom:
+- [Item 0],  Khaki Pants, Casual style,  neckline, with  accents, from 
+- [Item 4], Navy blue Pants, Casual style,  neckline, with  accents, from 
+- [Item 7], Tan Pants, Casual style,  neckline, with  accents, from 
+- [Item 10], Gray Pants, Outdoor/Hiking style,  neckline, with  accents, from 
+- [Item 17], Olive Green Pants, Casual, Utilitarian style, - neckline, with Black accents, from Unclear
+- [Item 18],  Gray Cargo pants, Casual style,  neckline, with  accents, from 
+- [Item 26], Light beige Pants, Classic style,  neckline, with  accents, from 
+
+Footwear:
+- [Item 1], Mint green Sneakers, Sporty style,  neckline, with Purple, Tan accents, from 
+- [Item 3], Red Sneakers, Classic style,  neckline, with White, Tan accents, from 
+- [Item 5], Solid with accent stripes Navy Blue Sneakers, Classic, Retro style,  neckline, with White, Beige accents, from Adidas
+- [Item 6], Brown Shoes, Casual, comfortable style,  neckline, with Grey accents, from No brand name visible
+- [Item 13],  White Sneakers, Casual style,  neckline, with  accents, from 
+- [Item 15],  White Sneakers, Basketball style,  neckline, with Green accents, from Air Jordan
+- [Item 16],  Black Shoes, Athletic style,  neckline, with  accents, from 
+- [Item 20], White Sneakers, Casual style,  neckline, with Black, Red accents, from Fashion
+
+Top:
+- [Item 2], White T-shirt, Basic style, Crew neck neckline, with  accents, from Gildan
+- [Item 8], Light Green Shirt, Casual style, Collared neckline, with  accents, from L.L.Bean
+- [Item 9], Printed panda design Light blue T-shirt, Casual style, Crewneck neckline, with Navy blue, mustard yellow accents, from 
+- [Item 11], Photographic print Blue T-shirt, Casual style, Crew neck neckline, with Orange, White accents, from 
+- [Item 12], White T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 14], Plaid Black Shirt, Casual style, Collared neckline, with White, Gray accents, from Stormtech
+- [Item 19], Black Dress Shirt, Formal style, Collared neckline, with  accents, from Flex
+- [Item 21], Graphic Print Heather Gray T-shirt, Casual style, Crew Neck neckline, with Red, Yellow, Blue, Green, Orange accents, from NPR
+- [Item 22], Light blue Long sleeve shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 23], Black T-shirt, Casual style, Crew neck neckline, with  accents, from 
+- [Item 24], Black T-shirt, Basic style, Crew neck neckline, with  accents, from SON
+- [Item 25], Pink Shirt, Casual style, Collared neckline, with White accents, from 
+
+
+INSTRUCTIONS:
+1. Only recommend items that are explicitly listed in the inventory above.
+2. Each outfit should include: at least 1 top, 1 bottom, and 1 footwear (optional outerwear depending on the occasion/weather).
+3. The recommendation should follow the JSON format exactly as shown below:
+{
+    "Outfit": [item_id numbers],
+    "Explanation": "1-2 sentences explaining why this outfit works",
+    "Styling Tips": "1-2 sentences on additional styling suggestions"
+}
+
+FORMAT:
+- "Outfit": Array of IDs (without the "Item" prefix)
+- "Explanation" and "Styling Tips": Concise sentences.
+
+Return only the JSON object with the attribute names as keys. 
+Do not include any extra text, markdown formatting, or explanation outside of the JSON.
+
+2025-04-12 19:45:42 INFO: Generated text from model: {
+    "Outfit": [12, 17, 6],
+    "Explanation": "This outfit combines a casual white t-shirt with olive green utility pants and brown casual shoes for a relaxed yet put-together look.",
+    "Styling Tips": "Roll up the pants slightly to show some ankle. Add a denim jacket or lightweight cardigan for cooler weather."
+}
+2025-04-12 19:45:42 INFO: Parsed recommendation output: {'outfit': [12, 17, 6], 'explanation': 'This outfit combines a casual white t-shirt with olive green utility pants and brown casual shoes for a relaxed yet put-together look.', 'styling': 'Roll up the pants slightly to show some ankle. Add a denim jacket or lightweight cardigan for cooler weather.'}
+2025-04-12 19:45:42 INFO: Processing index: 12
+2025-04-12 19:45:42 INFO: Resolved index 12 to S3 URL: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/1a353280-0f2e-4bde-b284-93556422f0d8_st2020_whi.png
+2025-04-12 19:45:42 INFO: Processing index: 17
+2025-04-12 19:45:42 INFO: Resolved index 17 to S3 URL: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/5b26f760-3e0b-4484-84c9-fe51eb5ed5fb_t1_werkpants_mens_olive_flat_lay_4825e693-f588-4813-bff0-1d4c46ce82ce.jpg
+2025-04-12 19:45:42 INFO: Processing index: 6
+2025-04-12 19:45:42 INFO: Resolved index 6 to S3 URL: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/ac14cdbe-6dad-49ce-8406-5a710d573128_Pair-leather-shoes.png
+2025-04-12 19:45:42 INFO: 127.0.0.1 - - [12/Apr/2025 19:45:42] "POST /recommend HTTP/1.1" 200 -
+2025-04-12 19:56:40 INFO: 127.0.0.1 - - [12/Apr/2025 19:56:40] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:56:43 INFO: 127.0.0.1 - - [12/Apr/2025 19:56:43] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:56:46 INFO: 127.0.0.1 - - [12/Apr/2025 19:56:46] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:56:49 INFO: 127.0.0.1 - - [12/Apr/2025 19:56:49] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:56:52 INFO: 127.0.0.1 - - [12/Apr/2025 19:56:52] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:56:55 INFO: 127.0.0.1 - - [12/Apr/2025 19:56:55] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:56:58 INFO: 127.0.0.1 - - [12/Apr/2025 19:56:58] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:01 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:01] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:04 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:04] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:07 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:07] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:10 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:10] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:13 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:13] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:16 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:16] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:19 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:19] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:22 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:22] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:25 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:25] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:28 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:28] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:31 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:31] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:34 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:34] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:37 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:37] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:57:40 INFO: 127.0.0.1 - - [12/Apr/2025 19:57:40] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:58:17 INFO: 127.0.0.1 - - [12/Apr/2025 19:58:17] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:58:28 INFO: 127.0.0.1 - - [12/Apr/2025 19:58:28] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:58:31 INFO: 127.0.0.1 - - [12/Apr/2025 19:58:31] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:58:34 INFO: 127.0.0.1 - - [12/Apr/2025 19:58:34] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:58:37 INFO: 127.0.0.1 - - [12/Apr/2025 19:58:37] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:58:40 INFO: 127.0.0.1 - - [12/Apr/2025 19:58:40] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:58:43 INFO: 127.0.0.1 - - [12/Apr/2025 19:58:43] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:58:46 INFO: 127.0.0.1 - - [12/Apr/2025 19:58:46] "GET /list HTTP/1.1" 200 -
+2025-04-12 19:58:49 INFO: 127.0.0.1 - - [12/Apr/2025 19:58:49] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:18:47 INFO: 127.0.0.1 - - [12/Apr/2025 20:18:47] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:18:50 INFO: 127.0.0.1 - - [12/Apr/2025 20:18:50] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:18:53 INFO: 127.0.0.1 - - [12/Apr/2025 20:18:53] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:18:56 INFO: 127.0.0.1 - - [12/Apr/2025 20:18:56] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:18:59 INFO: 127.0.0.1 - - [12/Apr/2025 20:18:59] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:19:02 INFO: 127.0.0.1 - - [12/Apr/2025 20:19:02] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:19:05 INFO: 127.0.0.1 - - [12/Apr/2025 20:19:05] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:19:08 INFO: 127.0.0.1 - - [12/Apr/2025 20:19:08] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:19:11 INFO: 127.0.0.1 - - [12/Apr/2025 20:19:11] "GET /list HTTP/1.1" 200 -
+2025-04-12 20:19:14 INFO: 127.0.0.1 - - [12/Apr/2025 20:19:14] "GET /list HTTP/1.1" 200 -

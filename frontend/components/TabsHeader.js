@@ -58,12 +58,12 @@ const TabsHeader = ({ darkMode, toggleDarkMode }) => {
         {darkMode ? (
           <>
             <AiOutlineSun size={24} style={{ color: '#FFD700' }} />
-            <span style={{ color: 'white' }}>Light Mode</span>
+            <span style={{ color: 'white' }}></span>
           </>
         ) : (
           <>
             <AiOutlineMoon size={24} style={{ color: '#555' }} />
-            <span style={{ color: 'black' }}>Dark Mode</span>
+            <span style={{ color: 'black' }}></span>
           </>
         )}
       </div>

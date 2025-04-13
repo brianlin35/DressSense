@@ -1,14 +1,26 @@
-// pages/fits.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { Modal, Button } from 'react-bootstrap';
 import TabsHeader from '../components/TabsHeader';
 
-function RecommendationDisplay({ recommendation }) {
+function RecommendationDisplay({ recommendation, onRegenerate, onSave }) {
   const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    console.log("Recommendation received:", recommendation);
+  }, [recommendation]);
 
   const handleImageClick = (url) => setSelectedImage(url);
   const handleClose = () => setSelectedImage(null);
+
+  if (!recommendation.outfit || !Array.isArray(recommendation.outfit)) {
+    return (
+      <div style={{ marginTop: '20px' }}>
+        <h3>Recommended Outfit</h3>
+        <p>Error: Recommendation data is not available or invalid.</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ marginTop: '20px' }}>
@@ -34,6 +46,34 @@ function RecommendationDisplay({ recommendation }) {
         <strong>Styling Tips:</strong> {recommendation.styling}
       </p>
 
+      <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+        <button 
+          onClick={onRegenerate}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#f0f0f0',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          Regenerate
+        </button>
+        <button 
+          onClick={onSave}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          Save Outfit
+        </button>
+      </div>
+
       {selectedImage && (
         <Modal show={true} onHide={handleClose} centered>
           <Modal.Header closeButton>
@@ -58,15 +98,30 @@ function RecommendationDisplay({ recommendation }) {
 export default function Fits({ darkMode, toggleDarkMode }) {
   const router = useRouter();
   const { imageUrl } = router.query;
-
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: 'Welcome! Ask for an outfit recommendation by describing what you are looking for.',
-    },
-  ]);
+  const messagesEndRef = useRef(null);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [lastPrompt, setLastPrompt] = useState('');
+
+  useEffect(() => {
+    const storedMessages = localStorage.getItem('chatHistory');
+    if (storedMessages) {
+      setMessages(JSON.parse(storedMessages));
+    } else {
+      setMessages([
+        {
+          role: 'assistant',
+          content: 'Welcome! Ask for an outfit recommendation by describing what you are looking for.',
+        },
+      ]);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('chatHistory', JSON.stringify(messages));
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     if (imageUrl) {
@@ -74,13 +129,21 @@ export default function Fits({ darkMode, toggleDarkMode }) {
     }
   }, [imageUrl]);
 
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (input.trim() === '') return;
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-    const userMessage = { role: 'user', content: input };
+  const handleSend = async (e, promptOverride = null) => {
+    e?.preventDefault();
+    const prompt = promptOverride || input;
+    if (prompt.trim() === '') return;
+
+    const userMessage = { role: 'user', content: prompt };
     setMessages((prev) => [...prev, userMessage]);
-    setInput('');
+    if (!promptOverride) {
+      setInput('');
+      setLastPrompt(prompt);
+    }
     setLoading(true);
 
     try {
@@ -92,7 +155,11 @@ export default function Fits({ darkMode, toggleDarkMode }) {
       const data = await response.json();
 
       if (data.outfit && data.explanation && data.styling) {
-        const recommendationMessage = { role: 'recommendation', content: data };
+        const recommendationMessage = { 
+          role: 'recommendation', 
+          content: data,
+          promptUsed: prompt
+        };
         setMessages((prev) => [...prev, recommendationMessage]);
       } else if (data.error) {
         const errorMessage = { role: 'assistant', content: `Error: ${data.error}` };
@@ -108,78 +175,113 @@ export default function Fits({ darkMode, toggleDarkMode }) {
     setLoading(false);
   };
 
+  const handleRegenerate = (prompt) => {
+    const regeneratePrompt = `Give me another outfit option for: ${prompt}`;
+    handleSend(null, regeneratePrompt);
+  };
+
+  const handleSaveOutfit = (outfitData) => {
+    try {
+      const newOutfit = {
+        id: Date.now().toString(),
+        images: outfitData.outfit,
+        explanation: outfitData.explanation,
+        stylingTips: outfitData.styling,
+        createdAt: new Date().toISOString()
+      };
+
+      let savedOutfits = [];
+      try {
+        const stored = localStorage.getItem('savedOutfits');
+        savedOutfits = stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        console.error('Error parsing saved outfits:', e);
+        savedOutfits = [];
+      }
+
+      const updatedOutfits = [...savedOutfits, newOutfit];
+      localStorage.setItem('savedOutfits', JSON.stringify(updatedOutfits));
+      
+      alert('Outfit saved to your collections!');
+    } catch (error) {
+      console.error('Error saving outfit:', error);
+      alert('Failed to save outfit. Please try again.');
+    }
+  };
+
   return (
-    <div className="container" style={{ marginTop: '20px' }}>
+    <div className="container" style={{ 
+      marginTop: '20px',
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
       <TabsHeader darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
-      <div
-        className="chat-wrapper"
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          maxWidth: '600px',
-          margin: '40px auto 0', // Center horizontally with auto margins
-        }}
-      >
-        {/* 
-          Keep the box background #f7f7f7, but override text color to black
-          in night mode, so it's readable on this page only.
-        */}
-        <div
-          className="chat-container"
-          style={{
-            width: '100%',
-            background: '#f7f7f7',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-            color: darkMode ? '#000' : '#333',   // <-- Force black text in night mode
-          }}
-        >
-          {messages.map((msg, index) => {
-            if (msg.role === 'recommendation') {
-              return <RecommendationDisplay key={index} recommendation={msg.content} />;
-            } else {
-              return (
-                <div
-                  key={index}
-                  className={`message-bubble ${
-                    msg.role === 'assistant' ? 'assistant-bubble' : 'user-bubble'
-                  }`}
-                  style={{
-                    marginBottom: '10px',
-                    textAlign: msg.role === 'assistant' ? 'left' : 'right',
-                    background: msg.role === 'assistant' ? '#e1f5fe' : '#c8e6c9',
-                    padding: '10px',
-                    borderRadius: '8px',
-                    whiteSpace: 'pre-wrap',
-                    // Also ensure bubble text is black in night mode:
-                    color: darkMode ? '#000' : '#333',
-                  }}
-                >
-                  {msg.content.split('\n').map((line, i) => (
-                    <div key={i}>{line}</div>
-                  ))}
-                </div>
-              );
-            }
-          })}
-          {loading && (
-            <div style={{ textAlign: 'center', fontStyle: 'italic' }}>Loading...</div>
-          )}
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        maxWidth: '600px',
+        margin: '0 auto',
+        padding: '20px 0',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          flex: 1,
+          overflowY: 'auto',
+          padding: '0 20px',
+          marginBottom: '20px',
+          background: '#f7f7f7',
+          borderRadius: '8px',
+          boxShadow: '0 0 10px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ padding: '20px' }}>
+            {messages.map((msg, index) => {
+              if (msg.role === 'recommendation') {
+                return (
+                  <RecommendationDisplay 
+                    key={index}
+                    recommendation={msg.content}
+                    onRegenerate={() => handleRegenerate(msg.promptUsed || lastPrompt)}
+                    onSave={() => handleSaveOutfit(msg.content)}
+                  />
+                );
+              } else {
+                return (
+                  <div
+                    key={index}
+                    className={`message-bubble ${msg.role === 'assistant' ? 'assistant-bubble' : 'user-bubble'}`}
+                    style={{
+                      marginBottom: '10px',
+                      textAlign: msg.role === 'assistant' ? 'left' : 'right',
+                      background: msg.role === 'assistant' ? '#e1f5fe' : '#c8e6c9',
+                      padding: '10px',
+                      borderRadius: '8px',
+                      whiteSpace: 'pre-wrap',
+                      color: '#000',
+                      wordBreak: 'break-word'
+                    }}
+                  >
+                    {msg.content.split('\n').map((line, i) => (
+                      <div key={i}>{line}</div>
+                    ))}
+                  </div>
+                );
+              }
+            })}
+            {loading && <div style={{ textAlign: 'center', fontStyle: 'italic' }}>Loading...</div>}
+            <div ref={messagesEndRef} />
+          </div>
         </div>
 
-        {/* Chat Input Form */}
         <form
           onSubmit={handleSend}
-          className="chat-form"
           style={{
             display: 'flex',
             width: '100%',
-            marginTop: '20px',
+            padding: '0 20px'
           }}
         >
           <input
@@ -198,7 +300,6 @@ export default function Fits({ darkMode, toggleDarkMode }) {
           />
           <button
             type="submit"
-            className="send-button"
             style={{
               padding: '10px 20px',
               fontSize: '16px',
