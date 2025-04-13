@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { Modal, Button } from 'react-bootstrap';
-import TabsHeader from '../components/TabsHeader';
+import { Modal, Button, Toast } from 'react-bootstrap';
+import FixedHeader from '../components/FixedHeader';
+import { AiFillDelete } from 'react-icons/ai';
 
 function RecommendationDisplay({ recommendation, onRegenerate, onSave }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -103,6 +104,24 @@ export default function Fits({ darkMode, toggleDarkMode }) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [lastPrompt, setLastPrompt] = useState('');
+  const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
+
+  const showToast = (message, variant = 'success') => {
+    setToast({ show: true, message, variant });
+    setTimeout(() => setToast({ ...toast, show: false }), 3000);
+  };
+
+  const clearChat = () => {
+    if (window.confirm('Are you sure you want to clear the chat history?')) {
+      setMessages([
+        {
+          role: 'assistant',
+          content: 'Welcome! Ask for an outfit recommendation by describing what you are looking for.',
+        },
+      ]);
+      localStorage.removeItem('chatHistory');
+    }
+  };
 
   useEffect(() => {
     const storedMessages = localStorage.getItem('chatHistory');
@@ -180,43 +199,76 @@ export default function Fits({ darkMode, toggleDarkMode }) {
     handleSend(null, regeneratePrompt);
   };
 
-  const handleSaveOutfit = (outfitData) => {
+  const handleSaveOutfit = async (outfitData, promptUsed) => {
+    const newOutfit = {
+      id: Date.now().toString(),
+      images: outfitData.outfit,
+      prompt: promptUsed,
+      explanation: outfitData.explanation,
+      styling: outfitData.styling,
+      createdAt: new Date().toISOString(),
+      favorite: false
+    };
+  
     try {
-      const newOutfit = {
-        id: Date.now().toString(),
-        images: outfitData.outfit,
-        explanation: outfitData.explanation,
-        stylingTips: outfitData.styling,
-        createdAt: new Date().toISOString()
-      };
-
-      let savedOutfits = [];
-      try {
-        const stored = localStorage.getItem('savedOutfits');
-        savedOutfits = stored ? JSON.parse(stored) : [];
-      } catch (e) {
-        console.error('Error parsing saved outfits:', e);
-        savedOutfits = [];
-      }
-
-      const updatedOutfits = [...savedOutfits, newOutfit];
-      localStorage.setItem('savedOutfits', JSON.stringify(updatedOutfits));
-      
-      alert('Outfit saved to your collections!');
+      // Save to localStorage
+      const stored = localStorage.getItem('savedOutfits');
+      const current = stored ? JSON.parse(stored) : [];
+      const updated = [newOutfit, ...current];
+      localStorage.setItem('savedOutfits', JSON.stringify(updated));
+  
+      // Optionally save to backend
+      await fetch('http://127.0.0.1:5001/save-outfit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newOutfit),
+      });
+  
+      router.push('/collections');
     } catch (error) {
       console.error('Error saving outfit:', error);
       alert('Failed to save outfit. Please try again.');
     }
   };
+  
 
   return (
     <div className="container" style={{ 
       marginTop: '20px',
-      height: '100vh',
+      height: 'calc(100vh - 80px)',
       display: 'flex',
       flexDirection: 'column'
     }}>
-      <TabsHeader darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      <FixedHeader darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+
+      <div
+        style={{
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          zIndex: 10001,
+        }}
+      >
+        <button
+          onClick={clearChat}
+          style={{
+            padding: '8px 12px',
+            backgroundColor: '#ff4444',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+          }}
+          title="Clear chat history"
+        >
+          <AiFillDelete size={18} />
+          Clear Chat
+        </button>
+      </div>
 
       <div style={{
         flex: 1,
@@ -225,7 +277,7 @@ export default function Fits({ darkMode, toggleDarkMode }) {
         width: '100%',
         maxWidth: '600px',
         margin: '0 auto',
-        padding: '20px 0',
+        padding: '100px 0 20px',
         overflow: 'hidden'
       }}>
         <div style={{
@@ -242,10 +294,10 @@ export default function Fits({ darkMode, toggleDarkMode }) {
               if (msg.role === 'recommendation') {
                 return (
                   <RecommendationDisplay 
-                    key={index}
-                    recommendation={msg.content}
-                    onRegenerate={() => handleRegenerate(msg.promptUsed || lastPrompt)}
-                    onSave={() => handleSaveOutfit(msg.content)}
+                  key={index}
+                  recommendation={msg.content}
+                  onRegenerate={() => handleRegenerate(msg.promptUsed || lastPrompt)}
+                  onSave={() => handleSaveOutfit(msg.content, msg.promptUsed || lastPrompt)}
                   />
                 );
               } else {
@@ -314,6 +366,24 @@ export default function Fits({ darkMode, toggleDarkMode }) {
           </button>
         </form>
       </div>
+
+      {/* Toast notification */}
+      <Toast
+        show={toast.show}
+        onClose={() => setToast({ ...toast, show: false })}
+        bg={toast.variant}
+        delay={3000}
+        autohide
+        style={{
+          position: 'fixed',
+          bottom: 20,
+          right: 20,
+          minWidth: 200,
+          zIndex: 9999,
+        }}
+      >
+        <Toast.Body className="text-white">{toast.message}</Toast.Body>
+      </Toast>
     </div>
   );
 }

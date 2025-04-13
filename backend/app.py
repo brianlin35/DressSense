@@ -5,6 +5,7 @@ import os
 import io
 import re
 import uuid
+from PIL import Image  
 import base64
 from datetime import datetime, timezone
 from flask import Flask, request, jsonify
@@ -31,6 +32,8 @@ AWS_REGION = "us-east-1"
 S3_BUCKET = "dresssense-bucket-jorge"
 
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
+outfits_table = dynamodb.Table('outfits')
+
 table = dynamodb.Table("ClothingItems")
 
 s3_client = boto3.client(
@@ -53,12 +56,39 @@ bedrock_runtime = boto3.client(
     config=Config(retries={"max_attempts": 3})
 )
 
+def compress_image(image_bytes, max_size=5*1024*1024, quality=85):
+    """Compress image to stay under Claude's 5MB limit"""
+    try:
+        img = Image.open(io.BytesIO(image_bytes))
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+            
+        output = io.BytesIO()
+        img.save(output, format='JPEG', quality=quality)
+        
+        # Reduce quality incrementally if still too large
+        while len(output.getvalue()) > max_size and quality > 10:
+            quality -= 5
+            output = io.BytesIO()
+            img.save(output, format='JPEG', quality=quality)
+            
+        logger.info(f"Compressed image from {len(image_bytes)} to {len(output.getvalue())} bytes")
+        return output.getvalue()
+    except Exception as e:
+        logger.error(f"Error compressing image: {e}")
+        return image_bytes  # Fallback to original if compression fails
+
 def run_recognition(temp_file_path, s3_url, product_name) -> dict:
     """
     Calls Claude 3.5 Sonnet with image and text prompt.
     """
     with open(temp_file_path, "rb") as image_file:
         image_bytes = image_file.read()
+        
+        # NEW: Compress if over 4MB (leave some headroom)
+        if len(image_bytes) > 4*1024*1024:
+            image_bytes = compress_image(image_bytes)
+            
         image_base64 = base64.b64encode(image_bytes).decode("utf-8")
 
     prompt = f"""
@@ -107,7 +137,7 @@ Notes:
                             "type": "image",
                             "source": {
                                 "type": "base64",
-                                "media_type": "image/png",
+                                "media_type": "image/jpeg",  # Changed to jpeg
                                 "data": image_base64
                             }
                         },
@@ -135,30 +165,26 @@ Notes:
 
         # Clean the response by removing any text outside the JSON
         try:
-            # First try to parse directly in case it's clean JSON
             features = json.loads(generated_text)
             return features
         except json.JSONDecodeError:
-            # If that fails, try extracting JSON
             json_start = generated_text.find('{')
             json_end = generated_text.rfind('}') + 1
             if json_start == -1 or json_end == 0:
                 logger.error("No valid JSON found in model output.")
-                return {}
+                return None  # Changed from empty dict
 
             json_str = generated_text[json_start:json_end]
-            logger.info(f"Extracted JSON substring:\n{json_str}")
-            
             try:
                 features = json.loads(json_str)
                 return features
             except json.JSONDecodeError as e:
-                logger.error(f"Error parsing extracted JSON: {e}\nExtracted:\n{json_str}")
-                return {}
+                logger.error(f"Error parsing extracted JSON: {e}")
+                return None
 
     except Exception as e:
         logger.error(f"Error during Claude invocation: {e}")
-        return {}
+        return None  # Changed from empty dict
 
 def create_detailed_item_description(item: dict, item_id: str) -> str:
     """Build the short descriptor for each item used in the prompt."""
@@ -251,42 +277,30 @@ def parse_rec_response(response_str: str) -> dict:
 # ------------------------ Endpoints ------------------------
 @app.route("/upload", methods=["POST"])
 def upload_file():
-    # Get all uploaded files (supports multiple file upload)
     files = request.files.getlist("file")
     if not files or len(files) == 0:
         return jsonify({"error": "No file part"}), 400
 
-    # Validate that all files are images.
     for file in files:
         if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
             return jsonify({"error": "Only image files are allowed"}), 400
 
-    # Get the user provided name (if any) and clean it up.
     provided_name = request.form.get("name", "").strip()
-    
-    # Do one scan to determine how many items are already in the DB
     scan_response = table.scan()
     current_count = len(scan_response.get("Items", []))
-
     uploaded_items = []
 
-    # Process each file in the upload
     for index, file in enumerate(files):
         unique_id = str(uuid.uuid4())
         unique_filename = f"{unique_id}_{file.filename}"
         file_key = f"user-uploads/{unique_filename}"
 
-        # Determine product name:
         if not provided_name or provided_name.lower() == "untitled":
             product_name = f"Clothing Piece {current_count + index + 1}"
         else:
-            # If a name is provided and there are multiple files, append an index
-            if len(files) > 1:
-                product_name = f"{provided_name} {current_count + index + 1}"
-            else:
-                product_name = provided_name
+            product_name = f"{provided_name} {current_count + index + 1}" if len(files) > 1 else provided_name
 
-        # Read the file and remove the background
+        # Process image
         input_bytes = file.read()
         output_bytes = remove(input_bytes)
         output_file = io.BytesIO(output_bytes)
@@ -298,14 +312,14 @@ def upload_file():
             S3_BUCKET,
             file_key,
             ExtraArgs={
-                'ContentType': file.content_type,
+                'ContentType': 'image/jpeg',  # Changed to jpeg
                 'ContentDisposition': 'inline'
             }
         )
         s3_url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
         logger.info(f"Uploaded file to S3: {s3_url}")
 
-        # Create a placeholder record in DynamoDB with default values
+        # Create placeholder record
         placeholder_item = {
             "id": unique_id,
             "name": product_name,
@@ -318,13 +332,11 @@ def upload_file():
             "color": "pending",
             "material": "pending",
             "fitted_market_value": "pending",
-            "status": "pending",
+            "status": "processing",  # Changed from pending
             "processed_at": None,
             "error_message": None
-            # We'll add "analysis" later once we get it from the model
         }
         table.put_item(Item=placeholder_item)
-        logger.info(f"Created placeholder record: {json.dumps(placeholder_item)}")
 
         # Save file temporarily and run image recognition
         temp_path = f"/tmp/{unique_filename}"
@@ -334,24 +346,22 @@ def upload_file():
         metadata = run_recognition(temp_path, s3_url, product_name)
         os.remove(temp_path)
 
-        # metadata should look like:
-        # {
-        #   "analysis": { ... },
-        #   "extra_notes": "..."
-        # }
+        # NEW: Handle failed processing
+        if metadata is None:
+            table.update_item(
+                Key={"id": unique_id},
+                UpdateExpression="SET #st = :status, error_message = :error",
+                ExpressionAttributeValues={
+                    ":status": "failed",
+                    ":error": "Image processing failed - possibly too large"
+                },
+                ExpressionAttributeNames={"#st": "status"}
+            )
+            continue  # Skip to next file
 
-        # We'll do a safety check
         analysis_data = metadata.get("analysis", {})
 
-        # Update top-level fields from the analysis if you still want them:
-        category_value = analysis_data.get("Category", "unknown")
-        type_value = analysis_data.get("Type of clothing", "unknown")
-        brand_value = analysis_data.get("Brand", "unknown")
-        style_value = analysis_data.get("Style", "unknown")
-        color_value = analysis_data.get("Primary Color", "unknown")
-        material_value = analysis_data.get("Fabric Material", "unknown")
-
-        # Build the UpdateExpression
+        # Update record with analysis
         update_expression = (
             "SET #nm = :name, category = :category, #ty = :type, brand = :brand, "
             "size = :size, #sty = :style, color = :color, "
@@ -360,17 +370,17 @@ def upload_file():
         )
         expression_attribute_values = {
             ":name": product_name,
-            ":category": category_value,
-            ":type": type_value,
-            ":brand": brand_value,
+            ":category": analysis_data.get("Category", "unknown"),
+            ":type": analysis_data.get("Type of clothing", "unknown"),
+            ":brand": analysis_data.get("Brand", "unknown"),
             ":size": "N/A",
-            ":style": style_value,
-            ":color": color_value,
-            ":material": material_value,
+            ":style": analysis_data.get("Style", "unknown"),
+            ":color": analysis_data.get("Primary Color", "unknown"),
+            ":material": analysis_data.get("Fabric Material", "unknown"),
             ":fitted_market_value": "N/A",
             ":status": "processed",
             ":processed_at": datetime.now(timezone.utc).isoformat(),
-            ":analysis": json.dumps(analysis_data)  # store as string
+            ":analysis": json.dumps(analysis_data)
         }
         expression_attribute_names = {
             "#nm": "name",
@@ -385,7 +395,6 @@ def upload_file():
             ExpressionAttributeValues=expression_attribute_values,
             ExpressionAttributeNames=expression_attribute_names
         )
-        logger.info(f"Updated record {unique_id} with classification results + analysis.")
 
         item = table.get_item(Key={"id": unique_id}).get("Item")
         uploaded_items.append(item)
@@ -488,7 +497,6 @@ def toggle_favorite():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/recommend", methods=["POST"])
-@app.route("/recommend", methods=["POST"])
 def recommend():
     try:
         data = request.get_json()  
@@ -580,6 +588,34 @@ def recommend():
     except Exception as e:
         logger.error(f"Error in /recommend endpoint: {str(e)}")
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/save-outfit', methods=['POST'])
+def save_outfit():
+    data = request.get_json()
+    print("Saving outfit:", data)
+
+    try:
+        item = {
+            "id": str(data.get("id", str(uuid.uuid4()))),
+            "images": data["images"],
+            "prompt": data["prompt"],
+            "createdAt": data["createdAt"],
+        }
+        outfits_table.put_item(Item=item)  # ✅ fix here
+        return jsonify({"message": "Outfit saved successfully"}), 200
+    except Exception as e:
+        print("DynamoDB Error:", e)
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/list-outfits', methods=['GET'])
+def list_outfits():
+    try:
+        response = outfits_table.scan()
+        items = response.get("Items", [])
+        return jsonify(items)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5001)

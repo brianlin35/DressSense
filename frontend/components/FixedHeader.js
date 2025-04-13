@@ -1,4 +1,3 @@
-// components/FixedHeader.js
 import React from 'react';
 import TabsHeader from './TabsHeader';
 import MenuButtons from './MenuButtons';
@@ -12,6 +11,11 @@ const FixedHeader = ({
   onToggleFilter,
   onUploadClick
 }) => {
+  const showFilters = favoritesFilter !== undefined 
+    && handleFavoritesFilterToggle 
+    && activeFilters 
+    && onToggleFilter;
+
   return (
     <div
       style={{
@@ -26,13 +30,15 @@ const FixedHeader = ({
       }}
     >
       <TabsHeader darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-      <MenuButtons
-        favoritesFilter={favoritesFilter}
-        handleFavoritesFilterToggle={handleFavoritesFilterToggle}
-        activeFilters={activeFilters}
-        onToggleFilter={onToggleFilter}
-        onUploadClick={onUploadClick}
-      />
+      {showFilters && (
+        <MenuButtons
+          favoritesFilter={favoritesFilter}
+          handleFavoritesFilterToggle={handleFavoritesFilterToggle}
+          activeFilters={activeFilters}
+          onToggleFilter={onToggleFilter}
+          onUploadClick={onUploadClick}
+        />
+      )}
     </div>
   );
 };
