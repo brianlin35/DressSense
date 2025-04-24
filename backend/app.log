@@ -1177,3 +1177,371 @@ Do not include any extra text, markdown formatting, or explanation outside of th
 2025-04-13 10:11:02 INFO: Processing index: 60
 2025-04-13 10:11:02 INFO: Resolved index 60 to S3 URL: https://dresssense-bucket-jorge.s3.us-east-1.amazonaws.com/user-uploads/9dcc1b22-5b28-4234-b292-cfb7abb75f07_IMG_0897.JPG
 2025-04-13 10:11:02 INFO: 127.0.0.1 - - [13/Apr/2025 10:11:02] "POST /recommend HTTP/1.1" 200 -
+2025-04-24 10:45:16 INFO: Found credentials in shared credentials file: ~/.aws/credentials
+2025-04-24 10:45:16 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.30.1.165:5001
+2025-04-24 10:45:16 INFO: [33mPress CTRL+C to quit[0m
+2025-04-24 10:45:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:45:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:27 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:27] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:29 ERROR: Exception on /upload [POST]
+Traceback (most recent call last):
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/Desktop/DressSense/backend/app.py", line 289, in upload_file
+    scan_response = table.scan()
+                    ^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/boto3/resources/factory.py", line 581, in do_action
+    response = action(self, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/boto3/resources/action.py", line 88, in __call__
+    response = getattr(parent.meta.client, operation_name)(*args, **params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/botocore/client.py", line 570, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/botocore/context.py", line 124, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/botocore/client.py", line 1031, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (AccessDeniedException) when calling the Scan operation: User: arn:aws:iam::471112929574:user/brianlin is not authorized to perform: dynamodb:Scan on resource: arn:aws:dynamodb:us-east-1:471112929574:table/ClothingItems because no identity-based policy allows the dynamodb:Scan action
+2025-04-24 10:46:29 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:29] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+2025-04-24 10:46:29 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:29] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:32 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:32] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:35 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:35] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:38 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:38] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:41 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:41] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:44 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:44] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:47 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:47] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:50 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:50] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:53 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:53] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:56 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:56] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:46:59 INFO: 127.0.0.1 - - [24/Apr/2025 10:46:59] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:02 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:02] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:05 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:05] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:08 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:08] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:11 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:11] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:14 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:14] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:17 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:17] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:20 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:20] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:23 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:23] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:26 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:26] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:29 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:29] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:32 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:32] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:35 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:35] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:38 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:38] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:41 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:41] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:44 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:44] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:47 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:47] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:50 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:50] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:53 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:53] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:56 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:56] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:47:59 INFO: 127.0.0.1 - - [24/Apr/2025 10:47:59] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:02 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:02] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:05 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:05] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:35 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:35] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:38 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:38] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:41 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:41] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:44 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:44] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:48 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:48] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:50 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:50] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:53 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:53] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:56 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:56] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:48:59 INFO: 127.0.0.1 - - [24/Apr/2025 10:48:59] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:02 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:02] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:05 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:05] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:08 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:08] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:11 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:11] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:14 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:14] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:17 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:17] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:20 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:20] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:23 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:23] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:26 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:26] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:29 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:29] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:32 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:32] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:49:35 INFO: 127.0.0.1 - - [24/Apr/2025 10:49:35] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:50:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:50:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:51:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:51:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:51:42 INFO: 127.0.0.1 - - [24/Apr/2025 10:51:42] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:51:44 INFO: 127.0.0.1 - - [24/Apr/2025 10:51:44] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:51:47 INFO: 127.0.0.1 - - [24/Apr/2025 10:51:47] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:51:50 INFO: 127.0.0.1 - - [24/Apr/2025 10:51:50] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:51:53 INFO: 127.0.0.1 - - [24/Apr/2025 10:51:53] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:51:56 INFO: 127.0.0.1 - - [24/Apr/2025 10:51:56] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:51:59 INFO: 127.0.0.1 - - [24/Apr/2025 10:51:59] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:02 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:02] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:05 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:05] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:08 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:08] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:11 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:11] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:14 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:14] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:17 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:17] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:20 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:20] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:23 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:23] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:26 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:26] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:29 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:29] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:32 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:32] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:35 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:35] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:38 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:38] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:41 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:41] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:52:44 INFO: 127.0.0.1 - - [24/Apr/2025 10:52:44] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:53:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:53:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:54:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:54:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:55:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:55:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:56:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:56:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:57:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:57:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:57:57 INFO: 127.0.0.1 - - [24/Apr/2025 10:57:57] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:57:59 INFO: 127.0.0.1 - - [24/Apr/2025 10:57:59] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:02 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:02] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:05 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:05] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:08 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:08] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:11 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:11] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:14 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:14] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:17 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:17] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:20 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:20] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:23 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:23] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:26 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:26] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:29 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:29] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:32 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:32] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:35 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:35] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:38 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:38] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:41 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:41] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:44 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:44] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:47 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:47] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:50 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:50] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:53 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:53] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:58:56 INFO: 127.0.0.1 - - [24/Apr/2025 10:58:56] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 10:59:25 INFO: 127.0.0.1 - - [24/Apr/2025 10:59:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:00:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:00:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:01:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:01:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:02:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:02:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:02:52 INFO: 127.0.0.1 - - [24/Apr/2025 11:02:52] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:02:53 INFO: 127.0.0.1 - - [24/Apr/2025 11:02:53] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:02:56 INFO: 127.0.0.1 - - [24/Apr/2025 11:02:56] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:02:59 INFO: 127.0.0.1 - - [24/Apr/2025 11:02:59] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:02 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:02] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:05 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:05] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:08 ERROR: Exception on /upload [POST]
+Traceback (most recent call last):
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/Desktop/DressSense/backend/app.py", line 289, in upload_file
+    if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+                ^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/boto3/resources/factory.py", line 581, in do_action
+    response = action(self, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/boto3/resources/action.py", line 88, in __call__
+    response = getattr(parent.meta.client, operation_name)(*args, **params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/botocore/client.py", line 570, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/botocore/context.py", line 124, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/botocore/client.py", line 1031, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (AccessDeniedException) when calling the Scan operation: User: arn:aws:iam::471112929574:user/brianlin is not authorized to perform: dynamodb:Scan on resource: arn:aws:dynamodb:us-east-1:471112929574:table/ClothingItems because no identity-based policy allows the dynamodb:Scan action
+2025-04-24 11:03:08 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:08] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+2025-04-24 11:03:08 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:08] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:11 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:11] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:14 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:14] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:17 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:17] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:20 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:20] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:23 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:23] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:26 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:26] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:29 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:29] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:32 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:32] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:35 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:35] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:38 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:38] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:41 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:41] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:44 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:44] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:47 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:47] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:50 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:50] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:53 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:53] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:56 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:56] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:03:59 INFO: 127.0.0.1 - - [24/Apr/2025 11:03:59] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:04:02 INFO: 127.0.0.1 - - [24/Apr/2025 11:04:02] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:04:05 INFO: 127.0.0.1 - - [24/Apr/2025 11:04:05] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:04:08 INFO: 127.0.0.1 - - [24/Apr/2025 11:04:08] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:04:11 INFO: 127.0.0.1 - - [24/Apr/2025 11:04:11] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:04:14 INFO: 127.0.0.1 - - [24/Apr/2025 11:04:14] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:04:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:04:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:06:13 INFO: Found credentials in environment variables.
+2025-04-24 11:07:40 INFO: Found credentials in environment variables.
+2025-04-24 11:07:40 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.30.1.165:5001
+2025-04-24 11:07:40 INFO: [33mPress CTRL+C to quit[0m
+2025-04-24 11:07:58 INFO: 127.0.0.1 - - [24/Apr/2025 11:07:58] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:07:59 INFO: 127.0.0.1 - - [24/Apr/2025 11:07:59] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:02 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:02] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:05 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:05] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:08 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:08] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:11 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:11] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:14 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:14] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:17 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:17] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:20 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:20] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:23 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:23] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:26 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:26] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:29 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:29] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:32 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:32] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:35 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:35] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:38 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:38] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:41 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:41] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:44 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:44] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:47 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:47] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:50 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:50] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:53 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:53] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:56 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:56] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:08:59 INFO: 127.0.0.1 - - [24/Apr/2025 11:08:59] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:11 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:11] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:14 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:14] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:14 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:14] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:16 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:16] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:19 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:19] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:22 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:22] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:28 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:28] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:29 ERROR: Exception on /upload [POST]
+Traceback (most recent call last):
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/Desktop/DressSense/backend/app.py", line 293, in upload_file
+    scan_response = table.scan()
+                    ^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/boto3/resources/factory.py", line 581, in do_action
+    response = action(self, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/boto3/resources/action.py", line 88, in __call__
+    response = getattr(parent.meta.client, operation_name)(*args, **params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/botocore/client.py", line 570, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/botocore/context.py", line 124, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/brianlin/anaconda3/envs/dresssense/lib/python3.11/site-packages/botocore/client.py", line 1031, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.errorfactory.ResourceNotFoundException: An error occurred (ResourceNotFoundException) when calling the Scan operation: Requested resource not found
+2025-04-24 11:09:29 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:29] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+2025-04-24 11:09:31 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:31] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:34 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:34] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:37 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:37] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:40 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:40] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:43 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:43] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:46 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:46] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:49 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:49] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:52 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:52] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:55 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:55] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:09:58 INFO: 127.0.0.1 - - [24/Apr/2025 11:09:58] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:01 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:01] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:04 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:04] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:07 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:07] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:10 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:10] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:13 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:13] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:16 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:16] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:19 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:19] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:22 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:22] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:28 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:28] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:31 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:31] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:34 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:34] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:37 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:37] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:40 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:40] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:43 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:43] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:46 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:46] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:49 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:49] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:10:52 INFO: 127.0.0.1 - - [24/Apr/2025 11:10:52] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:11:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:11:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:12:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:12:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:13:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:13:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:14:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:14:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:15:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:15:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:16:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:16:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:17:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:17:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:18:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:18:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:19:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:19:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:20:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:20:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:21:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:21:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:22:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:22:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:23:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:23:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:24:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:24:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:25:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:25:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:26:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:26:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:27:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:27:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:28:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:28:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:29:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:29:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:30:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:30:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:31:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:31:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:32:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:32:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:33:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:33:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:34:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:34:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:35:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:35:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:36:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:36:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:37:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:37:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:38:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:38:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:39:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:39:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:40:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:40:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:41:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:41:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:42:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:42:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:43:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:43:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:44:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:44:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:45:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:45:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:46:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:46:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:47:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:47:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:48:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:48:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:49:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:49:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:50:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:50:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:51:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:51:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:52:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:52:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:53:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:53:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:54:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:54:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:55:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:55:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:56:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:56:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 11:57:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:57:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -

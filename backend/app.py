@@ -13,10 +13,14 @@ from flask_cors import CORS
 from rembg import remove
 from transformers import AutoTokenizer
 from botocore.config import Config
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
-    filename='/Users/jorgesandoval/Desktop/Coding/Berkeley/DATASCI210/Web Dashboard/backend/app.log',
+    filename=os.path.join(os.path.dirname(__file__), 'app.log'),
     level=logging.INFO,
     format='%(asctime)s %(levelname)s: %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
@@ -27,32 +31,28 @@ logger.setLevel(logging.INFO)
 app = Flask(__name__)
 CORS(app)
 
-# AWS Configurations
-AWS_REGION = "us-east-1"
-S3_BUCKET = "dresssense-bucket-jorge"
-
-dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
+# Initialize AWS resources
+dynamodb = boto3.resource("dynamodb", region_name=os.getenv("AWS_REGION"))
 outfits_table = dynamodb.Table('outfits')
-
-table = dynamodb.Table("ClothingItems")
+clothing_items_table = dynamodb.Table("clothing-items")
 
 s3_client = boto3.client(
     "s3",
-    region_name=AWS_REGION,
+    region_name=os.getenv("AWS_REGION"),
     aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
     aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
 )
 
 sagemaker_client = boto3.client(
     "sagemaker-runtime",
-    region_name=AWS_REGION,
+    region_name=os.getenv("AWS_REGION"),
     aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
     aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
 )
 
 bedrock_runtime = boto3.client(
     "bedrock-runtime",
-    region_name=AWS_REGION,
+    region_name=os.getenv("AWS_REGION"),
     config=Config(retries={"max_attempts": 3})
 )
 
@@ -309,14 +309,14 @@ def upload_file():
         # Upload to S3
         s3_client.upload_fileobj(
             output_file,
-            S3_BUCKET,
+            os.getenv("S3_BUCKET"),
             file_key,
             ExtraArgs={
                 'ContentType': 'image/jpeg',  # Changed to jpeg
                 'ContentDisposition': 'inline'
             }
         )
-        s3_url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
+        s3_url = f"https://{os.getenv("S3_BUCKET")}.s3.{os.getenv('AWS_REGION')}.amazonaws.com/{file_key}"
         logger.info(f"Uploaded file to S3: {s3_url}")
 
         # Create placeholder record
@@ -422,7 +422,7 @@ def delete_file():
 
     try:
         key = url.split(".com/")[-1]
-        s3_client.delete_object(Bucket=S3_BUCKET, Key=key)
+        s3_client.delete_object(Bucket=os.getenv("S3_BUCKET"), Key=key)
         response = table.scan(
             FilterExpression=boto3.dynamodb.conditions.Attr("s3_url").eq(url)
         )
@@ -601,7 +601,7 @@ def save_outfit():
             "prompt": data["prompt"],
             "createdAt": data["createdAt"],
         }
-        outfits_table.put_item(Item=item)  # ✅ fix here
+        outfits_table.put_item(Item=item)
         return jsonify({"message": "Outfit saved successfully"}), 200
     except Exception as e:
         print("DynamoDB Error:", e)
