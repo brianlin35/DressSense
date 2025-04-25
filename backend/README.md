@@ -1,23 +1,21 @@
-# DressSense Backend API
+# DressSense Backend APIs
 
-This backend provides endpoints for generating clothing items metadata, generating outfit recommendations, and managing user wardrobes. Below is a summary of the available API endpoints and their usage.
+This backend provides endpoints for generating clothing item features, generating outfit recommendations, and managing user wardrobes. Below is a summary of the available API endpoints and their usage.
 
 ---
 
 ## Table of Contents
-- [DressSense Backend API](#dresssense-backend-api)
-  - [Table of Contents](#table-of-contents)
-  - [Setup](#setup)
-  - [Endpoints](#endpoints)
-    - [POST `/upload`](#post-upload)
-    - [GET `/list`](#get-list)
-    - [POST `/delete`](#post-delete)
-    - [POST `/update`](#post-update)
-    - [POST `/favorite`](#post-favorite)
-    - [POST `/recommend`](#post-recommend)
-    - [POST `/save-outfit`](#post-save-outfit)
-    - [GET `/list-outfits`](#get-list-outfits)
-  - [Notes](#notes)
+- [Setup](#setup)
+- [Endpoints](#endpoints)
+  - [POST `/upload`](#post-upload)
+  - [GET `/list`](#get-list)
+  - [POST `/delete`](#post-delete)
+  - [POST `/update`](#post-update)
+  - [POST `/favorite`](#post-favorite)
+  - [POST `/recommend`](#post-recommend)
+  - [POST `/save-outfit`](#post-save-outfit)
+  - [GET `/list-outfits`](#get-list-outfits)
+- [Notes](#notes)
 
 ---
 
