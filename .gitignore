@@ -1,6 +1,5 @@
 .env.local
 .env
-/backend/app.log
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
@@ -28,3 +27,6 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+# Ignore backend app log
+backend/app.log

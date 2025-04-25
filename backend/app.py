@@ -15,6 +15,77 @@ from transformers import AutoTokenizer
 from botocore.config import Config
 from dotenv import load_dotenv
 
+# Constants
+MAX_IMAGE_SIZE = 5 * 1024 * 1024  # 5MB
+ATTRIBUTE_KEYS = [
+    "category",
+    "type",
+    "brand",
+    "size",
+    "style",
+    "color",
+    "material",
+    "fitted_market_value",
+    "accent_colors",
+    "pattern",
+    "shape",
+    "fit",
+    "neckline",
+    "key_design_elements",
+    "occasion_suitability",
+    "weather_appropriateness",
+    "fabric_weight",
+    "functional_features",
+    "additional_notes"
+]
+
+# DynamoDB field definitions
+DYNAMO_FIELDS = [
+    ("#nm", "name", ":name", "name"),
+    ("#category", "category", ":category", "category"),
+    ("#ty", "type", ":type", "type"),
+    ("#br", "brand", ":brand", "brand"),
+    ("#size", "size", ":size", "size"),
+    ("#sty", "style", ":style", "style"),
+    ("#pr", "color", ":primary_color", "color"),
+    ("#mat", "material", ":material", "material"),
+    ("#st", "status", ":status", "status"),
+    ("#processed_at", "processed_at", ":processed_at", "processed_at"),
+    ("#ac", "accent_colors", ":accent_colors", "accent_colors"),
+    ("#pat", "pattern", ":pattern", "pattern"),
+    ("#sh", "shape", ":shape", "shape"),
+    ("#fit", "fit", ":fit", "fit"),
+    ("#nl", "neckline", ":neckline", "neckline"),
+    ("#kde", "key_design_elements", ":key_design_elements", "key_design_elements"),
+    ("#oc", "occasion_suitability", ":occasion_suitability", "occasion_suitability"),
+    ("#wa", "weather_appropriateness", ":weather_appropriateness", "weather_appropriateness"),
+    ("#fw", "fabric_weight", ":fabric_weight", "fabric_weight"),
+    ("#ff", "functional_features", ":functional_features", "functional_features"),
+    ("#an", "additional_notes", ":additional_notes", "additional_notes"),
+]
+
+# Helper to build update_expression, attribute names, and values
+def build_dynamo_update(metadata, product_name):
+    update_parts = []
+    names = {}
+    values = {}
+
+    for abv, full, val_key in DYNAMO_FIELDS:
+        update_parts.append(f"{abv} = {val_key}")
+        names[abv] = full
+        if val_key == ":name":
+            values[val_key] = product_name
+        elif val_key == ":status":
+            values[val_key] = "processed"
+        elif val_key == ":processed_at":
+            from datetime import datetime, timezone
+            values[val_key] = datetime.now(timezone.utc).isoformat()
+        else:
+            values[val_key] = metadata.get(full, "unknown")
+
+    update_expression = "SET " + ", ".join(update_parts)
+    return update_expression, names, values
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -57,7 +128,17 @@ bedrock_runtime = boto3.client(
 )
 
 def compress_image(image_bytes, max_size=5*1024*1024, quality=85):
-    """Compress image to stay under Claude's 5MB limit"""
+    """
+    Compress an image to ensure it stays under a specified size limit (default 5MB).
+
+    Args:
+        image_bytes (bytes): The original image in bytes.
+        max_size (int, optional): Maximum allowed image size in bytes. Defaults to 5MB.
+        quality (int, optional): Initial JPEG quality. Defaults to 85.
+
+    Returns:
+        bytes: Compressed image in JPEG format.
+    """
     try:
         img = Image.open(io.BytesIO(image_bytes))
         if img.mode != 'RGB':
@@ -78,151 +159,171 @@ def compress_image(image_bytes, max_size=5*1024*1024, quality=85):
         logger.error(f"Error compressing image: {e}")
         return image_bytes  # Fallback to original if compression fails
 
-def run_recognition(temp_file_path, s3_url, product_name) -> dict:
+def run_recognition(temp_file_path):
     """
-    Calls Claude 3.5 Sonnet with image and text prompt.
+    Calls the Qwen VL model with the provided image file and returns the recognition result.
+
+    Args:
+        temp_file_path (str): Path to the temporary image file.
+
+    Returns:
+        dict: Recognition result from the model.
     """
     with open(temp_file_path, "rb") as image_file:
         image_bytes = image_file.read()
         
-        # NEW: Compress if over 4MB (leave some headroom)
-        if len(image_bytes) > 4*1024*1024:
+        # Compress if over MAX_IMAGE_SIZE (leave some headroom)
+        if len(image_bytes) > MAX_IMAGE_SIZE:
             image_bytes = compress_image(image_bytes)
             
-        image_base64 = base64.b64encode(image_bytes).decode("utf-8")
+        # Convert to base64 (expected model input format)
+        image_base64 = "data:image;base64," + base64.b64encode(image_bytes).decode("utf-8")
 
-    prompt = f"""
-You are a fashion expert and product description generator.
-Return ONE JSON object (no code fences, no extra text after the JSON).
-The JSON must have exactly this structure:
-
-{{
-  "analysis": {{
-    "Category": "",
-    "Type of clothing": "",
-    "Primary Color": "",
-    "Accent Color(s)": "",
-    "Pattern": "",
-    "Shape": "",
-    "Fit": "",
-    "Neckline": "",
-    "Key Design Elements": "",
-    "Brand": "",
-    "Style": "",
-    "Occasion": "",
-    "Weather Appropriateness": "",
-    "Fabric Material": "",
-    "Fabric Weight": "",
-    "Functional Features": ""
-  }},
-  "extra_notes": ""
-}}
-
-Notes:
-1. "Category" must be one of: Outerwear, Top, Bottom, Footwear.
-2. End the response with the final brace.
-3. Do not repeat the prompt.
-4. Do not include any text outside the JSON object.
-    """
-
-    try:
-        body = {
-            "anthropic_version": "bedrock-2023-05-31",
-            "max_tokens": 1000,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": "image/jpeg",  # Changed to jpeg
-                                "data": image_base64
-                            }
-                        },
-                        {
-                            "type": "text",
-                            "text": prompt.strip()
-                        }
-                    ]
-                }
-            ]
-        }
-
-        response = bedrock_runtime.invoke_model(
-            modelId="anthropic.claude-3-sonnet-20240229-v1:0",
-            contentType="application/json",
-            accept="application/json",
-            body=json.dumps(body)
+        # Call Qwen VL model
+        response = sagemaker_client.invoke_endpoint(
+            EndpointName="qwen-inference",
+            ContentType="application/json",
+            Body=json.dumps({"image": image_base64})
         )
+        print("Raw response:", response)
 
-        result_str = response["body"].read().decode("utf-8")
-        result_json = json.loads(result_str)
-        generated_text = result_json["content"][0]["text"]
-
+        # Retrieve generate text and log
+        generated_text = response["generated_text"]
         logger.info(f"Model response:\n{generated_text}")
 
-        # Clean the response by removing any text outside the JSON
+        # Parse JSON
         try:
-            features = json.loads(generated_text)
-            return features
-        except json.JSONDecodeError:
-            json_start = generated_text.find('{')
-            json_end = generated_text.rfind('}') + 1
-            if json_start == -1 or json_end == 0:
-                logger.error("No valid JSON found in model output.")
-                return None  # Changed from empty dict
+            # Find clean json string
+            start_index = generated_text.find("{")
+            end_index = generated_text.rfind("}") + 1
 
-            json_str = generated_text[json_start:json_end]
-            try:
-                features = json.loads(json_str)
-                return features
-            except json.JSONDecodeError as e:
-                logger.error(f"Error parsing extracted JSON: {e}")
+            # If no valid json found, return None
+            if start_index == -1 or end_index == 0:
+                logger.error("No valid JSON found in model output.")
                 return None
 
-    except Exception as e:
-        logger.error(f"Error during Claude invocation: {e}")
-        return None  # Changed from empty dict
+            # Extract json string
+            valid_json_string = generated_text[start_index:end_index]
 
-def create_detailed_item_description(item: dict, item_id: str) -> str:
-    """Build the short descriptor for each item used in the prompt."""
-    # item is the nested analysis from DynamoDB, e.g. item["analysis"]["Category"]
-    primary_color = item.get('Primary Color', 'N/A')
-    type_of_clothing = item.get('Type of clothing', 'N/A')
-    pattern = item.get('Pattern', '')
-    style = item.get('Style', '')
-    neckline = item.get('Neckline', '')
-    accent = item.get('Accent Color(s)', '')
-    brand = item.get('Brand', '')
+            # Load json
+            features = json.loads(valid_json_string)
+            logger.info(f"Extracted features: {features}")
 
-    desc = [f"[Item {item_id}]", f"{primary_color} {type_of_clothing}"]
-    if pattern.lower() not in ["solid", "not applicable", "n/a"]:
-        desc[1] = f"{pattern} {desc[1]}"
-    if style.lower() not in ["not specified", "not applicable", "n/a"]:
-        desc.append(f"{style} style")
-    if neckline.lower() not in ["not specified", "not applicable", "n/a"]:
-        desc.append(f"{neckline} neckline")
-    if accent.lower() not in ["not specified", "not applicable", "n/a"]:
-        desc.append(f"with {accent} accents")
-    if brand.lower() not in ["not specified", "not applicable", "n/a"]:
-        desc.append(f"from {brand}")
-    return ", ".join(desc)
+            return features
 
-def create_outfit_recommendation_prompt(clothing_items: list) -> str:
+        except json.JSONDecodeError as e:
+            logger.error(f"Error parsing extracted JSON: {e}")
+            return None
+
+def create_detailed_item_description(item: dict, item_id: str):
     """
-    Build a system prompt from the "analysis" objects in clothing_items.
-    Each clothing_item is the parsed JSON from the DB: item["analysis"].
+    Builds a detailed description for a clothing item to be used in prompts.
+
+    Args:
+        item (dict): Clothing item attributes.
+        item_id (str): Unique identifier for the item.
+
+    Returns:
+        str: Detailed item description string.
     """
-    inventory_by_category = {}
-    for idx, analysis in enumerate(clothing_items):
-        category = analysis.get("Category", "Unknown")
+    NULL_ATTRIBUTES = ["Not specified", "Not applicable", "N/A", "pending"]
+    
+    # Load all needed attributes into variables using ATTRIBUTE_KEYS
+    type_of_clothing = item.get('type')
+    brand = item.get('brand')
+    style = item.get('style')
+    color = item.get('color')
+    material = item.get('material')
+    accent_colors = item.get('accent_colors')
+    pattern = item.get('pattern')
+    shape = item.get('shape')
+    fit = item.get('fit')
+    neckline = item.get('neckline')
+    key_design_elements = item.get('key_design_elements')
+    occasion_suitability = item.get('occasion_suitability')
+    weather_appropriateness = item.get('weather_appropriateness')
+    fabric_weight = item.get('fabric_weight')
+    functional_features = item.get('functional_features')
+    additional_notes = item.get('additional_notes')
+
+    # List of attributes to include in the description
+    description_parts = []
+    
+    # Start with the ID reference
+    description_parts.append(f"[Item {item_id}]")
+
+    # Basic item description (example: "Striped red t-shirt")
+    base_desc = f"{color} {type_of_clothing}"
+    if pattern and pattern not in NULL_ATTRIBUTES:
+        base_desc = f"{pattern} {base_desc}"
+    description_parts.append(base_desc)
+
+    # Add other more detailed attributes if they exist and not null
+    if style and style not in NULL_ATTRIBUTES:
+        description_parts.append(f"{style} style")
+
+    if material and material not in NULL_ATTRIBUTES:
+        material_desc = material
+        if fabric_weight and fabric_weight not in NULL_ATTRIBUTES:
+            material_desc = f"{fabric_weight} {material_desc}"
+        description_parts.append(material_desc)
+
+    if fit and fit not in NULL_ATTRIBUTES:
+        description_parts.append(f"{fit} fit")
+    
+    if neckline and neckline not in NULL_ATTRIBUTES:
+        description_parts.append(f"{neckline} neckline")
+
+    if accent_colors and accent_colors not in NULL_ATTRIBUTES:
+        description_parts.append(f"with {accent_colors} accents")
+
+    if key_design_elements and key_design_elements not in NULL_ATTRIBUTES:
+        description_parts.append(f"featuring {key_design_elements}")
+
+    if functional_features and functional_features not in NULL_ATTRIBUTES:
+        description_parts.append(f"({functional_features})")
+
+    if brand and brand not in NULL_ATTRIBUTES:
+        description_parts.append(f"from {brand}")
+
+    if shape and shape not in NULL_ATTRIBUTES:
+        description_parts.append(f"{shape} shape")
+
+    if occasion_suitability and occasion_suitability not in NULL_ATTRIBUTES:
+        description_parts.append(f"suitable for {occasion_suitability}")
+
+    if weather_appropriateness and weather_appropriateness not in NULL_ATTRIBUTES:
+        description_parts.append(f"suitable for {weather_appropriateness} weather")
+
+    full_description = ", ".join([part for part in description_parts])
+
+    if additional_notes and additional_notes not in NULL_ATTRIBUTES:
+        full_description += "\n    " + f"Additional Notes: {additional_notes}"
+
+    return full_description
+
+def create_outfit_recommendation_prompt(clothing_items: list):
+    """
+    Builds a system prompt string from a list of clothing items for outfit recommendation.
+
+    Args:
+        clothing_items (list): List of clothing item dictionaries.
+
+    Returns:
+        str: System prompt for the recommendation model.
+    """
+    # Group items by category
+    inventory_by_category = {} # key: category, value: list of item descriptions strings
+    for idx, item in enumerate(clothing_items):
+        category = item.get("category", "Unknown")
         if category not in inventory_by_category:
             inventory_by_category[category] = []
-        item_description = create_detailed_item_description(analysis, str(idx))
+        
+        # Create detailed description for each item
+        item_description = create_detailed_item_description(item, str(idx))
         inventory_by_category[category].append(item_description)
 
+    # Build inventory text. List available items by category
     inventory_text = ""
     for category, items in inventory_by_category.items():
         inventory_text += f"\n{category}:\n"
@@ -253,9 +354,15 @@ Do not include any extra text, markdown formatting, or explanation outside of th
 """
     return prompt
 
-def parse_rec_response(response_str: str) -> dict:
+def parse_rec_response(response_str: str):
     """
-    Given the model's raw text, extract the "Outfit", "Explanation", and "Styling Tips" fields as JSON.
+    Parses the raw model response string to extract the 'Outfit', 'Explanation', and 'Styling Tips' fields as JSON.
+
+    Args:
+        response_str (str): Raw text response from the recommendation model.
+
+    Returns:
+        dict: Parsed fields as a dictionary.
     """
     outfit_match = re.search(r"\"Outfit\":\s*(\[[^\]]*\])", response_str)
     explanation_match = re.search(r"\"Explanation\":\s*\"([^\"]*)\"", response_str)
@@ -277,6 +384,13 @@ def parse_rec_response(response_str: str) -> dict:
 # ------------------------ Endpoints ------------------------
 @app.route("/upload", methods=["POST"])
 def upload_file():
+    """
+    Endpoint to upload a new clothing item image and metadata.
+    Accepts multipart/form-data with an image file and item attributes.
+
+    Returns:
+        JSON response indicating success or failure, and item information if successful.
+    """
     files = request.files.getlist("file")
     if not files or len(files) == 0:
         return jsonify({"error": "No file part"}), 400
@@ -316,7 +430,7 @@ def upload_file():
                 'ContentDisposition': 'inline'
             }
         )
-        s3_url = f"https://{os.getenv("S3_BUCKET")}.s3.{os.getenv('AWS_REGION')}.amazonaws.com/{file_key}"
+        s3_url = f"https://{os.getenv('S3_BUCKET')}.s3.{os.getenv('AWS_REGION')}.amazonaws.com/{file_key}"
         logger.info(f"Uploaded file to S3: {s3_url}")
 
         # Create placeholder record
@@ -324,6 +438,9 @@ def upload_file():
             "id": unique_id,
             "name": product_name,
             "s3_url": s3_url,
+            "status": "processing",
+            "processed_at": None,
+            "error_message": None,
             "category": "pending",
             "type": "pending",
             "brand": "pending",
@@ -332,11 +449,20 @@ def upload_file():
             "color": "pending",
             "material": "pending",
             "fitted_market_value": "pending",
-            "status": "processing",  # Changed from pending
-            "processed_at": None,
-            "error_message": None
+            "accent_colors": "pending",
+            "pattern": "pending",
+            "shape": "pending",
+            "fit": "pending",
+            "neckline": "pending",
+            "key_design_elements": "pending",
+            "occasion_suitability": "pending",
+            "weather_appropriateness": "pending",
+            "fabric_weight": "pending",
+            "functional_features": "pending",
+            "additional_notes": "pending"
         }
-        table.put_item(Item=placeholder_item)
+
+        clothing_item_table.put_item(Item=placeholder_item)
 
         # Save file temporarily and run image recognition
         temp_path = f"/tmp/{unique_filename}"
@@ -348,7 +474,7 @@ def upload_file():
 
         # NEW: Handle failed processing
         if metadata is None:
-            table.update_item(
+            clothing_item_table.update_item(
                 Key={"id": unique_id},
                 UpdateExpression="SET #st = :status, error_message = :error",
                 ExpressionAttributeValues={
@@ -359,44 +485,69 @@ def upload_file():
             )
             continue  # Skip to next file
 
-        analysis_data = metadata.get("analysis", {})
-
         # Update record with analysis
         update_expression = (
-            "SET #nm = :name, category = :category, #ty = :type, brand = :brand, "
-            "size = :size, #sty = :style, color = :color, "
-            "material = :material, fitted_market_value = :fitted_market_value, "
-            "#st = :status, processed_at = :processed_at, analysis = :analysis"
+            "SET #nm = :name, #category = :category, #ty = :type, #br = :brand, "
+            "#size = :size, #sty = :style, #pr = :primary_color, #mat = :material, "
+            "#fmv = :fitted_market_value, #st = :status, #processed_at = :processed_at, analysis = :analysis, "
+            "#ac = :accent_colors, #pat = :pattern, #sh = :shape, #fit = :fit, #nl = :neckline, "
+            "#kde = :key_design_elements, #oc = :occasion_suitability, #wa = :weather_appropriateness, "
+            "#fw = :fabric_weight, #ff = :functional_features, #an = :additional_notes"
         )
-        expression_attribute_values = {
-            ":name": product_name,
-            ":category": analysis_data.get("Category", "unknown"),
-            ":type": analysis_data.get("Type of clothing", "unknown"),
-            ":brand": analysis_data.get("Brand", "unknown"),
-            ":size": "N/A",
-            ":style": analysis_data.get("Style", "unknown"),
-            ":color": analysis_data.get("Primary Color", "unknown"),
-            ":material": analysis_data.get("Fabric Material", "unknown"),
-            ":fitted_market_value": "N/A",
-            ":status": "processed",
-            ":processed_at": datetime.now(timezone.utc).isoformat(),
-            ":analysis": json.dumps(analysis_data)
-        }
         expression_attribute_names = {
             "#nm": "name",
+            "#category": "category",
             "#ty": "type",
+            "#br": "brand",
+            "#size": "size",
             "#sty": "style",
-            "#st": "status"
+            "#pr": "color",
+            "#mat": "material",
+            "#st": "status",
+            "#processed_at": "processed_at",
+            "#ac": "accent_colors",
+            "#pat": "pattern",
+            "#sh": "shape",
+            "#fit": "fit",
+            "#nl": "neckline",
+            "#kde": "key_design_elements",
+            "#oc": "occasion_suitability",
+            "#wa": "weather_appropriateness",
+            "#fw": "fabric_weight",
+            "#ff": "functional_features",
+            "#an": "additional_notes"
+        }
+        expression_attribute_values = {
+            ":name": product_name,
+            ":status": "processed",
+            ":processed_at": datetime.now(timezone.utc).isoformat(),
+            ":category": metadata.get("category", "unknown"),
+            ":type": metadata.get("type", "unknown"),
+            ":brand": metadata.get("brand", "unknown"),
+            ":style": metadata.get("style", "unknown"),
+            ":primary_color": metadata.get("color", "unknown"),
+            ":accent_colors": metadata.get("accent_colors", "unknown"),
+            ":pattern": metadata.get("pattern", "unknown"),
+            ":shape": metadata.get("shape", "unknown"),
+            ":fit": metadata.get("fit", "unknown"),
+            ":neckline": metadata.get("neckline", "unknown"),
+            ":key_design_elements": metadata.get("key_design_elements", "unknown"),
+            ":material": metadata.get("material", "unknown"),
+            ":occasion_suitability": metadata.get("occasion_suitability", "unknown"),
+            ":weather_appropriateness": metadata.get("weather_appropriateness", "unknown"),
+            ":fabric_weight": metadata.get("fabric_weight", "unknown"),
+            ":functional_features": metadata.get("functional_features", "unknown"),
+            ":additional_notes": metadata.get("additional_notes", "unknown")
         }
 
-        table.update_item(
-            Key={"id": unique_id},
+        clothing_items_table.update_item(
+            Key={"clothing-item-id": unique_id},
             UpdateExpression=update_expression,
             ExpressionAttributeValues=expression_attribute_values,
-            ExpressionAttributeNames=expression_attribute_names
+            ExpressionAttributeNames=expression_attribute_names,
         )
 
-        item = table.get_item(Key={"id": unique_id}).get("Item")
+        item = clothing_items_table.get_item(Key={"clothing-item-id": unique_id}).get("Item")
         uploaded_items.append(item)
 
     return jsonify({
@@ -406,8 +557,14 @@ def upload_file():
 
 @app.route("/list", methods=["GET"])
 def list_files():
+    """
+    Endpoint to list all clothing item files for the current user.
+
+    Returns:
+        JSON response with a list of clothing items.
+    """
     try:
-        response = table.scan()
+        response = clothing_item_table.scan()
         items = response.get("Items", [])
         return jsonify({"files": items})
     except Exception as e:
@@ -415,6 +572,12 @@ def list_files():
 
 @app.route("/delete", methods=["POST"])
 def delete_file():
+    """
+    Endpoint to delete a clothing item by its item_id.
+
+    Returns:
+        JSON response indicating success or failure.
+    """
     data = request.get_json()
     url = data.get("url", "")
     if not url or "amazonaws.com/" not in url:
@@ -423,19 +586,25 @@ def delete_file():
     try:
         key = url.split(".com/")[-1]
         s3_client.delete_object(Bucket=os.getenv("S3_BUCKET"), Key=key)
-        response = table.scan(
+        response = clothing_item_table.scan(
             FilterExpression=boto3.dynamodb.conditions.Attr("s3_url").eq(url)
         )
         items = response.get("Items", [])
         if items:
             for item in items:
-                table.delete_item(Key={"id": item["id"]})
+                clothing_item_table.delete_item(Key={"clothing-item-id": item["clothing-item-id"]})
         return jsonify({"message": "Deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route("/update", methods=["POST"])
 def update_item():
+    """
+    Endpoint to update the attributes of an existing clothing item.
+
+    Returns:
+        JSON response indicating success or failure, and updated item info if successful.
+    """
     data = request.get_json()
     item_id = data.get("id")
     if not item_id:
@@ -444,7 +613,7 @@ def update_item():
     update_expression = "SET "
     expression_attribute_values = {}
     expression_attribute_names = {}
-    allowed_fields = ["name", "category", "type", "brand", "size", "style", "color", "material", "fitted_market_value"]
+    allowed_fields = ["name"] + ATTRIBUTE_KEYS
 
     for field in allowed_fields:
         if field in data:
@@ -467,8 +636,8 @@ def update_item():
         return jsonify({"error": "No valid fields provided for update."}), 400
 
     try:
-        table.update_item(
-            Key={"id": item_id},
+        clothing_item_table.update_item(
+            Key={"clothing-item-id": item_id},
             UpdateExpression=update_expression,
             ExpressionAttributeValues=expression_attribute_values,
             ExpressionAttributeNames=expression_attribute_names
@@ -480,6 +649,12 @@ def update_item():
 
 @app.route("/favorite", methods=["POST"])
 def toggle_favorite():
+    """
+    Endpoint to toggle the 'favorite' status of a clothing item.
+
+    Returns:
+        JSON response indicating success or failure, and new favorite status.
+    """
     data = request.get_json()
     item_id = data.get("id")
     favorite = data.get("favorite")
@@ -498,30 +673,24 @@ def toggle_favorite():
 
 @app.route("/recommend", methods=["POST"])
 def recommend():
+    """
+    Endpoint to get outfit recommendations based on user wardrobe and preferences.
+
+    Returns:
+        JSON response with recommended outfits, explanations, and styling tips.
+    """
     try:
         data = request.get_json()  
         user_prompt = data.get("user_prompt", "")
         logger.info(f"User prompt received: {user_prompt}")
         
-        # Read from ClothingItems
-        response = table.scan()
+        # Read from Clothing Items Table
+        response = clothing_item_table.scan()
         items = response.get('Items', [])
-        logger.info(f"Total items scanned from ClothingItems: {len(items)}")
-        
-        # Filter items with analysis field
-        valid_items = [item for item in items if "analysis" in item]
-        logger.info(f"Total valid items (with analysis field): {len(valid_items)}")
-        
-        # Convert analysis string back to dict
-        clothing_items = []
-        for vitem in valid_items:
-            try:
-                analysis_dict = json.loads(vitem["analysis"])
-                clothing_items.append(analysis_dict)
-            except:
-                clothing_items.append({})
+        logger.info(f"Total items scanned from Clothing Items Table: {len(items)}")
 
-        sys_prompt = create_outfit_recommendation_prompt(clothing_items)
+        # Create outfit recommendation prompt using wardrobe items
+        sys_prompt = create_outfit_recommendation_prompt(items)
         logger.info(f"System prompt created:\n{sys_prompt}")
         
         # Prepare the messages for Claude model
@@ -572,12 +741,12 @@ def recommend():
         if "outfit" in rec_output and isinstance(rec_output["outfit"], list):
             for idx in rec_output["outfit"]:
                 logger.info(f"Processing index: {idx}")
-                if isinstance(idx, int) and idx < len(valid_items):
-                    s3_url = valid_items[idx]["s3_url"]
+                if isinstance(idx, int) and idx < len(items):
+                    s3_url = items[idx]["s3_url"]
                     logger.info(f"Resolved index {idx} to S3 URL: {s3_url}")
                     resolved_outfit_urls.append(s3_url)
                 else:
-                    logger.error(f"Index {idx} out of range; total valid items: {len(valid_items)}")
+                    logger.error(f"Index {idx} out of range; total valid items: {len(items)}")
             rec_output["outfit"] = resolved_outfit_urls
         else:
             logger.error("Recommendation output does not contain a valid 'outfit' array.")
@@ -591,6 +760,12 @@ def recommend():
     
 @app.route('/save-outfit', methods=['POST'])
 def save_outfit():
+    """
+    Endpoint to save a recommended outfit to the user's saved outfits list.
+
+    Returns:
+        JSON response indicating success or failure, and outfit info if successful.
+    """
     data = request.get_json()
     print("Saving outfit:", data)
 
@@ -609,6 +784,12 @@ def save_outfit():
     
 @app.route('/list-outfits', methods=['GET'])
 def list_outfits():
+    """
+    Endpoint to list all saved outfits for the current user.
+
+    Returns:
+        JSON response with a list of saved outfits.
+    """
     try:
         response = outfits_table.scan()
         items = response.get("Items", [])

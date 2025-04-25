@@ -1545,3 +1545,9 @@ botocore.errorfactory.ResourceNotFoundException: An error occurred (ResourceNotF
 2025-04-24 11:55:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:55:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
 2025-04-24 11:56:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:56:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
 2025-04-24 11:57:25 INFO: 127.0.0.1 - - [24/Apr/2025 11:57:25] "[35m[1mGET /list HTTP/1.1[0m" 500 -
+2025-04-24 15:57:13 INFO: Found credentials in environment variables.
+2025-04-24 15:57:14 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.30.1.165:5001
+2025-04-24 15:57:14 INFO: [33mPress CTRL+C to quit[0m
